@@ -1,0 +1,28 @@
+<div class="container-fluid text-center">
+    <nav class="navbar navbar-custom navbar-expand-sm">
+        <a class="navbar-brand" href="/">Olivia Flowers</a>
+
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/adminorderlist">Для администратора</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/catalog">Каталог</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/order">Корзина</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/profile">Профиль</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<style>
+    .container-fluid, .navbar-custom{
+        background-color: #f0eade;
+    }
+</style>

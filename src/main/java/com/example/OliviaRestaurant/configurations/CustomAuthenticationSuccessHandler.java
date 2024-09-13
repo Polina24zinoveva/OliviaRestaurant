@@ -1,0 +1,6 @@
+package com.example.OliviaRestaurant.configurations;
+
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+
+public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+}
