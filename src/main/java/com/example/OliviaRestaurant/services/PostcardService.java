@@ -1,7 +1,7 @@
 package com.example.OliviaRestaurant.services;
 
-import com.example.OliviaRestaurant.models.Image;
-import com.example.OliviaRestaurant.models.Postcard;
+import com.example.OliviaRestaurant.modelsOld.Image;
+import com.example.OliviaRestaurant.modelsOld.Postcard;
 import com.example.OliviaRestaurant.repositories.ImageRepository;
 import com.example.OliviaRestaurant.repositories.PostcardRepository;
 import lombok.extern.slf4j.Slf4j;

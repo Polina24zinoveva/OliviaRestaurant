@@ -1,8 +1,8 @@
 package com.example.OliviaRestaurant.repositories;
 
 
-import com.example.OliviaRestaurant.models.Order;
-import com.example.OliviaRestaurant.models.User;
+import com.example.OliviaRestaurant.modelsOld.Order;
+import com.example.OliviaRestaurant.modelsOld.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

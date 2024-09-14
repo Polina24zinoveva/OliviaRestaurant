@@ -1,6 +1,6 @@
 package com.example.OliviaRestaurant.controllers;
 
-import com.example.OliviaRestaurant.models.Image;
+import com.example.OliviaRestaurant.modelsOld.Image;
 import com.example.OliviaRestaurant.repositories.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;

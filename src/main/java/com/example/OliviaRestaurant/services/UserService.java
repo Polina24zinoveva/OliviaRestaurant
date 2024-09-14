@@ -1,7 +1,7 @@
 package com.example.OliviaRestaurant.services;
 
-import com.example.OliviaRestaurant.models.User;
-import com.example.OliviaRestaurant.models.UserWithoutLink;
+import com.example.OliviaRestaurant.modelsOld.User;
+import com.example.OliviaRestaurant.modelsOld.UserWithoutLink;
 import com.example.OliviaRestaurant.repositories.UserRepository;
 import com.example.OliviaRestaurant.repositories.UserWithoutLinkRepository;
 import lombok.extern.slf4j.Slf4j;

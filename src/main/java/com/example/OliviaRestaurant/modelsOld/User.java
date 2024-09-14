@@ -1,4 +1,4 @@
-package com.example.OliviaRestaurant.models;//package com.example.OliviaFlowers.models;
+package com.example.OliviaRestaurant.modelsOld;//package com.example.OliviaFlowers.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "users2")
 @Data
 public class User implements UserDetails {
     @Id
