@@ -1,8 +1,8 @@
 package com.example.OliviaRestaurant.repositories;
 
-import com.example.OliviaRestaurant.models.Favorite;
-import com.example.OliviaRestaurant.models.Favorite_key;
-import com.example.OliviaRestaurant.models.User;
+import com.example.OliviaRestaurant.modelsOld.Favorite;
+import com.example.OliviaRestaurant.modelsOld.Favorite_key;
+import com.example.OliviaRestaurant.modelsOld.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

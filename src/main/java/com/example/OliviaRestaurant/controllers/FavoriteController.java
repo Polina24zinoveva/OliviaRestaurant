@@ -1,7 +1,7 @@
 package com.example.OliviaRestaurant.controllers;
 
-import com.example.OliviaRestaurant.models.Bouquet;
-import com.example.OliviaRestaurant.models.User;
+import com.example.OliviaRestaurant.modelsOld.Bouquet;
+import com.example.OliviaRestaurant.modelsOld.User;
 import com.example.OliviaRestaurant.services.FavoriteService;
 import com.example.OliviaRestaurant.services.UserService;
 import org.springframework.security.core.Authentication;

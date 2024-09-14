@@ -1,7 +1,7 @@
 package com.example.OliviaRestaurant.services;
 
-import com.example.OliviaRestaurant.models.Bouquet;
-import com.example.OliviaRestaurant.models.Image;
+import com.example.OliviaRestaurant.modelsOld.Bouquet;
+import com.example.OliviaRestaurant.modelsOld.Image;
 import com.example.OliviaRestaurant.repositories.BouquetRepository;
 import com.example.OliviaRestaurant.repositories.ImageRepository;
 import jakarta.persistence.EntityManager;

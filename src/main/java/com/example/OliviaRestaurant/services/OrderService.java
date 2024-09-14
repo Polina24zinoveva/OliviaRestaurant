@@ -1,8 +1,8 @@
 package com.example.OliviaRestaurant.services;
 
-import com.example.OliviaRestaurant.models.Order;
-import com.example.OliviaRestaurant.models.Postcard;
-import com.example.OliviaRestaurant.models.User;
+import com.example.OliviaRestaurant.modelsOld.Order;
+import com.example.OliviaRestaurant.modelsOld.Postcard;
+import com.example.OliviaRestaurant.modelsOld.User;
 import com.example.OliviaRestaurant.repositories.OrderRepository;
 import com.example.OliviaRestaurant.repositories.PostcardRepository;
 import com.example.OliviaRestaurant.repositories.UserRepository;

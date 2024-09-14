@@ -1,8 +1,8 @@
 package com.example.OliviaRestaurant.repositories;
 
-import com.example.OliviaRestaurant.models.Bouquet;
-import com.example.OliviaRestaurant.models.Order;
-import com.example.OliviaRestaurant.models.Order_has_bouquet;
+import com.example.OliviaRestaurant.modelsOld.Bouquet;
+import com.example.OliviaRestaurant.modelsOld.Order;
+import com.example.OliviaRestaurant.modelsOld.Order_has_bouquet;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

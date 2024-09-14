@@ -1,9 +1,9 @@
 package com.example.OliviaRestaurant.controllers;
 
-import com.example.OliviaRestaurant.models.Bouquet;
-import com.example.OliviaRestaurant.models.HomePage;
-import com.example.OliviaRestaurant.models.Order;
-import com.example.OliviaRestaurant.models.User;
+import com.example.OliviaRestaurant.modelsOld.Bouquet;
+import com.example.OliviaRestaurant.modelsOld.HomePage;
+import com.example.OliviaRestaurant.modelsOld.Order;
+import com.example.OliviaRestaurant.modelsOld.User;
 import com.example.OliviaRestaurant.repositories.HomePageRepository;
 import com.example.OliviaRestaurant.services.*;
 import org.springframework.beans.factory.annotation.Autowired;

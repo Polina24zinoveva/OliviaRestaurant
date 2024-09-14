@@ -1,7 +1,7 @@
 package com.example.OliviaRestaurant.services;
 
 
-import com.example.OliviaRestaurant.models.*;
+import com.example.OliviaRestaurant.modelsOld.*;
 import com.example.OliviaRestaurant.repositories.FavoriteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

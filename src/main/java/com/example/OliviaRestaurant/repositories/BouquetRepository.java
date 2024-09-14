@@ -1,6 +1,6 @@
 package com.example.OliviaRestaurant.repositories;
 
-import com.example.OliviaRestaurant.models.Bouquet;
+import com.example.OliviaRestaurant.modelsOld.Bouquet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 

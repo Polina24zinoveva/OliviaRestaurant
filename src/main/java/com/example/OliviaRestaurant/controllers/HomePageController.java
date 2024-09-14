@@ -1,8 +1,8 @@
 package com.example.OliviaRestaurant.controllers;
 
-import com.example.OliviaRestaurant.models.Bouquet;
-import com.example.OliviaRestaurant.models.HomePage;
-import com.example.OliviaRestaurant.models.User;
+import com.example.OliviaRestaurant.modelsOld.Bouquet;
+import com.example.OliviaRestaurant.modelsOld.HomePage;
+import com.example.OliviaRestaurant.modelsOld.User;
 import com.example.OliviaRestaurant.repositories.HomePageRepository;
 import com.example.OliviaRestaurant.services.BouquetService;
 import com.example.OliviaRestaurant.services.UserService;

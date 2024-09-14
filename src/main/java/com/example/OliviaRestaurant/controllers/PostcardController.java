@@ -1,6 +1,6 @@
 package com.example.OliviaRestaurant.controllers;
 
-import com.example.OliviaRestaurant.models.Postcard;
+import com.example.OliviaRestaurant.modelsOld.Postcard;
 import com.example.OliviaRestaurant.services.PostcardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
