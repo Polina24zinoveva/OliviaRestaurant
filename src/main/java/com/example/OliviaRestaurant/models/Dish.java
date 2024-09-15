@@ -1,15 +1,17 @@
 package com.example.OliviaRestaurant.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 //Блюда
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "dishes")
 @Data
@@ -31,6 +33,9 @@ public class Dish {
     @Column(name = "weight")
     private Integer weight;
 
+    @Column(name = "composition", columnDefinition = "text")
+    private String composition;
+
     @ManyToOne
     @JoinColumn(name = "cuisine_id")
     private Cuisine cuisine;
@@ -40,5 +45,8 @@ public class Dish {
     private DishType dishType;
 
     @OneToMany(mappedBy = "dish")
-    private List<OrderDish> orderDishes = new ArrayList<>();
+    private List<OrderHasDish> orderHasDishes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "dish")
+    private List<Image> images = new ArrayList<>();
 }

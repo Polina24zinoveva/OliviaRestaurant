@@ -1,4 +1,4 @@
-package com.example.OliviaRestaurant.modelsOld;
+package com.example.OliviaRestaurant.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,16 +25,14 @@ public class Image {
     @Column
     private String contentType;
 
-    @Column
-    private boolean isPreviewImage;
 
-//    @Column(name = "photo", columnDefinition = "LONGBLOB")
-//    @Lob
-//    private byte[] bytes;
-
-   @Column(name = "photo", columnDefinition = "BYTEA")
+    @Column(name = "photo", columnDefinition = "LONGBLOB")
+    @Lob
     private byte[] bytes;
 
+//   @Column(name = "photo", columnDefinition = "BYTEA")
+//    private byte[] bytes;
+
     @ManyToOne
-    private Bouquet bouquet;
+    private Dish dish;
 }

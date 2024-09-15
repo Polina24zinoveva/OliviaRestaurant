@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Data
-public class OrderNew {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idOrder")
@@ -21,7 +21,7 @@ public class OrderNew {
 
     @ManyToOne
     @JoinColumn(name = "id_user", referencedColumnName = "idUser")
-    private UserNew user;
+    private User user;
 
     @Column(name = "address")
     private String address;
@@ -38,6 +38,10 @@ public class OrderNew {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "date_time_delivery")
+    private LocalDateTime dateTimeDelivery;
+
+
     @OneToMany(mappedBy = "order")
-    private List<OrderDish> orderDishes;
+    private List<OrderHasDish> orderHasDishes;
 }

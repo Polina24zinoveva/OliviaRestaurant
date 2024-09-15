@@ -1,40 +1,31 @@
 package com.example.OliviaRestaurant.services;
 
-import com.example.OliviaRestaurant.modelsOld.Order;
-import com.example.OliviaRestaurant.modelsOld.Postcard;
-import com.example.OliviaRestaurant.modelsOld.User;
+import com.example.OliviaRestaurant.models.Order;
+import com.example.OliviaRestaurant.models.User;
 import com.example.OliviaRestaurant.repositories.OrderRepository;
-import com.example.OliviaRestaurant.repositories.PostcardRepository;
 import com.example.OliviaRestaurant.repositories.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class OrderService {
     @Autowired
     private final OrderRepository orderRepository;
     @Autowired
     private final UserRepository userRepository;
-    @Autowired
-    private PostcardRepository postcardRepository;
 
-
-    public OrderService(OrderRepository orderRepository, UserRepository userRepository){
-        this.orderRepository = orderRepository;
-        this.userRepository = userRepository;
-    }
 
     public boolean saveOrder(Principal principal, Order order){
-        order.setUser(getUserByPrincipal(principal));;
+        order.setUser(getUserByPrincipal(principal));
         orderRepository.save(order);
         return true;
     }
@@ -66,29 +57,16 @@ public class OrderService {
         return orderRepository.findAllByStatus("Оплачен");
     }
 
-    public List<Postcard> getPostCardToDelivery(List<Order> orders){
-        List<Postcard> postcards = new ArrayList<>();
-        orders.forEach(order -> {
-            postcards.add(postcardRepository.findById(order.getTypePostcard()).orElse(null));
-        });
-
-        return postcards;
-    }
-
     @Transactional
-    public void CheckoutOrder(Principal principal, Long typePostcard, String textPostcard,
+    public void CheckoutOrder(Principal principal,
                               String addressDelivery, LocalDateTime datePayment,
-                              LocalDate dateDelivery, String timeDelivery, String phoneNumber){
+                              LocalDateTime dateDelivery){
         try{
             Order order = HaveOrderInCardByPrincipal(principal);
-            order.setTypePostcard(typePostcard);
-            order.setTextPostcard(textPostcard);
-            order.setAddressDelivery(addressDelivery);
-            order.setDatePayment(datePayment);
-            order.setDateDelivery(dateDelivery);
-            order.setTimeDelivery(timeDelivery);
+            order.setAddress(addressDelivery);
+            order.setPaymentTime(datePayment);
+            order.setDateTimeDelivery(dateDelivery);
             order.setStatus("Оплачен");
-            order.setPhoneNumber(phoneNumber);
             orderRepository.save(order);
         }catch (Exception e){
             e.printStackTrace();

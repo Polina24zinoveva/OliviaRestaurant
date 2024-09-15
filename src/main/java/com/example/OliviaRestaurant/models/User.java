@@ -2,9 +2,7 @@ package com.example.OliviaRestaurant.models;//package com.example.OliviaFlowers.
 
 import com.example.OliviaRestaurant.models.enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,9 +11,11 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(name = "users")
 @Data
-public class UserNew implements UserDetails {
+public class User implements UserDetails {
     @Id
     @Column (name = "idUser")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,8 +35,11 @@ public class UserNew implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
+    @Column (name = "activationCode")
+    private String activationCode;
+
     @OneToMany(mappedBy="user")
-    private List<OrderNew> orders = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
 
     // Security
     @Override

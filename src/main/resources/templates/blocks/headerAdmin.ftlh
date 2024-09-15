@@ -4,7 +4,7 @@
 
         <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/adminorderlist">Для администратора</a>
+                <a class="nav-link active" aria-current="page" href="/adminOrderList">Для администратора</a>
             </li>
 
             <li class="nav-item">

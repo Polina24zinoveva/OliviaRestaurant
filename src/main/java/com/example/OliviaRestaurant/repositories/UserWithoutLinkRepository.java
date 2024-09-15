@@ -1,6 +1,6 @@
 package com.example.OliviaRestaurant.repositories;
 
-import com.example.OliviaRestaurant.modelsOld.UserWithoutLink;
+import com.example.OliviaRestaurant.models.UserWithoutLink;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserWithoutLinkRepository extends JpaRepository<UserWithoutLink, Long> {

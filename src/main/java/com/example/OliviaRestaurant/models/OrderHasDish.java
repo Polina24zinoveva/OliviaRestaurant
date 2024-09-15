@@ -1,28 +1,28 @@
 package com.example.OliviaRestaurant.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "order_dishes")
 @Data
-public class OrderDish {
+public class OrderHasDish {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private OrderNew order;
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "dish_id")
     private Dish dish;
 
-    @Column(name = "quantity")
-    private Integer quantity;
+    @Column(name = "count")
+    private Integer count;
 }

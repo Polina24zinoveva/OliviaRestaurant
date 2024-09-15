@@ -163,31 +163,31 @@
             <div class="row" style="margin-top: 2rem; margin-bottom: 2rem;">
                 <div class="col-md-2">
                     <div class="thumbnails-wrapper">
-                        <#list bouquet.images as image>
-                            <img src="/images/${image.id}" class="thumbnail <#if image_index == 0>active</#if>" data-bs-target="#carouselBouquet" data-bs-slide-to="${image_index}" alt="Фото">
+                        <#list dish.images as image>
+                            <img src="/images/${image.id}" class="thumbnail <#if image_index == 0>active</#if>" data-bs-target="#carouselDish" data-bs-slide-to="${image_index}" alt="Фото">
                         </#list>
                     </div>
                 </div>
                 <div class="col-md-10">
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-                    <div id="carouselBouquet" class="carousel slide">
+                    <div id="carouselDish" class="carousel slide">
                         <div class="carousel-indicators">
-                            <#list bouquet.images as image>
-                                <button type="button" data-bs-target="#carouselBouquet" data-bs-slide-to="${image_index}"<#if image_index == 0> class="active"</#if> aria-current="true" aria-label="Slide ${image_index + 1}"></button>
+                            <#list dish.images as image>
+                                <button type="button" data-bs-target="#carouselDish" data-bs-slide-to="${image_index}"<#if image_index == 0> class="active"</#if> aria-current="true" aria-label="Slide ${image_index + 1}"></button>
                             </#list>
                         </div>
                         <div class="carousel-inner">
-                            <#list bouquet.images as image>
+                            <#list dish.images as image>
                                 <div class="carousel-item<#if image_index == 0> active</#if>">
                                     <img src="/images/${image.id}" class="d-block w-100 image" alt="Фото">
                                 </div>
                             </#list>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselBouquet" data-bs-slide="prev">
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselDish" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselBouquet" data-bs-slide="next">
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselDish" data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                         </button>
@@ -198,26 +198,28 @@
 
         <div class="col-md-4 d-flex flex-column">
             <div class="flex-grow-1">
-                <h4 class="text" style="margin-top: 3rem;">${bouquet.name}</h4>
+                <h4 class="text" style="margin-top: 3rem;">${dish.name}</h4>
             </div>
             <div class="flex-grow-1">
                 <h6 class="text">Состав:</h6>
-                <p><#list (bouquet.composition)?split("\n") as line>
+                <p><#list (dish.composition)?split("\n") as line>
                     ${line}<br>
                 </#list></p>
-                <h6 class="text">${bouquet.price} рублей</h6>
+                <p class="text">Калорийность: ${dish.calories}</p>
+                <p class="text">Вес: ${dish.weight}</p>
+                <h6 class="text">${dish.price} рублей</h6>
             </div>
             <div class="d-flex justify-content-between" style="margin-bottom: 50px;"> <!-- Добавляем классы d-flex и justify-content-between -->
                 <!-- Кнопка "Добавить в корзину" -->
                 <#if inCard==false>
-                    <form id="addButton" onclick="addOrAdded()" action="/bouquet_addcar/${bouquet.id}" method="post">
+                    <form id="addButton" onclick="addOrAdded()" action="/addOrderDish/${dish.id}" method="post">
                         <button type="submit" class="btn btn-custom">Добавить в корзину</button>
                     </form>
                     <form id="addedButton" action="/order" style="display:none;">
                         <button type="submit" class="btn btn-custom2">Перейти в корзину</button>
                     </form>
                 <#else>
-                    <form id="addButton" onclick="addOrAdded()" action="/bouquet_addcar/${bouquet.id}" method="post" style="display:none;">
+                    <form id="addButton" onclick="addOrAdded()" action="/addOrderDish/${dish.id}" method="post" style="display:none;">
                         <button type="submit" class="btn btn-custom">Добавить в корзину</button>
                     </form>
                     <form id="addedButton" action="/order">
@@ -237,56 +239,6 @@
                     }
                 </script>
 
-                <#if inFav==false>
-                    <form id="addFav" onclick="addOrAddedFav()" action="/add_to_favorites" method="post">
-                        <input type="hidden" name="bouquetId" value="${bouquet.id}">
-                        <button type="submit" class="btn btn-custom-fav">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
-                            </svg>
-                        </button>
-                    </form>
-                    <form id="addedFav" onclick="addOrAdded()" action="/remove_from_favorites_without_user" method="post" style="display:none;">
-                        <input type="hidden" name="bouquetId" value="${bouquet.id}">
-                        <button type="submit" class="btn btn-custom-fav">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
-                            </svg>
-                        </button>
-                    </form>
-                <#else>
-                    <form id="addFav" onclick="addOrAdded()" action="/add_to_favorites" method="post" style="display:none;">
-                        <input type="hidden" name="bouquetId" value="${bouquet.id}">
-                        <button type="submit" class="btn btn-custom-fav">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
-                            </svg>
-                        </button>
-                    </form>
-                    <form id="addedFav" onclick="addOrAdded()" action="/remove_from_favorites_without_user" method="post">
-                        <input type="hidden" name="bouquetId" value="${bouquet.id}">
-                        <button type="submit" class="btn btn-custom-fav">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
-                            </svg>
-                        </button>
-                    </form>
-                </#if>
-
-                <script>
-                    function addOrAddedFav() {
-                        if (document.getElementById("addedFav").style.display === "none") {
-                            document.getElementById("addedFav").style.display = "block"
-                            document.getElementById("addFav").style.display = "none"
-                        } else {
-                            document.getElementById("addedFav").style.display = "none"
-                            document.getElementById("addFav").style.display = "block"
-                        }
-                    }
-                </script>
-
-                <!-- Кнопка "Добавить в избранное" -->
-
             </div>
         </div>
 
@@ -305,7 +257,7 @@
         });
     });
 
-    var carousel = document.getElementById('carouselBouquet');
+    var carousel = document.getElementById('carouselDish');
     carousel.addEventListener('slide.bs.carousel', function (event) {
         var index = event.to;
         var thumbnails = document.querySelectorAll('.thumbnail');
