@@ -9,7 +9,6 @@
     </title>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         function showMessage(message) {
             Swal.fire({
@@ -153,6 +152,7 @@
         .custom-link:hover {
             text-decoration: underline; /* Подчеркивание при наведении */
         }
+
         /* Для футера внизу страницы: html, body, wrapper*/
         html, body {
             height: 100%;
@@ -170,35 +170,18 @@
         <#else>
             <#include "blocks/header.ftlh">
         </#if>
+
         <#if message??>
             <script>
                 showMessage("${message}");
             </script>
         </#if>
+
         <div class="d-flex">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 1rem;">Заказы:</h6>
-                        <div style="margin-left: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminorderlist" class="custom-link category-link">Активные заказы</a></p>
-                            <p><a href="/adminFinishedOrderList" class="custom-link category-link">Доставленные заказы</a></p>
-                            <p><a href="/adminCanceledOrderList" class="custom-link category-link">Отмененные заказы</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Букеты:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/admin" class="custom-link category-link">Все букеты</a></p>
-                            <p><a href="/adminaddbouquet" class="custom-link category-link">Добавление нового букета</a></p>
-                            <p><a href="/adminchoicebouquet" class="custom-link category-link">Выбор букетов на главный экран</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Открытки:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminpostcard" class="custom-link category-link">Открытки</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Пользователи:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminAllUsers" class="custom-link category-link">Пользователи</a></p>
-                        </div>
+                        <#include "blocks/adminMenu.ftlh">
                     </div>
                     <script>
                         // Получаем текущий путь
@@ -222,31 +205,82 @@
                     </div>
 
                     <div class="col-md-9">
-                        <h5 style="margin-top: 10px; margin-bottom: 2rem;">Выбор букетов для главного экрана</h5>
+                        <h5 style="margin-top: 10px; margin-bottom: 2rem;">Добавление букета</h5>
                         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-                        <form action="/add_bouquets_to_homepage" method="post">
+                        <form action="/adminCreateDish" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                             <div class="mb-3">
-                                <label for="bouquet2" class="form-label">ID букета 1:</label>
-                                <input type="text" class="form-control" id="bouquet1" name="bouquet1" value="${bouquet1}">
-                                <label for="description1" class="form-label">Описание букета:</label>
-                                <textarea class="form-control" id="description1" name="description1" style="height: auto">${description1}</textarea>
+                                <label for="name" class="form-label">Название:</label>
+                                <input type="text" id="required1" class="form-control" id="name" name="name" required>
                             </div>
                             <div class="mb-3">
-                                <label for="bouquet2" class="form-label">ID букета 2:</label>
-                                <input type="text" class="form-control" id="bouquet2" name="bouquet2" value="${bouquet2}">
-                                <label for="description2" class="form-label">Описание букета:</label>
-                                <textarea class="form-control" id="description2" name="description2" style="height: auto">${description2}</textarea>
+                                <label for="file1" class="form-label">Первое фото:</label>
+                                <input type="file" id="required2" class="form-control" id="file1" name="file1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="file2" class="form-label">Второе фото:</label>
+                                <input type="file" class="form-control" id="file2" name="file2">
+                            </div>
+                            <div class="mb-3">
+                                <label for="file3" class="form-label">Третье фото:</label>
+                                <input type="file" class="form-control" id="file3" name="file3">
+                            </div>
+                            <div class="mb-3">
+                                <label for="composition" class="form-label">Состав:</label>
+                                <textarea class="form-control" id="composition" name="composition" rows="4" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="calories" class="form-label">Калорийность:</label>
+                                <input type="number" id="required3" class="form-control" id="calories" name="calories" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="weight" class="form-label">Вес:</label>
+                                <input type="number" id="required4" class="form-control" id="weight" name="weight" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Цена:</label>
+                                <input type="number" id="required5" class="form-control" id="price" name="price" required>
+                            </div>
 
-                            </div>
-                            <div class="mb-3">
-                                <label for="bouquet3" class="form-label">ID букета 3:</label>
-                                <input type="text" class="form-control" id="bouquet3" name="bouquet3" value="${bouquet3}">
-                                <label for="description3" class="form-label">Описание букета:</label>
-                                <textarea class="form-control" id="description3" name="description3" style="height: auto">${description3}</textarea>
 
+
+                            <!--
+                            <div class="mb-3">
+                                <h6 for="type" class="form-label">Тип блюда:</h6>
+                                <select name="type" id="type" class="form-control">
+                                    <option value="Тип 1">Тип 1</option>
+                                    <option value="Тип 2">Тип 2</option>
+                                    <option value="Тип 3">Тип 3</option>
+                                </select>
                             </div>
-                            <button type="submit" class="btn btn-custom">Добавить на главный экран</button>
+
+                            <div class="mb-3">
+                                <h6 for="type" class="form-label">Тип кухни:</h6>
+                                <select name="cuisine" id="cuisine" class="form-control">
+                                    <option value="Кухня 1">Кухня 1</option>
+                                    <option value="Кухня 2">Кухня 2</option>
+                                    <option value="Кухня 3">Кухня 3</option>
+                                    <option value="Кухня 4">Кухня 4</option>
+                                </select>
+                            </div>
+                            -->
+
+                            <button type="submit" class="btn btn-custom">Добавить</button>
                         </form>
+                        <script>
+                            function validateForm() {
+                                var required1 = document.getElementById("required1").value;
+                                var required2 = document.getElementById("required2").value;
+                                var required3 = document.getElementById("required3").value;
+                                var required4 = document.getElementById("required4").value;
+                                var required5 = document.getElementById("required5").value;
+                                var composition = document.getElementById("composition").value;
+
+                                if (required1 === "" || required2 === "" || required3 === "" || required4 === "" || required5 === "" || composition === "") {
+                                    alert("Пожалуйста, заполните все обязательные поля.");
+                                    return false;
+                                }
+                            }
+                        </script>
                     </div>
                 </div>
             </div>

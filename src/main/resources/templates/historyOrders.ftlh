@@ -10,6 +10,7 @@
             background-color: #f0eade;
         }
 
+
         .profile-buttons a, .profile-buttons button {
             width: 100%;
             margin-bottom: 10px;
@@ -175,7 +176,6 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
                                     <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
                                 </svg>
-                                ${currentUser.dateOfBirthday.format('dd.MM.yyyy')}
                             </p>
                         </div>
 
@@ -194,12 +194,6 @@
                                     <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/>
                                 </svg>
                                 <a class="custom-link category-link" href="/historyOrders">История заказов</a>
-                            </p>
-                            <p class="icon-text">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
-                                </svg>
-                                <a class="custom-link category-link" href="/favorite">Избранное</a>
                             </p>
                             <form action="/logout" method="post">
                                 <button type="submit" class="btn btn-custom">Выйти</button>
@@ -281,23 +275,23 @@
                                 <div id="orderItemsDiv_${order.id}" style="display:none;" >
                                     <br>
                                     <#assign y = 0>
-                                    <#list toDeliverBouquets[x] as bouquet>
+                                    <#list toDeliverDishes[x] as dish>
                                         <div class="row" style="width: 36rem;">
                                             <div class="col-md-3" style="margin-bottom: 1rem;">
-                                                <#if bouquet.images[0]?has_content && bouquet.images[0]?size gt 1>
-                                                    <img src="/images/${bouquet.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
+                                                <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
+                                                    <img src="/images/${dish.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
                                                 <#else>
                                                     <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
                                                 </#if>
                                             </div>
                                             <div class="col-md-3">
-                                                <a href="/bouquet/${bouquet.id}" class="custom-link me-auto">${bouquet.name}</a>
+                                                <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
                                             </div>
                                             <div class="col-md-3">
                                                 ${toDeliverAmounts[x][y]} шт
                                             </div>
                                             <div class="col-md-3">
-                                                ${bouquet.price} ₽
+                                                ${dish.price} ₽
                                             </div>
                                         </div>
                                     </#list>

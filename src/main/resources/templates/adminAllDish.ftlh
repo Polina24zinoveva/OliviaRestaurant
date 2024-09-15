@@ -143,7 +143,6 @@
         .category-link.active {
             text-decoration: underline; /* Подчеркиваем выбранную категорию */
         }
-
         .custom-link {
             font-size: 1.05rem; /* Размер шрифта */
             color: #333;
@@ -152,7 +151,6 @@
         .custom-link:hover {
             text-decoration: underline; /* Подчеркивание при наведении */
         }
-
         /* Для футера внизу страницы: html, body, wrapper*/
         html, body {
             height: 100%;
@@ -170,37 +168,16 @@
         <#else>
             <#include "blocks/header.ftlh">
         </#if>
-
         <#if message??>
             <script>
                 showMessage("${message}");
             </script>
         </#if>
-
         <div class="d-flex">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 1rem;">Заказы:</h6>
-                        <div style="margin-left: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminorderlist" class="custom-link category-link">Активные заказы</a></p>
-                            <p><a href="/adminFinishedOrderList" class="custom-link category-link">Доставленные заказы</a></p>
-                            <p><a href="/adminCanceledOrderList" class="custom-link category-link">Отмененные заказы</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Букеты:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/admin" class="custom-link category-link">Все букеты</a></p>
-                            <p><a href="/adminaddbouquet" class="custom-link category-link">Добавление нового букета</a></p>
-                            <p><a href="/adminchoicebouquet" class="custom-link category-link">Выбор букетов на главный экран</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Открытки:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminpostcard" class="custom-link category-link">Открытки</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Пользователи:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminAllUsers" class="custom-link category-link">Пользователи</a></p>
-                        </div>
+                        <#include "blocks/adminMenu.ftlh">
                     </div>
                     <script>
                         // Получаем текущий путь
@@ -224,56 +201,67 @@
                     </div>
 
                     <div class="col-md-9">
-                        <h5 style="margin-top: 10px; margin-bottom: 2rem;">Добавление букета</h5>
-                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-                        <form action="/bouquet_create" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Название:</label>
-                                <input type="text" id="required1" class="form-control" id="name" name="name" required>
+                        <#if allDishes?size = 0>
+                            <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
+                                <h5>Нет букетов в базе</h5>
                             </div>
-                            <div class="mb-3">
-                                <label for="file1" class="form-label">Первое фото:</label>
-                                <input type="file" id="required2" class="form-control" id="file1" name="file1" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="file2" class="form-label">Второе фото:</label>
-                                <input type="file" class="form-control" id="file2" name="file2">
-                            </div>
-                            <div class="mb-3">
-                                <label for="file3" class="form-label">Третье фото:</label>
-                                <input type="file" class="form-control" id="file3" name="file3">
-                            </div>
-                            <div class="mb-3">
-                                <label for="composition" class="form-label">Состав:</label>
-                                <textarea class="form-control" id="composition" name="composition" rows="4" required></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="price" class="form-label">Цена:</label>
-                                <input type="number" id="required3" class="form-control" id="price" name="price" required>
-                            </div>
-                            <div class="mb-3">
-                                <h6 for="type" class="form-label">Тип букета:</h6>
-                                <select name="type" id="type" class="form-control">
-                                    <option value="Авторский">Авторский</option>
-                                    <option value="В коробке">В коробке</option>
-                                    <option value="Cвадебный">Cвадебный</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-custom">Добавить</button>
-                        </form>
-                        <script>
-                            function validateForm() {
-                                var required1 = document.getElementById("required1").value;
-                                var required2 = document.getElementById("required2").value;
-                                var required3 = document.getElementById("required3").value;
-                                var composition = document.getElementById("composition").value;
 
-                                if (required1 === "" || required1 === "" || required1 === "" || composition === "") {
-                                    alert("Пожалуйста, заполните все обязательные поля.");
-                                    return false;
-                                }
-                            }
-                        </script>
+                        <#else>
+                            <h5 style="margin-top: 10px; margin-bottom: 2rem;">Все букеты</h5>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Название</th>
+                                    <th>Состав</th>
+                                    <th>Калорийность</th>
+                                    <th>Вес</th>
+                                    <th>Цена</th>
+                                    <th>Фото</th>
+                                    <th>Действия</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <#list allDishes as dish>
+                                    <tr>
+                                        <td>${dish.id}</td>
+                                        <td>${dish.name}</td>
+                                        <td>${dish.composition}</td>
+                                        <td>${dish.calories}</td>
+                                        <td>${dish.weight}</td>
+                                        <td>${dish.price}</td>
+                                        <td>
+                                            <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
+                                                <img src="/images/${dish.images[0].id}" alt="Фото" style="max-width: 100px; max-height: 100px;">
+                                            <#else>
+                                                <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
+                                            </#if>
+
+                                            <#if dish.images[1]?has_content && dish.images[1]?size gt 1>
+                                                <img src="/images/${dish.images[1].id}" alt="Фото"  style="max-width: 100px; max-height: 100px;">
+                                            <#else>
+                                                <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
+                                            </#if>
+
+                                            <#if dish.images[2]?has_content && dish.images[2]?size gt 1>
+                                                <img src="/images/${dish.images[2].id}" alt="Фото" style="max-width: 100px; max-height: 100px;">
+                                            <#else>
+                                                <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
+                                            </#if>
+
+                                        </td>
+                                        <td>
+                                            <a href="/dish/${dish.id}" class="btn btn-custom2">Просмотр</a>
+                                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+                                            <form action="/adminDeleteDish/${dish.id}" method="post">
+                                                <button type="submit" class="btn btn-custom2">Удалить</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </#list>
+                                </tbody>
+                            </table>
+                        </#if>
                     </div>
                 </div>
             </div>

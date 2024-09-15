@@ -1,4 +1,4 @@
-package com.example.OliviaRestaurant.modelsOld;
+package com.example.OliviaRestaurant.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -266,7 +266,6 @@
                     });
                 </script>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Пароль" required>
-                <input type="date" class="form-control" id="dateOfBirthday" name="dateOfBirthday" max="${maxDate}" placeholder="Дата рождения" required>
 
                 <button>Зарегистрироваться</button>
             </form>

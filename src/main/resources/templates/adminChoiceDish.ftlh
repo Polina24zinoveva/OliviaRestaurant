@@ -9,6 +9,7 @@
     </title>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         function showMessage(message) {
             Swal.fire({
@@ -143,6 +144,7 @@
         .category-link.active {
             text-decoration: underline; /* Подчеркиваем выбранную категорию */
         }
+
         .custom-link {
             font-size: 1.05rem; /* Размер шрифта */
             color: #333;
@@ -177,26 +179,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 1rem;">Заказы:</h6>
-                        <div style="margin-left: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminorderlist" class="custom-link category-link">Активные заказы</a></p>
-                            <p><a href="/adminFinishedOrderList" class="custom-link category-link">Доставленные заказы</a></p>
-                            <p><a href="/adminCanceledOrderList" class="custom-link category-link">Отмененные заказы</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Букеты:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/admin" class="custom-link category-link">Все букеты</a></p>
-                            <p><a href="/adminaddbouquet" class="custom-link category-link">Добавление нового букета</a></p>
-                            <p><a href="/adminchoicebouquet" class="custom-link category-link">Выбор букетов на главный экран</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Открытки:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminpostcard" class="custom-link category-link">Открытки</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Пользователи:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminAllUsers" class="custom-link category-link">Пользователи</a></p>
-                        </div>
+                        <#include "blocks/adminMenu.ftlh">
                     </div>
                     <script>
                         // Получаем текущий путь
@@ -220,68 +203,31 @@
                     </div>
 
                     <div class="col-md-9">
-                        <#if allBouquets?size = 0>
-                            <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
-                                <h5>Нет букетов в базе</h5>
+                        <h5 style="margin-top: 10px; margin-bottom: 2rem;">Выбор букетов для главного экрана</h5>
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+                        <form action="/add_bouquets_to_homepage" method="post">
+                            <div class="mb-3">
+                                <label for="bouquet2" class="form-label">ID букета 1:</label>
+                                <input type="text" class="form-control" id="bouquet1" name="bouquet1" value="${bouquet1}">
+                                <label for="description1" class="form-label">Описание букета:</label>
+                                <textarea class="form-control" id="description1" name="description1" style="height: auto">${description1}</textarea>
                             </div>
+                            <div class="mb-3">
+                                <label for="bouquet2" class="form-label">ID букета 2:</label>
+                                <input type="text" class="form-control" id="bouquet2" name="bouquet2" value="${bouquet2}">
+                                <label for="description2" class="form-label">Описание букета:</label>
+                                <textarea class="form-control" id="description2" name="description2" style="height: auto">${description2}</textarea>
 
-                        <#else>
-                            <h5 style="margin-top: 10px; margin-bottom: 2rem;">Все букеты</h5>
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Название</th>
-                                    <th>Состав</th>
-                                    <th>Цена</th>
-                                    <th>Фото</th>
-                                    <th>Действия</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <#list allBouquets as bouquet>
-                                    <tr>
-                                        <td>${bouquet.id}</td>
-                                        <td>${bouquet.name}</td>
-                                        <!-- Вывод состава букета в несколько строк -->
-                                        <td>
-                                            <#list (bouquet.composition)?split("\n") as line>
-                                                ${line}<br>
-                                            </#list>
-                                        </td>
-                                        <td>${bouquet.price}</td>
-                                        <td>
-                                            <#if bouquet.images[0]?has_content && bouquet.images[0]?size gt 1>
-                                                <img src="/images/${bouquet.images[0].id}" alt="Фото" style="max-width: 100px; max-height: 100px;">
-                                            <#else>
-                                                <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
-                                            </#if>
+                            </div>
+                            <div class="mb-3">
+                                <label for="bouquet3" class="form-label">ID букета 3:</label>
+                                <input type="text" class="form-control" id="bouquet3" name="bouquet3" value="${bouquet3}">
+                                <label for="description3" class="form-label">Описание букета:</label>
+                                <textarea class="form-control" id="description3" name="description3" style="height: auto">${description3}</textarea>
 
-                                            <#if bouquet.images[1]?has_content && bouquet.images[1]?size gt 1>
-                                                <img src="/images/${bouquet.images[1].id}" alt="Фото"  style="max-width: 100px; max-height: 100px;">
-                                            <#else>
-                                                <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
-                                            </#if>
-
-                                            <#if bouquet.images[2]?has_content && bouquet.images[2]?size gt 1>
-                                                <img src="/images/${bouquet.images[2].id}" alt="Фото" style="max-width: 100px; max-height: 100px;">
-                                            <#else>
-                                                <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
-                                            </#if>
-
-                                        </td>
-                                        <td>
-                                            <a href="/bouquet/${bouquet.id}" class="btn btn-custom2">Просмотр</a>
-                                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-                                            <form action="/bouquet_delete/${bouquet.id}" method="post">
-                                                <button type="submit" class="btn btn-custom2">Удалить</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                </#list>
-                                </tbody>
-                            </table>
-                        </#if>
+                            </div>
+                            <button type="submit" class="btn btn-custom">Добавить на главный экран</button>
+                        </form>
                     </div>
                 </div>
             </div>

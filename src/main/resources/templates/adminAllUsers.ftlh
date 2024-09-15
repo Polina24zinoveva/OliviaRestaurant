@@ -167,26 +167,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 1rem;">Заказы:</h6>
-                        <div style="margin-left: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminorderlist" class="custom-link category-link">Активные заказы</a></p>
-                            <p><a href="/adminFinishedOrderList" class="custom-link category-link">Доставленные заказы</a></p>
-                            <p><a href="/adminCanceledOrderList" class="custom-link category-link">Отмененные заказы</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Букеты:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/admin" class="custom-link category-link">Все букеты</a></p>
-                            <p><a href="/adminaddbouquet" class="custom-link category-link">Добавление нового букета</a></p>
-                            <p><a href="/adminchoicebouquet" class="custom-link category-link">Выбор букетов на главный экран</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Открытки:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminpostcard" class="custom-link category-link">Открытки</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Пользователи:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminAllUsers" class="custom-link category-link">Пользователи</a></p>
-                        </div>
+                       <#include "blocks/adminMenu.ftlh">
                     </div>
                     <script>
                         // Получаем текущий путь
@@ -225,7 +206,6 @@
                                     <th>Фамилия</th>
                                     <th>Номер телефона</th>
                                     <th>Эл. почта</th>
-                                    <th>Дата рождения</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -236,7 +216,6 @@
                                         <td>${user.surname}</td>
                                         <td>${user.phoneNumber}</td>
                                         <td>${user.email}</td>
-                                        <td>${user.dateOfBirthday.format('dd.MM.yyyy')}</td>
                                     </tr>
                                 </#list>
                                 </tbody>

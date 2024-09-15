@@ -179,26 +179,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 1rem;">Заказы:</h6>
-                        <div style="margin-left: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminorderlist" class="custom-link category-link">Активные заказы</a></p>
-                            <p><a href="/adminFinishedOrderList" class="custom-link category-link">Доставленные заказы</a></p>
-                            <p><a href="/adminCanceledOrderList" class="custom-link category-link">Отмененные заказы</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Букеты:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/admin" class="custom-link category-link">Все букеты</a></p>
-                            <p><a href="/adminaddbouquet" class="custom-link category-link">Добавление нового букета</a></p>
-                            <p><a href="/adminchoicebouquet" class="custom-link category-link">Выбор букетов на главный экран</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Открытки:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminpostcard" class="custom-link category-link">Открытки</a></p>
-                        </div>
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Пользователи:</h6>
-                        <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                            <p><a href="/adminAllUsers" class="custom-link category-link">Пользователи</a></p>
-                        </div>
+                        <#include "blocks/adminMenu.ftlh">
                     </div>
                     <script>
                         // Получаем текущий путь
@@ -242,23 +223,23 @@
                                             <div class="col-7">
                                                 <h6>Товары в заказе:</h6>
                                                 <#assign y = 0>
-                                                <#list toDeliverBouquets[x] as bouquet>
+                                                <#list toDeliverDishes[x] as dish>
                                                     <div class="row" style="width: 36rem;">
                                                         <div class="col-md-3" style="margin-bottom: 1rem;">
-                                                            <#if bouquet.images[0]?has_content && bouquet.images[0]?size gt 1>
-                                                                <img src="/images/${bouquet.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
+                                                            <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
+                                                                <img src="/images/${dish.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
                                                             <#else>
                                                                 <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
                                                             </#if>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <a href="/bouquet/${bouquet.id}" class="custom-link me-auto">${bouquet.name}</a>
+                                                            <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
                                                         </div>
                                                         <div class="col-md-3">
                                                             ${toDeliverAmounts[x][y]} шт
                                                         </div>
                                                         <div class="col-md-3">
-                                                            ${bouquet.price} ₽
+                                                            ${dish.price} ₽
                                                         </div>
                                                     </div>
                                                 </#list>

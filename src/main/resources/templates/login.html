@@ -235,18 +235,18 @@
 </#if>
 <#if message??>
 <script>
-            showMessage("${message}");
-        </script>
+    showMessage("${message}");
+</script>
 </#if>
 <#if warning??>
 <script>
-            showWarning("${warning}");
-        </script>
+    showWarning("${warning}");
+</script>
 </#if>
 <#if error??>
 <script>
-            showError("${error}");
-        </script>
+    showError("${error}");
+</script>
 </#if>
 <div class="container" id="container">
     <div class="form-container sign-up">
@@ -261,12 +261,11 @@
             <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.6-beta.29/dist/inputmask.min.js"></script>
             <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Номер телефона" required>
             <script>
-                    $(document).ready(function(){
-                        Inputmask({"mask": "8 (999) 999-99-99"}).mask("#phoneNumber");
-                    });
-                </script>
+                $(document).ready(function(){
+                    Inputmask({"mask": "8 (999) 999-99-99"}).mask("#phoneNumber");
+                });
+            </script>
             <input type="password" class="form-control" id="password" name="password" placeholder="Пароль" required>
-            <input type="date" class="form-control" id="dateOfBirthday" name="dateOfBirthday" max="${maxDate}" placeholder="Дата рождения" required>
 
             <button>Зарегистрироваться</button>
         </form>
@@ -295,18 +294,18 @@
 </div>
 
 <script>
-        const container = document.getElementById('container');
-        const loginButton = document.getElementById('login');
-        const registerButton = document.getElementById('register');
+    const container = document.getElementById('container');
+    const loginButton = document.getElementById('login');
+    const registerButton = document.getElementById('register');
 
-        loginButton.addEventListener('click', () => {
-            container.classList.remove('active');
-        });
+    loginButton.addEventListener('click', () => {
+        container.classList.remove('active');
+    });
 
-        registerButton.addEventListener('click', () => {
-            container.classList.add('active');
-        });
-    </script>
+    registerButton.addEventListener('click', () => {
+        container.classList.add('active');
+    });
+</script>
 </body>
 
 <footer class="footer mt-auto">

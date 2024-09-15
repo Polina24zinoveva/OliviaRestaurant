@@ -1,7 +1,7 @@
 package com.example.OliviaRestaurant.controllers;
 
-import com.example.OliviaRestaurant.modelsOld.User;
-import com.example.OliviaRestaurant.modelsOld.UserWithoutLink;
+import com.example.OliviaRestaurant.models.User;
+import com.example.OliviaRestaurant.models.UserWithoutLink;
 import com.example.OliviaRestaurant.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -37,7 +37,6 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userService.getUserByEmail(username);
-        model.addAttribute("isAdmin", user != null && user.getIsAdministrator());
         if (message != null) model.addAttribute("message", message);
         if (warning != null) model.addAttribute("warning", warning);
         if (error != null) model.addAttribute("error", error);
@@ -61,7 +60,6 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userService.getUserByEmail(username);
-        model.addAttribute("isAdmin", user != null && user.getIsAdministrator());
         return "registration";
     }
     @GetMapping("/activate/{code}")

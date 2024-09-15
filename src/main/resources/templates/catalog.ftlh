@@ -19,6 +19,7 @@
 
         .image img{
             height: 18rem;
+            width: 18rem;
             border-radius: 7px;
         }
 
@@ -164,18 +165,17 @@
     </div>
 
 
-    <#if allBouquets??>
-        <#if allBouquets?size = 0>
+    <#if allDishes??>
+        <#if allDishes?size = 0>
             <div class="container mt-5">
                 <div class="row">
                     <div class="col-md-3 sideMarginRight">
                         <h6 for="typeRecipient" class="form-label" style="margin-top: 0.5rem;">Категория:</h6>
                         <div class="sideMargin" style="padding-top: 1rem;">
-                            <p><a class="custom-link category-link" href="/catalog">Все букеты</a></p>
-                            <p><a class="custom-link category-link" href="/authorBouquet">Авторские букеты</a></p>
-                            <p><a class="custom-link category-link" href="/boxBouquet">Композиции в коробках и корзинах</a></p>
-                            <p><a class="custom-link category-link" href="/weddingBouquet">Свадебный декор</a></p>
-                            <p><a class="custom-link category-link" href="/catalogPostcard">Открытки</a></p>
+                            <p><a class="custom-link category-link" href="/catalog">Все блюда</a></p>
+                            <p><a class="custom-link category-link" href="/authorBouquet">Тип 1</a></p>
+                            <p><a class="custom-link category-link" href="/boxBouquet">Тип 2</a></p>
+                            <p><a class="custom-link category-link" href="/weddingBouquet">Тип 3</a></p>
                         </div>
                         <script>
                             // Получаем текущий путь
@@ -195,7 +195,7 @@
                         </script>
 
                         <br>
-                        <form action="/filterBouquets" method="get">
+                        <form action="/filterDishes" method="get">
                             <h6 class="form-label">Сортировка:</h6>
                             <select name="sort" id="typeRecipient" class="form-control">
                                 <option value="0">По умолчанию</option>
@@ -377,7 +377,7 @@
                     </div>
                     <div class="col-md-9 justify-content-center align-items-center">
                         <div id="emptyCartMessage" class="margin-top:5rem;" style="height: 40%;">
-                            <h5>Нет доступных букетов</h5>
+                            <h5>Нет доступных блюд</h5>
                         </div>
                     </div>
                 </div>
@@ -388,11 +388,10 @@
                     <div class="col-md-3 sideMarginRight">
                         <h6 for="typeRecipient" class="form-label" style="margin-top: 0.5rem;">Категория:</h6>
                         <div class="sideMargin" style="padding-top: 1rem;">
-                            <p><a class="custom-link category-link" href="/catalog">Все букеты</a></p>
-                            <p><a class="custom-link category-link" href="/authorBouquet">Авторские букеты</a></p>
-                            <p><a class="custom-link category-link" href="/boxBouquet">Композиции в коробках и корзинах</a></p>
-                            <p><a class="custom-link category-link" href="/weddingBouquet">Свадебный декор</a></p>
-                            <p><a class="custom-link category-link" href="/catalogPostcard">Открытки</a></p>
+                            <p><a class="custom-link category-link" href="/catalog">Все блюда</a></p>
+                            <p><a class="custom-link category-link" href="/authorBouquet">Тип 1</a></p>
+                            <p><a class="custom-link category-link" href="/boxBouquet">Тип 2</a></p>
+                            <p><a class="custom-link category-link" href="/weddingBouquet">Тип 3</a></p>
                         </div>
                         <script>
                             // Получаем текущий путь
@@ -412,7 +411,7 @@
                         </script>
 
                         <br>
-                         <form action="/filterBouquets" method="get">
+                         <form action="/filterDishes" method="get">
                              <h6 class="form-label">Сортировка:</h6>
                              <select name="sort" id="typeRecipient" class="form-control">
                                  <option value="0">По умолчанию</option>
@@ -595,103 +594,16 @@
                     <div class="col-md-9">
                         <h4>${title}</h4>
                         <div class="row">
-                            <#list allBouquets as bouquet>
+                            <#list allDishes as dish>
                                 <div class="col-md-4">
                                     <div class="product">
-                                        <a href="/bouquet/${bouquet.id}" class="image">
-                                            <img src="/images/${bouquet.images[0].id}" alt="Фото">
+                                        <a href="/dish/${dish.id}" class="image">
+                                            <img src="/images/${dish.images[0].id}" alt="Фото">
                                         </a>
                                         <div class="info">
-                                            <a href="/bouquet/${bouquet.id}" class="card-link-name">${bouquet.name}</a>
-                                            <div>${bouquet.price}</div>
+                                            <a href="/dish/${dish.id}" class="card-link-name">${dish.name}</a>
+                                            <div>${dish.price}</div>
                                         </div>
-                                    </div>
-                                </div>
-                            </#list>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </#if>
-
-    <#else>
-        <#if allPostcards?size = 0>
-            <div class="container mt-5">
-                <div class="row">
-                    <div class="col-md-3 sideMarginRight">
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 0.5rem;">Категория:</h6>
-                        <div class="sideMargin" style="padding-top: 1rem;">
-                            <p><a class="custom-link category-link" href="/catalog">Все букеты</a></p>
-                            <p><a class="custom-link category-link" href="/authorBouquet">Авторские букеты</a></p>
-                            <p><a class="custom-link category-link" href="/boxBouquet">Композиции в коробках и корзинах</a></p>
-                            <p><a class="custom-link category-link" href="/weddingBouquet">Свадебный декор</a></p>
-                            <p><a class="custom-link category-link" href="/catalogPostcard">Открытки</a></p>
-                        </div>
-                        <script>
-                            // Получаем текущий путь
-                            var currentPath = window.location.pathname;
-
-                            // Получаем все ссылки категорий
-                            var categoryLinks = document.querySelectorAll('.category-link');
-
-                            // Проходим по каждой ссылке
-                            categoryLinks.forEach(function(link) {
-                                // Если текущий путь совпадает с атрибутом href этой ссылки
-                                if (link.getAttribute('href') === currentPath) {
-                                    // Добавляем класс активности
-                                    link.classList.add('active');
-                                }
-                            });
-                        </script>
-                    </div>
-                    <div class="col-md-9 d-flex flex-column justify-content-center align-items-center">
-                        <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
-                            <h5>Нет доступных открыток</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <#else>
-            <div class="container mt-5">
-                <div class="row">
-                    <div class="col-md-3 sideMarginRight">
-                        <h6 for="typeRecipient" class="form-label" style="margin-top: 0.5rem;">Категория:</h6>
-                        <div class="sideMargin" style="padding-top: 1rem;">
-                            <p><a class="custom-link category-link" href="/catalog">Все букеты</a></p>
-                            <p><a class="custom-link category-link" href="/authorBouquet">Авторские букеты</a></p>
-                            <p><a class="custom-link category-link" href="/boxBouquet">Композиции в коробках и корзинах</a></p>
-                            <p><a class="custom-link category-link" href="/weddingBouquet">Свадебный декор</a></p>
-                            <p><a class="custom-link category-link" href="/catalogPostcard">Открытки</a></p>
-                        </div>
-                        <script>
-                            // Получаем текущий путь
-                            var currentPath = window.location.pathname;
-
-                            // Получаем все ссылки категорий
-                            var categoryLinks = document.querySelectorAll('.category-link');
-
-                            // Проходим по каждой ссылке
-                            categoryLinks.forEach(function(link) {
-                                // Если текущий путь совпадает с атрибутом href этой ссылки
-                                if (link.getAttribute('href') === currentPath) {
-                                    // Добавляем класс активности
-                                    link.classList.add('active');
-                                }
-                            });
-                        </script>
-
-                        <br>
-
-                    </div>
-                    <div class="col-md-9">
-                        <h4>${title}</h4>
-                        <div class="row">
-                            <#list allPostcards as Postcards>
-                                <div class="col-md-4">
-                                    <div class="product">
-                                        <a href="/Postcards/${Postcards.id}" class="image">
-                                            <img src="/images/${Postcards.image.id}" alt="Фото">
-                                        </a>
                                     </div>
                                 </div>
                             </#list>

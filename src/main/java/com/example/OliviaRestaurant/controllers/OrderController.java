@@ -1,9 +1,10 @@
 package com.example.OliviaRestaurant.controllers;
 
-import com.example.OliviaRestaurant.modelsOld.Bouquet;
-import com.example.OliviaRestaurant.modelsOld.Order;
-import com.example.OliviaRestaurant.modelsOld.User;
+import com.example.OliviaRestaurant.models.Dish;
+import com.example.OliviaRestaurant.models.Order;
+import com.example.OliviaRestaurant.models.User;
 import com.example.OliviaRestaurant.services.*;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,35 +24,22 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+@AllArgsConstructor
 @Controller
 public class OrderController {
     @Autowired
     public final OrderService orderService;
-    @Autowired
-    public final OrderHasBouquetService orderHasBouquetService;
 
     @Autowired
-    private final PostcardService postcardService;
+    public final OrderHasDishService orderHasDishService;
 
     @Autowired
     private final UserService userService;
 
-
     @Autowired
-    private BouquetService bouquetService;
+    private DishService dishService;
 
-    public OrderController(OrderService orderService, OrderHasBouquetService orderHasBouquetService,
-                           PostcardService postcardService, UserService userService) {
-        this.orderService = orderService;
-        this.orderHasBouquetService = orderHasBouquetService;
-        this.postcardService = postcardService;
-        this.userService = userService;
-    }
 
-//    @GetMapping("/order")
-//    public String order(){
-//        return "order";
-//    }
 
     @GetMapping("/order/add")
     public String addOrder(Order order, Principal principal) throws IOException {
@@ -59,7 +47,7 @@ public class OrderController {
         return "redirect:/order";
     }
 
-    @GetMapping("/getorders")
+    @GetMapping("/getOrders")
     public String getOrders(Principal principal, Model model){
         model.addAttribute("orders", orderService.ListOrders());
         model.addAttribute("user", orderService.getUserByPrincipal(principal));
@@ -67,7 +55,7 @@ public class OrderController {
     }
 
     @GetMapping("/order")
-    public String getBouqordersAc(Principal principal,Model model){
+    public String getDishOrders(Principal principal,Model model){
         try {
 
             // Получение текущей даты
@@ -82,24 +70,23 @@ public class OrderController {
             }
 
 
-            model.addAttribute("acBouquets", orderHasBouquetService.getbouquetsByOrder(orderService.HaveOrderInCardByPrincipal(principal)));
+            model.addAttribute("acDish", orderHasDishService.getDishesByOrder(orderService.HaveOrderInCardByPrincipal(principal)));
 
             model.addAttribute("inacOrders", orderService.ListOrdersInactive(principal));
-            model.addAttribute("acAmounts", orderHasBouquetService.getAmountsByOrder(orderService.HaveOrderInCardByPrincipal(principal)));
-            List<Long> acAmounts = orderHasBouquetService.getAmountsByOrder(orderService.HaveOrderInCardByPrincipal(principal));
-            Long countBouquetsInOrder = 0L;
+            model.addAttribute("acAmounts", orderHasDishService.getAmountsByOrder(orderService.HaveOrderInCardByPrincipal(principal)));
+            List<Integer> acAmounts = orderHasDishService.getAmountsByOrder(orderService.HaveOrderInCardByPrincipal(principal));
+            Long countDishesInOrder = 0L;
             for(int i = 0; i < acAmounts.size(); i++){
-                countBouquetsInOrder += acAmounts.get(i);
+                countDishesInOrder += acAmounts.get(i);
             }
-            String countBouquetsInOrderString = "";
-            if (countBouquetsInOrder == 1){ countBouquetsInOrderString = "1 букет";}
-            else if (countBouquetsInOrder >= 2 && countBouquetsInOrder <= 4){countBouquetsInOrderString = countBouquetsInOrder + " букета";}
-            else {countBouquetsInOrderString = countBouquetsInOrder + " букетов";}
+            String countDishesInOrderString = "";
+            if (countDishesInOrder == 1){ countDishesInOrderString = "1 блюдо";}
+            else if (countDishesInOrder >= 2 && countDishesInOrder <= 4){countDishesInOrderString = countDishesInOrder + " блюда";}
+            else {countDishesInOrderString = countDishesInOrder + " блюд";}
 
-            model.addAttribute("countBouquetsInOrderString", countBouquetsInOrderString);
+            model.addAttribute("countDishesInOrderString", countDishesInOrderString);
 
             model.addAttribute("acOrder", orderService.HaveOrderInCardByPrincipal(principal));
-            model.addAttribute("allPostcards", postcardService.listAllPostcards());
 
             // Получение пользователя из базы данных по его email (имени пользователя)
             User user = userService.getUserByEmail(principal.getName());
@@ -116,7 +103,6 @@ public class OrderController {
                 // Пользователь аутентифицирован, можно получить его имя пользователя или другой идентификатор
                 String username = authentication.getName(); // Получить имя пользователя
                 User user1 = userService.getUserByEmail(username);
-                model.addAttribute("isAdmin", user1.getIsAdministrator());
             }
 
         } catch (Exception e) {
@@ -125,24 +111,37 @@ public class OrderController {
         return "order";
     }
 
-    @PostMapping("/order_delete/{id}")
-    public String deleteOrderBouquet(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes){
+    @PostMapping("/addOrderDish/{id}")
+    public String addOrderDish(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes){
         try {
-            Bouquet bouquet = bouquetService.getBouquetByID(id);
-            orderHasBouquetService.removeOrderHasBouquet(bouquet, principal);
-            redirectAttributes.addFlashAttribute("message", "Букет удалён из заказа");
+            Dish dish  = dishService.getDishByID(id);
+            orderHasDishService.createOrderHasDish(dish, principal);
+            redirectAttributes.addFlashAttribute("message", "Блюдо добавлено в корзину");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Ошибка при удалении букета из заказа");
+            redirectAttributes.addFlashAttribute("error", "Ошибка при добавлении блюда в корзину");
         }
 
         return "redirect:/order";
     }
 
-    @PostMapping("/order_amountchange/{id}")
-    public String changebouquetcount(@PathVariable Long id, @RequestParam(name = "count") Long count, Principal principal, RedirectAttributes redirectAttributes){
+    @PostMapping("/orderDelete/{id}")
+    public String deleteOrderDish(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes){
+        try {
+            Dish dish  = dishService.getDishByID(id);
+            orderHasDishService.removeOrderHasDish(dish, principal);
+            redirectAttributes.addFlashAttribute("message", "Блюдо удалено из заказа");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Ошибка при удалении блюда из заказа");
+        }
+
+        return "redirect:/order";
+    }
+
+    @PostMapping("/changeDishCount/{id}")
+    public String changeDishCount(@PathVariable Long id, @RequestParam(name = "count") Integer count, Principal principal, RedirectAttributes redirectAttributes){
         try{
-            Bouquet bouquet = bouquetService.getBouquetByID(id);
-            orderHasBouquetService.changeAmount(bouquet, principal, count);
+            Dish dish = dishService.getDishByID(id);
+            orderHasDishService.changeAmount(dish, principal, count);
         }catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Ошибка при изменении стоимости");
         }
@@ -151,32 +150,14 @@ public class OrderController {
     }
 
 
-    @PostMapping("/order_checkout")
-    public String Checkoutbouquet(@RequestParam(name = "typePostcard") Long typePostcard,
-                                  @RequestParam(name = "textPostcard") String textPostcard,
-                                  @RequestParam(name = "addressDelivery") String addressDelivery,
-                                  @RequestParam(name = "dateDelivery") LocalDate dateDelivery,
-                                  @RequestParam(name = "timeDelivery") String timeDelivery,
-                                  @RequestParam(name = "dataPostcardId") String dataPostcardId,
-                                  @RequestParam(name = "phoneNumber") String phoneNumber,
+    @PostMapping("/orderCheckout")
+    public String CheckoutDish(@RequestParam(name = "addressDelivery") String addressDelivery,
+                                  @RequestParam(name = "dateTimeDelivery") LocalDateTime dateTimeDelivery,
                                   Principal principal, RedirectAttributes redirectAttributes){
         LocalDateTime datePayment = LocalDateTime.now();
-        //даже не спрашивайте , что это. Только так работает
-        if(typePostcard == 0){
-            char secondChar = dataPostcardId.charAt(0);
-            // Преобразование char в String
-            String secondCharAsString = String.valueOf(secondChar);
-            // Преобразование String в Long
-            typePostcard = Long.parseLong(secondCharAsString);
-        }
-        if(textPostcard == ""){
-            textPostcard = null;
-        }
-        if(textPostcard == ""){
-            textPostcard = null;
-        }
+
         try{
-            orderService.CheckoutOrder(principal, typePostcard, textPostcard, addressDelivery, datePayment, dateDelivery, timeDelivery, phoneNumber);
+            orderService.CheckoutOrder(principal, addressDelivery, datePayment, dateTimeDelivery);
             redirectAttributes.addFlashAttribute("message", "Заказ оформлен. Оплата курьеру при получении");
         }catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Ошибка при оформлении заказа");
@@ -184,9 +165,4 @@ public class OrderController {
 
         return "redirect:/profile";
     }
-
-
-
-
-
 }
