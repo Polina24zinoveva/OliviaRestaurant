@@ -205,7 +205,7 @@
                     </div>
 
                     <div class="col-md-9">
-                        <h5 style="margin-top: 10px; margin-bottom: 2rem;">Добавление букета</h5>
+                        <h5 style="margin-top: 10px; margin-bottom: 2rem;">Добавление нового блюда</h5>
                         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
                         <form action="/adminCreateDish" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                             <div class="mb-3">
@@ -241,28 +241,25 @@
                                 <input type="number" id="required5" class="form-control" id="price" name="price" required>
                             </div>
 
-
-
-                            <!--
                             <div class="mb-3">
                                 <h6 for="type" class="form-label">Тип блюда:</h6>
-                                <select name="type" id="type" class="form-control">
-                                    <option value="Тип 1">Тип 1</option>
-                                    <option value="Тип 2">Тип 2</option>
-                                    <option value="Тип 3">Тип 3</option>
+                                <select name="dishTypeId" id="type" class="form-control">
+                                    <option value="1">Один</option>
+                                    <option value="2">Два</option>
+                                    <option value="3">Три</option>
                                 </select>
                             </div>
 
                             <div class="mb-3">
                                 <h6 for="type" class="form-label">Тип кухни:</h6>
-                                <select name="cuisine" id="cuisine" class="form-control">
-                                    <option value="Кухня 1">Кухня 1</option>
-                                    <option value="Кухня 2">Кухня 2</option>
-                                    <option value="Кухня 3">Кухня 3</option>
-                                    <option value="Кухня 4">Кухня 4</option>
+                                <select name="cuisineId" id="cuisine" class="form-control">
+                                    <option value="1">Один</option>
+                                    <option value="2">Два</option>
+                                    <option value="3">Три</option>
+                                    <option value="4">Четыре</option>
                                 </select>
                             </div>
-                            -->
+
 
                             <button type="submit" class="btn btn-custom">Добавить</button>
                         </form>
