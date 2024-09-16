@@ -232,7 +232,7 @@
                     <div class="col-md-9">
                         <#if toDeliverOrders?size = 0>
                             <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
-                                <h5>Вы еще ничего не заказывали</h5>
+                                <h5>У вас нет активных заказов</h5>
                             </div>
 
                         <#else>
@@ -246,50 +246,34 @@
                                             <div class="d-flex align-items-baseline">
                                                 <h5>Заказ №${order.id} </h5>
                                                 <p class="mb-0 me-2">&nbsp на сумму</p>
-                                                <h5 class="mb-0">${order.sumOrder} ₽</h5>
+                                                <h5 class="mb-0">${order.totalPrice} ₽</h5>
                                             </div>
                                         </div>
                                         <div class="row"  style="margin-top: 1rem;">
                                             <div class="col-7">
                                                 <h6>Товары в заказе:</h6>
                                                 <#assign y = 0>
-                                                <#list toDeliverBouquets[x] as bouquet>
+                                                <#list toDeliverDishes[x] as dish>
                                                     <div class="row" style="width: 36rem;">
                                                         <div class="col-md-3" style="margin-bottom: 1rem;">
-                                                            <#if bouquet.images[0]?has_content && bouquet.images[0]?size gt 1>
-                                                                <img src="/images/${bouquet.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
+                                                            <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
+                                                                <img src="/images/${dish.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
                                                             <#else>
                                                                 <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
                                                             </#if>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <a href="/bouquet/${bouquet.id}" class="custom-link me-auto">${bouquet.name}</a>
+                                                            <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
                                                         </div>
                                                         <div class="col-md-3">
                                                             ${toDeliverAmounts[x][y]} шт
                                                         </div>
                                                         <div class="col-md-3">
-                                                            ${bouquet.price} ₽
+                                                            ${dish.price} ₽
                                                         </div>
                                                     </div>
                                                 </#list>
                                                 <#assign y++>
-                                                <#if toDeliverPostcards[x]??>
-                                                    <div class="row" style="width: 36rem;">
-                                                        <div class="col-md-3" style="margin-bottom: 1rem;">
-                                                            <img src="/images/${toDeliverPostcards[x].image.id}" class="image" alt="Фото" style="max-width: 6rem;" class="me-2">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            ${order.textPostcard!'Открытка без текста'}
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            1 шт
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            0 ₽
-                                                        </div>
-                                                    </div>
-                                                </#if>
                                             </div>
 
                                             <div class="col-md-1 vertical-line">
@@ -297,15 +281,11 @@
 
                                             <div class="col-4">
                                                 <h6>Доставка по адресу:</h6>
-                                                <p>${order.addressDelivery}</p>
+                                                <p>${order.address}</p>
                                                 <h6>Дата доставки:</h6>
-                                                <p>${order.dateDelivery.format('dd.MM.yyyy')}</p>
+                                                <p>${order.dateDelivery}</p>
                                                 <h6>Время доставки:</h6>
                                                 <p>${order.timeDelivery!}</p>
-                                                <h6>Стоимость доставки:</h6>
-                                                <p>${order.sumDelivery} ₽</p>
-                                                <h6>Контактный номер:</h6>
-                                                <p>${order.phoneNumber!}</p>
                                             </div>
                                             <#assign x++>
                                         </div>

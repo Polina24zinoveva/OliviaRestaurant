@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 // Заказ
@@ -32,14 +33,17 @@ public class Order {
     @Column(name = "total_price")
     private Double totalPrice;
 
-    @Column(name = "payment_time")
-    private LocalDateTime paymentTime;
+    @Column(name = "date_time_payment")
+    private LocalDateTime dateTimePayment;
 
     @Column(name = "status")
     private String status;
 
-    @Column(name = "date_time_delivery")
-    private LocalDateTime dateTimeDelivery;
+    @Column(name = "date_delivery")
+    private LocalDate dateDelivery;
+
+    @Column(name = "time_delivery")
+    private String timeDelivery;
 
 
     @OneToMany(mappedBy = "order")

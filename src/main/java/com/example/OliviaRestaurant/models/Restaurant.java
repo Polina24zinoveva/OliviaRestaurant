@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -19,6 +22,9 @@ public class Restaurant {
     @Column(name = "address", unique = true)
     private String address;
 
-    @Column(name = "opening_hours")
-    private String openingHours;
+    @Column(name = "open_hours")
+    private String openHours;
+
+    @Column(name = "close_hours")
+    private String closeHours;
 }

@@ -181,7 +181,7 @@ public class AdminController {
 
         // Сортируем заказы по дате доставки
         List<Order> sortedOrders = orders.stream()
-                .sorted((o1, o2) -> o1.getDateTimeDelivery().compareTo(o2.getDateTimeDelivery()))
+                .sorted((o1, o2) -> o1.getDateDelivery().compareTo(o2.getDateDelivery()))
                 .collect(Collectors.toList());
 
         model.addAttribute("toDeliverOrders", sortedOrders);
@@ -196,7 +196,7 @@ public class AdminController {
 
         // Сортируем заказы по дате доставки
         List<Order> sortedOrders = orders.stream()
-                .sorted((o1, o2) -> o2.getDateTimeDelivery().compareTo(o1.getDateTimeDelivery()))
+                .sorted((o1, o2) -> o2.getDateDelivery().compareTo(o1.getDateDelivery()))
                 .collect(Collectors.toList());
 
         model.addAttribute("toDeliverOrders", sortedOrders);
@@ -212,7 +212,7 @@ public class AdminController {
 
         // Сортируем заказы по дате доставки
         List<Order> sortedOrders = orders.stream()
-                .sorted((o1, o2) -> o2.getDateTimeDelivery().compareTo(o1.getDateTimeDelivery()))
+                .sorted((o1, o2) -> o2.getDateDelivery().compareTo(o1.getDateDelivery()))
                 .collect(Collectors.toList());
 
         model.addAttribute("toDeliverOrders", sortedOrders);

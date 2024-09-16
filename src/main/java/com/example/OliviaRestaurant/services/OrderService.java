@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -60,12 +61,13 @@ public class OrderService {
     @Transactional
     public void CheckoutOrder(Principal principal,
                               String addressDelivery, LocalDateTime datePayment,
-                              LocalDateTime dateDelivery){
+                              LocalDate dateDelivery, String timeDelivery){
         try{
             Order order = HaveOrderInCardByPrincipal(principal);
             order.setAddress(addressDelivery);
-            order.setPaymentTime(datePayment);
-            order.setDateTimeDelivery(dateDelivery);
+            order.setDateTimePayment(datePayment);
+            order.setDateDelivery(dateDelivery);
+            order.setTimeDelivery(timeDelivery);
             order.setStatus("Оплачен");
             orderRepository.save(order);
         }catch (Exception e){

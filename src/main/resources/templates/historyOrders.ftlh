@@ -172,11 +172,7 @@
                                 </svg>
                                 ${currentUser.email}
                             </p>
-                            <p class="icon-text">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
-                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-                                </svg>
-                            </p>
+
                         </div>
 
                         <h6 style="margin-top: 2rem;">Другое</h6>
@@ -234,10 +230,10 @@
                             <#list finishedOrders as order>
                                 <div class="row">
                                     <div class="col d-flex align-items-center justify-content-between">
-                                        <h5>Заказ №${order.id} от ${order.datePayment.format('dd.MM.yyyy')}</h5>
+                                        <h5>Заказ №${order.id} от ${order.dateTimePayment}</h5>
                                         <div class="d-flex align-items-center">
                                             <p class="mb-0 me-2">оплачено</p>
-                                            <h5 class="mb-0">${order.sumOrder} ₽</h5>
+                                            <h5 class="mb-0">${order.totalPrice} ₽</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -248,23 +244,19 @@
                                     <div class="d-flex">
                                         <div class="flex-fill">
                                             <h6>Доставка по адресу:</h6>
-                                            <p>${order.addressDelivery}</p>
+                                            <p>${order.address}</p>
                                         </div>
                                         <div class="flex-fill">
                                             <h6>Дата доставки:</h6>
-                                            <p>${order.dateDelivery.format('dd.MM.yyyy')}</p>
+                                            <p>${order.dateDelivery}</p>
                                         </div>
                                         <div class="flex-fill">
                                             <h6>Время доставки:</h6>
                                             <p>${order.timeDelivery!}</p>
                                         </div>
                                         <div class="flex-fill">
-                                            <h6>Стоимость доставки:</h6>
-                                            <p>${order.sumDelivery} ₽</p>
-                                        </div>
-                                        <div class="flex-fill">
                                             <h6>Контактный номер:</h6>
-                                            <p>${order.phoneNumber!}</p>
+                                            <p>${order.user.phoneNumber!}</p>
                                         </div>
                                     </div>
                                 </div>

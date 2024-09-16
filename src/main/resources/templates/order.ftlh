@@ -58,7 +58,7 @@
             }
         }
 
-        function timeaddresser(){
+        function setTime(){
             const datra = document.getElementById("dateDelivery").value;
             const dater = new Date(datra);
             const PBY = new Date();
@@ -68,24 +68,33 @@
             console.log("Input date:", PBJ.getTime());
             var select = document.getElementById("timeDelivery");
 
-
             if(tdy.getTime() == PBJ.getTime()){
                 console.log("Равенство работает");
 
-                var curhour = PBY.getHours();
-                console.log("Часы:", curhour);
+                PBY.setMinutes(PBY.getMinutes() + 59);
+
+                // Обновляем часы и минуты после добавления
+                curhour = PBY.getHours();
+                curminute = PBY.getMinutes();
+
+                console.log("Часы:", curhour, "Минуты:", curminute);
+
                 for (var i = 0; i < select.length; i++){
 
                     var timesel = select.options[i].text;
-                    var terer= parseInt(timesel.substring(0,2));
-                    if(terer <= curhour){
-                            select.options[i].style.display = 'none';
-                    }
-                    else {
+                    var timeParts = timesel.split(':');
+                    var optionHour = parseInt(timeParts[0]);
+                    var optionMinute = parseInt(timeParts[1]);
+
+                    // Сравниваем текущее время с временем опции
+                    if(optionHour < curhour || (optionHour === curhour && optionMinute <= curminute)){
+                        select.options[i].style.display = 'none';
+                    } else {
                         select.options[i].style.display = 'list-item';
                     }
-
                 }
+
+                // Устанавливаем первое доступное значение
                 for(var i = 0; i < select.length; i++){
                     if(select.options[i].style.display !== 'none'){
                         console.log("wawa", select.options[i].text);
@@ -94,20 +103,20 @@
                     }
                 }
 
-            }else{
+            } else {
+                // Если дата не сегодняшняя, показываем все опции
                 for (var i = 0; i < select.length; i++){
                     select.options[i].style.display = 'list-item';
-
                 }
                 select.value = select.options[0].value;
             }
-            // Обновление текстового поля с датой
 
+            // Обновление текстового поля с датой
             const parts = datra.split('-');
             const formattedDate = parts[2] + '.' + parts[1] + '.' + parts[0];
-
             document.getElementById("dateDisplay").value = formattedDate;
         }
+
 
 
         function validateForm() {
@@ -317,7 +326,7 @@
                 showMessage("${message}");
             </script>
         </#if>
-        <#if acBouquets?size = 0>
+        <#if dishes?size = 0>
             <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
                 <h4>Ваша корзина пуста</h4>
             </div>
@@ -338,27 +347,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <#list acBouquets as bouquet>
+                                <#list dishes as dish>
                                     <tr>
                                         <td>
-                                            <#if bouquet.images?has_content>
-                                                <img src="/images/${bouquet.images[0].id}" class="d-block w-100 photo" alt="Фото" style="max-width: 8rem;">
+                                            <#if dish.images?has_content>
+                                                <img src="/images/${dish.images[0].id}" class="d-block w-100 photo" alt="Фото" style="max-width: 8rem;">
                                             </#if>
                                         </td>
 
                                         <td style="vertical-align: middle; text-align: center;">
-                                            <a href="/bouquet/${bouquet.id}" class="card-link">${bouquet.name}</a>
+                                            <a href="/dish/${dish.id}" class="card-link">${dish.name}</a>
                                         </td>
 
-                                        <td style="vertical-align: middle; text-align: center;">${bouquet.price}</td>
+                                        <td style="vertical-align: middle; text-align: center;">${dish.price}</td>
 
 
                                         <td style="vertical-align: middle; text-align: center;">
-                                            <form action="/order_amountchange/${bouquet.id}" method="post" >
+                                            <form action="/changeDishCount/${dish.id}" method="post" >
                                                 <div class="input-group input-group-sm" style="max-width: 5rem;">
-                                                    <button class="btn btn-outline-secondary" type="submit" id="decreaseButton_${bouquet.id}" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">-</button>
-                                                    <input type="number" id="count" name="count" style="text-align: center;" class="form-control form-control-sm" size="1" min="1" max="10" value="${acAmounts[x]}">
-                                                    <button class="btn btn-outline-secondary" type="submit" id="increaseButton_${bouquet.id}" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
+                                                    <button class="btn btn-outline-secondary" type="submit" id="decreaseButton_${dish.id}" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">-</button>
+                                                    <input type="number" id="count" name="count" style="text-align: center;" class="form-control form-control-sm" size="1" min="1" max="10" value="${amounts[x]}">
+                                                    <button class="btn btn-outline-secondary" type="submit" id="increaseButton_${dish.id}" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
                                                 </div>
                                             </form>
                                         </td>
@@ -368,7 +377,7 @@
                                             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
                                                 integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
                                                 crossorigin="anonymous"></script>
-                                            <form action="/order_delete/${bouquet.id}" method="post">
+                                            <form action="/deleteDishFromOrder/${dish.id}" method="post">
                                                 <button type="submit" class="btn btn-custom">Удалить</button>
                                             </form>
                                         </td>
@@ -385,26 +394,18 @@
                     </div>
 
                     <div class="col-md-4">
-                        <#if acBouquets?size != 0>
+                        <#if dishes?size != 0>
                             <h4 class="text-start">Заказ:</h4>
                             <br>
-                            <form action="/order_checkout" method="post" onsubmit="return validateForm()">
+                            <form action="/orderCheckout" method="post" onsubmit="return validateForm()">
                                 <hr>
 
                                 <div class="row">
                                     <div class="col-6">
-                                        <p>${countBouquetsInOrderString}</p>
+                                        <p>${countDishesInOrderString}</p>
                                     </div>
                                     <div class="col-6">
-                                        <p class="text-end">${acOrder.sumOrder} руб.</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <p>Доставка</p>
-                                    </div>
-                                    <div class="col-6">
-                                        <p class="text-end">${acOrder.sumDelivery} руб.</p>
+                                        <p class="text-end">${order.totalPrice} руб.</p>
                                     </div>
                                 </div>
 
@@ -415,7 +416,7 @@
                                         <h5 class="text-start">Сумма заказа:</h5>
                                     </div>
                                     <div class="col-6">
-                                        <h5 class="text-end">${acOrder.sumOrderWithDelivery} руб.</h5>
+                                        <h5 class="text-end">${order.totalPrice} руб.</h5>
                                     </div>
                                 </div>
 
@@ -459,76 +460,64 @@
                                             </div>
                                         </#if>
                                         <div class="col-12 mb-3">
-                                            <h6 for="typeRecipient" class="form-label">Получатель:</h6>
-                                            <select onchange = "showNumberPhone()" name = "typeRecipient" id = "typeRecipient" class = "form-control">
-                                                <option id = "me" value = "0">Я</option>
-                                                <option value = "1">Другой человек</option>
-                                            </select>
-                                        </div>
-                                        <!--для правильного формата номера телефона-->
-                                        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-                                        <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.6-beta.29/dist/inputmask.min.js"></script>
-
-                                        <div class="col-12 mb-3">
-                                            <div class="form-group" id="phoneNumberContainer" style = "display:none">
-                                                <h6 class="text-start">Номер телефона</h6>
-                                                <input class="form-control" name="phoneNumber" id="phoneNumber" value = "${phoneNumber}" required>
+                                            <div class="form-group" id="addressDelivery">
+                                                <h6 class="text-start">Адрес доставки</h6>
+                                                <input class="form-control" name="addressDelivery" id="addressDelivery"
+                                                    placeholder="Улица, дом, квартира" required>
                                             </div>
                                         </div>
-                                        <script>
-                                            $(document).ready(function(){
-                                                Inputmask({"mask": "8 (999) 999-99-99"}).mask("#phoneNumber");
-                                            });
-                                        </script>
 
-                                    <div class="col-12 mb-3">
-                                        <div class="form-group" id="addressDelivery">
-                                            <h6 class="text-start">Адрес доставки</h6>
-                                            <input class="form-control" name="addressDelivery" id="addressDelivery"
-                                                placeholder="Улица, дом, квартира" required>
-                                        </div>
-                                    </div>
-
-
-
-
-                                    <div class="col-12 mb-3">
-                                        <div class="form-group">
-                                            <h6 class="text-start">Дата доставки</h6>
+                                        <div class="col-12 mb-3">
+                                            <div class="form-group">
+                                                <h6 class="text-start">Дата доставки</h6>
                                                 <div style="display:flex;">
-                                                    <input type="date" class="form-control" style="width:48px" id="dateDelivery" name="dateDelivery" min="${minDate}" max="${maxDate}" onchange="timeaddresser()" required>
+                                                    <input type="date" class="form-control" style="width:48px" id="dateDelivery" name="dateDelivery" min="${minDate}" max="${maxDate}" onchange="setTime()" required>
                                                     <input type="text" class="form-control" id="dateDisplay" readonly style="margin-left:4px">
                                                 </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 mb-3">
+                                            <h6 for="dateTimeDelivery" class="form-label">Время доставки:</h6>
+                                            <select name="timeDelivery" id="timeDelivery" class="form-control">
+                                                <option value="11:00">11:00</option>
+                                                <option value="11:30">11:30</option>
+                                                <option value="12:00">12:00</option>
+                                                <option value="12:30">12:30</option>
+                                                <option value="13:00">13:00</option>
+                                                <option value="13:30">13:30</option>
+                                                <option value="14:00">14:00</option>
+                                                <option value="14:30">14:30</option>
+                                                <option value="15:00">15:00</option>
+                                                <option value="15:30">15:30</option>
+                                                <option value="16:00">16:00</option>
+                                                <option value="16:30">16:30</option>
+                                                <option value="17:00">17:00</option>
+                                                <option value="17:30">17:30</option>
+                                                <option value="18:00">18:00</option>
+                                                <option value="18:30">18:30</option>
+                                                <option value="19:00">19:00</option>
+                                                <option value="19:30">19:30</option>
+                                                <option value="20:00">20:00</option>
+                                                <option value="20:30">20:30</option>
+                                                <option value="21:00">21:00</option>
+                                                <option value="21:30">21:30</option>
+                                                <option value="22:00">22:00</option>
+                                                <option value="22:30">22:30</option>
+                                                <option value="23:00">23:00</option>
+                                            </select>
                                         </div>
                                     </div>
-
-                                    <div class="col-12 mb-3">
-                                       <h6 for="dateTimeDelivery" class="form-label">Время доставки:</h6>
-                                       <select name="timeDelivery" id="timeDelivery" class="form-control">
-                                          <option value="08:00 - 10:00">08:00 - 10:00</option>
-                                          <option value="10:00 - 12:00">10:00 - 12:00</option>
-                                          <option value="12:00 - 14:00">12:00 - 14:00</option>
-                                          <option value="14:00 - 16:00">14:00 - 16:00</option>
-                                          <option value="16:00 - 18:00">16:00 - 18:00</option>
-                                          <option value="18:00 - 20:00">18:00 - 20:00</option>
-                                          <option value="20:00 - 22:00">20:00 - 22:00</option>
-                                          <option value="Спросить у получателя">Спросить у получателя</option>
-                                       </select>
-                                    </div>
-
                                 </div>
 
-
-                            </div>
-
-                            <div class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-custom-order">Оформить заказ</button>
-                            </div>
-                        </form>
+                                <div class="d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-custom-order">Оформить заказ</button>
+                                </div>
+                            </form>
                         </#if>
+                    </div>
                 </div>
             </div>
-        </div>
         </#if>
     </div>
      <footer class="footer mt-auto">

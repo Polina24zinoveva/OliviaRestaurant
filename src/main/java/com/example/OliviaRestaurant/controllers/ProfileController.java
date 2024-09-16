@@ -24,8 +24,13 @@ public class ProfileController {
         List<Order> orders = orderService.ListOrdersActive(user); // Получаем заказы пользователя
         // Сортируем заказы по дате доставки
         List<Order> sortedOrders = orders.stream()
-                .sorted((o1, o2) -> o1.getDateTimeDelivery().compareTo(o2.getDateTimeDelivery()))
+                .sorted((o1, o2) -> o1.getDateDelivery().compareTo(o2.getDateDelivery()))
                 .collect(Collectors.toList());
+
+        List<Order> sortedFinishedOrders = orders.stream()
+                .sorted((o1, o2) -> o2.getDateDelivery().compareTo(o1.getDateDelivery()))
+                .collect(Collectors.toList());
+
 
         model.addAttribute("currentUser", user);
         model.addAttribute("toDeliverOrders", sortedOrders);
@@ -40,7 +45,7 @@ public class ProfileController {
         List<Order> finishedOrders = orderService.ListOrdersFinished(user); // Получаем заказы пользователя
         // Сортируем заказы по дате доставки
         List<Order> sortedFinishedOrders = finishedOrders.stream()
-                .sorted((o1, o2) -> o2.getDateTimeDelivery().compareTo(o1.getDateTimeDelivery()))
+                .sorted((o1, o2) -> o2.getDateDelivery().compareTo(o1.getDateDelivery()))
                 .collect(Collectors.toList());
 
         model.addAttribute("finishedOrders", sortedFinishedOrders);

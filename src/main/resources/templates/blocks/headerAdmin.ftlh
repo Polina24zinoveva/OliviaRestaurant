@@ -1,6 +1,6 @@
 <div class="container-fluid text-center">
     <nav class="navbar navbar-custom navbar-expand-sm">
-        <a class="navbar-brand" href="/">Olivia Flowers</a>
+        <a class="navbar-brand" href="/">Olivia Restaurant</a>
 
         <ul class="navbar-nav ms-auto">
             <li class="nav-item">

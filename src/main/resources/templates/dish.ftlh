@@ -207,19 +207,21 @@
                 </#list></p>
                 <p class="text">Калорийность: ${dish.calories}</p>
                 <p class="text">Вес: ${dish.weight}</p>
+                <p class="text">Кухня: ${dish.cuisine.name}</p>
+                <p class="text">Тип блюда: ${dish.dishType.name}</p>
                 <h6 class="text">${dish.price} рублей</h6>
             </div>
             <div class="d-flex justify-content-between" style="margin-bottom: 50px;"> <!-- Добавляем классы d-flex и justify-content-between -->
                 <!-- Кнопка "Добавить в корзину" -->
                 <#if inCard==false>
-                    <form id="addButton" onclick="addOrAdded()" action="/addOrderDish/${dish.id}" method="post">
+                    <form id="addButton" onclick="addOrAdded()" action="/addDishToOrder/${dish.id}" method="post">
                         <button type="submit" class="btn btn-custom">Добавить в корзину</button>
                     </form>
                     <form id="addedButton" action="/order" style="display:none;">
                         <button type="submit" class="btn btn-custom2">Перейти в корзину</button>
                     </form>
                 <#else>
-                    <form id="addButton" onclick="addOrAdded()" action="/addOrderDish/${dish.id}" method="post" style="display:none;">
+                    <form id="addButton" onclick="addOrAdded()" action="/addDishToOrder/${dish.id}" method="post" style="display:none;">
                         <button type="submit" class="btn btn-custom">Добавить в корзину</button>
                     </form>
                     <form id="addedButton" action="/order">
