@@ -1,8 +1,9 @@
 package com.example.OliviaRestaurant.controllers;
 
-import com.example.OliviaRestaurant.models.Dish;
-import com.example.OliviaRestaurant.models.Order;
-import com.example.OliviaRestaurant.models.User;
+import com.example.OliviaRestaurant.models.*;
+import com.example.OliviaRestaurant.repositories.CuisineRepository;
+import com.example.OliviaRestaurant.repositories.DishTypeRepository;
+import com.example.OliviaRestaurant.repositories.ImageRepository;
 import com.example.OliviaRestaurant.services.DishService;
 import com.example.OliviaRestaurant.services.OrderHasDishService;
 import com.example.OliviaRestaurant.services.OrderService;
@@ -39,6 +40,9 @@ public class AdminController {
     @Autowired
     private final UserService userService;
 
+    private final CuisineRepository CuisineRepository;
+    private final DishTypeRepository DishTypeRepository;
+
 
     @GetMapping("/adminAllDish")
     public String admin(Model model){
@@ -59,15 +63,33 @@ public class AdminController {
 
 
     @PostMapping("/adminCreateDish")
-    public String adminCreateDish(@RequestParam("file1") MultipartFile file1, @RequestParam("file2") MultipartFile file2,
-                             @RequestParam("file3") MultipartFile file3, Dish dish,
-                             RedirectAttributes redirectAttributes) throws IOException {
+    public String adminCreateDish(
+            @RequestParam("file1") MultipartFile file1,
+            @RequestParam("file2") MultipartFile file2,
+            @RequestParam("file3") MultipartFile file3,
+            @RequestParam("dishTypeId") Long dishTypeId,
+            @RequestParam("cuisineId") Long cuisineId,
+            Dish dish,
+            RedirectAttributes redirectAttributes) throws IOException {
+
         try {
+            // Получаем тип блюда и кухню по их ID
+            DishType dishType = DishTypeRepository.findById(dishTypeId)
+                    .orElseThrow(() -> new IllegalArgumentException("Тип блюда не найден"));
+            Cuisine cuisine = CuisineRepository.findById(cuisineId)
+                    .orElseThrow(() -> new IllegalArgumentException("Кухня не найдена"));
+
+            // Присваиваем их объекту Dish
+            dish.setDishType(dishType);
+            dish.setCuisine(cuisine);
+
+            // Сохраняем блюдо и изображения
             dishService.saveDish(dish, file1, file2, file3);
             redirectAttributes.addFlashAttribute("message", "Блюдо успешно сохранено");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Ошибка при сохранении букета");
+            redirectAttributes.addFlashAttribute("error", "Ошибка при сохранении блюда");
         }
+
         return "redirect:/adminAddDish";
     }
 
