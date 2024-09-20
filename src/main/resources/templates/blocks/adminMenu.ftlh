@@ -10,6 +10,12 @@
     <p><a href="/adminChoiceDish" class="custom-link category-link">Выбор блюд в меню</a></p>
 </div>
 
+<h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Сотрудники:</h6>
+<div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
+    <p><a href="/adminAllEmployee" class="custom-link category-link">Сотрудники</a></p>
+    <p><a href="/adminAddEmployee" class="custom-link category-link">Назначение сотрудника</a></p>
+</div>
+
 <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Пользователи:</h6>
 <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
     <p><a href="/adminAllUsers" class="custom-link category-link">Пользователи</a></p>

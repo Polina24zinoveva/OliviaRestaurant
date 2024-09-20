@@ -206,12 +206,34 @@ public class AdminController {
         return "adminFinishedOrderList";
     }
 
+    @GetMapping("/adminAllEmployee")
+    public String adminAllEmployee(Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
+
+        model.addAttribute("allEmployee", userService.listAllEmployee());
+        return "adminAllEmployee";
+    }
+
+    @GetMapping("/adminAddEmployee")
+    public String adminAddEmployee(Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
+        return "adminAddEmployee";
+    }
+
+    @PostMapping("/adminAddEmployee")
+    public String adminAddEmployee(RedirectAttributes redirectAttributes) {
+
+        return "redirect:/adminAddEmployee";
+    }
+
+
 
     @GetMapping("/adminAllUsers")
     public String adminAllUsers(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
 
-        model.addAttribute("allUsers", userService.listAllUsers());
+        model.addAttribute("allUsers", userService.listAllClient());
         return "adminAllUsers";
     }
+
 }
