@@ -1,8 +1,11 @@
 package com.example.OliviaRestaurant.controllers;
 
 import com.example.OliviaRestaurant.models.Dish;
+import com.example.OliviaRestaurant.models.User;
 import com.example.OliviaRestaurant.services.*;
+import com.example.OliviaRestaurant.statics.StaticMethods;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +43,9 @@ public class CatalogController {
 
 
     @GetMapping("/catalog")
-    public String catalog(Model model){
+    public String catalog(Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
+
         dishes = dishService.listAllDishes();
         model.addAttribute("allDishes", dishes);
         String title = "Все блюда: ";

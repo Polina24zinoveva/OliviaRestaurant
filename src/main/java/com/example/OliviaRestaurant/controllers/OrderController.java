@@ -4,9 +4,11 @@ import com.example.OliviaRestaurant.models.Dish;
 import com.example.OliviaRestaurant.models.Order;
 import com.example.OliviaRestaurant.models.User;
 import com.example.OliviaRestaurant.services.*;
+import com.example.OliviaRestaurant.statics.StaticMethods;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,23 +41,27 @@ public class OrderController {
     @Autowired
     private DishService dishService;
 
-
-
     @GetMapping("/order/add")
-    public String addOrder(Order order, Principal principal) throws IOException {
+    public String addOrder(Order order, Principal principal, Model model,
+                           @AuthenticationPrincipal User user) throws IOException {
+        StaticMethods.header(user, model);
         orderService.saveOrder(principal, order);
         return "redirect:/order";
     }
 
     @GetMapping("/getOrders")
-    public String getOrders(Principal principal, Model model){
+    public String getOrders(Principal principal, Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
+
         model.addAttribute("orders", orderService.ListOrders());
         model.addAttribute("user", orderService.getUserByPrincipal(principal));
         return "order";
     }
 
     @GetMapping("/order")
-    public String getDishOrders(Principal principal,Model model){
+    public String getDishOrders(Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
+
         try {
 
             // Получение текущей даты
@@ -65,16 +71,15 @@ public class OrderController {
             LocalDate maxDate = minDate.plus(3, ChronoUnit.MONTHS);
 
             int hourNow = LocalTime.now().getHour();
-            if(hourNow >= 20){
+            if(hourNow >= 22){
                 minDate = minDate.plus(1, ChronoUnit.DAYS);
             }
 
 
-            model.addAttribute("acDish", orderHasDishService.getDishesByOrder(orderService.HaveOrderInCardByPrincipal(principal)));
+            model.addAttribute("dishes", orderHasDishService.getDishesByOrder(orderService.HaveOrderInCardByUser(user)));
 
-            model.addAttribute("inacOrders", orderService.ListOrdersInactive(principal));
-            model.addAttribute("acAmounts", orderHasDishService.getAmountsByOrder(orderService.HaveOrderInCardByPrincipal(principal)));
-            List<Integer> acAmounts = orderHasDishService.getAmountsByOrder(orderService.HaveOrderInCardByPrincipal(principal));
+            model.addAttribute("amounts", orderHasDishService.getAmountsByOrder(orderService.HaveOrderInCardByUser(user)));
+            List<Integer> acAmounts = orderHasDishService.getAmountsByOrder(orderService.HaveOrderInCardByUser(user));
             Long countDishesInOrder = 0L;
             for(int i = 0; i < acAmounts.size(); i++){
                 countDishesInOrder += acAmounts.get(i);
@@ -86,10 +91,8 @@ public class OrderController {
 
             model.addAttribute("countDishesInOrderString", countDishesInOrderString);
 
-            model.addAttribute("acOrder", orderService.HaveOrderInCardByPrincipal(principal));
+            model.addAttribute("order", orderService.HaveOrderInCardByUser(user));
 
-            // Получение пользователя из базы данных по его email (имени пользователя)
-            User user = userService.getUserByEmail(principal.getName());
 
             // Передача номера телефона в модель
             model.addAttribute("phoneNumber", user.getPhoneNumber());
@@ -111,8 +114,8 @@ public class OrderController {
         return "order";
     }
 
-    @PostMapping("/addOrderDish/{id}")
-    public String addOrderDish(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes){
+    @PostMapping("/addDishToOrder/{id}")
+    public String addDishToOrder(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes){
         try {
             Dish dish  = dishService.getDishByID(id);
             orderHasDishService.createOrderHasDish(dish, principal);
@@ -124,8 +127,8 @@ public class OrderController {
         return "redirect:/order";
     }
 
-    @PostMapping("/orderDelete/{id}")
-    public String deleteOrderDish(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes){
+    @PostMapping("/deleteDishFromOrder/{id}")
+    public String deleteDishFromOrder(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes){
         try {
             Dish dish  = dishService.getDishByID(id);
             orderHasDishService.removeOrderHasDish(dish, principal);
@@ -152,12 +155,13 @@ public class OrderController {
 
     @PostMapping("/orderCheckout")
     public String CheckoutDish(@RequestParam(name = "addressDelivery") String addressDelivery,
-                                  @RequestParam(name = "dateTimeDelivery") LocalDateTime dateTimeDelivery,
+                               @RequestParam(name = "dateDelivery") LocalDate dateDelivery,
+                               @RequestParam(name = "timeDelivery") String timeDelivery,
                                   Principal principal, RedirectAttributes redirectAttributes){
         LocalDateTime datePayment = LocalDateTime.now();
 
         try{
-            orderService.CheckoutOrder(principal, addressDelivery, datePayment, dateTimeDelivery);
+            orderService.CheckoutOrder(principal, addressDelivery, datePayment, dateDelivery, timeDelivery);
             redirectAttributes.addFlashAttribute("message", "Заказ оформлен. Оплата курьеру при получении");
         }catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Ошибка при оформлении заказа");

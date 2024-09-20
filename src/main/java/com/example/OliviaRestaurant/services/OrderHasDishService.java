@@ -108,7 +108,7 @@ public class OrderHasDishService {
             Order order = new Order();
             order.setUser(getUserByPrincipal(principal));
             order.setStatus("В корзине");
-            order.setTotalPrice(0.0);
+            order.setTotalPrice(dish.getPrice());
             orderRepository.save(order);
         }
         Order order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), "В корзине");

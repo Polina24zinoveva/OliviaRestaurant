@@ -3,8 +3,10 @@ package com.example.OliviaRestaurant.controllers;
 import com.example.OliviaRestaurant.models.User;
 import com.example.OliviaRestaurant.models.UserWithoutLink;
 import com.example.OliviaRestaurant.services.UserService;
+import com.example.OliviaRestaurant.statics.StaticMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,13 +32,12 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(Model model) {
+    public String login(Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
+
         LocalDate maxDate = LocalDate.now();
         model.addAttribute("maxDate", maxDate);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userService.getUserByEmail(username);
         if (message != null) model.addAttribute("message", message);
         if (warning != null) model.addAttribute("warning", warning);
         if (error != null) model.addAttribute("error", error);
@@ -54,16 +55,15 @@ public class UserController {
     }
 
     @GetMapping("/registration")
-    public String registration(Model model){
+    public String registration(Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
 
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userService.getUserByEmail(username);
         return "registration";
     }
     @GetMapping("/activate/{code}")
-    public String activate(Model model, @PathVariable String code) {
+    public String activate(@PathVariable String code, Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
+
         LocalDate maxDate = LocalDate.now();
         model.addAttribute("maxDate", maxDate);
 

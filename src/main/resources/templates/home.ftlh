@@ -61,7 +61,7 @@
     .p-custom-text {
       text-align: center;
       font-size: 16px;
-      max-width: 800px;
+      max-width: 1000px;
       margin: auto;
       margin-bottom: 4rem;
     }
@@ -96,46 +96,26 @@
 
 <body>
     <div>
-        <#include "blocks/headerAdmin.ftlh">
+        <#include "blocks/header.ftlh">
 
 
         <div class="image-container">
-            <center><img src="../logotip2.png" style="height: 180px;" alt="Logo"></center>
+            <center><img src="../logotip.png" style="height: 100px;" alt="Logo"></center>
         </div>
 
-        <p class="p-custom" style="padding-top: 1rem;">Вам могут понравиться наши сезонные букеты</p>
 
-        <!-- Если нет букетов, выводим сообщение о их отсутствии -->
-        <p class="p-text-center">На данный момент у нас нет сезонных букетов</p>
+        <center><img src="../rest.jpg" style="height: 400px; padding-top: 3rem; padding-bottom: 2rem;"></center>
+        <p class="text-center" style="font-size: 20px;">${address}</p>
+        <p class="text-center" style="font-size: 16px;">Часы работы: ${openHours} - ${closeHours}</p>
 
 
         <div class="background_color_about_us text-center">
             <p class="p-custom" style="padding-top: 4rem;">О нас</p>
-            <h5>OLIVIA - это цветы, собранные с любовью.</h5>
-            <p class="p-custom-text" style="padding-bottom: 4rem;">Цветы сопровождают нас в самые радостные моменты жизни, и мы рады проживать их вместе с вами.<br>
-              Наша команда занимается разработкой авторских букетов и композиций, декором свадеб и других мероприятий.<br>
+            <h5>OLIVIA — это ресторан, созданный с любовью к каждому гостю.</h5>
+            <p class="p-custom-text" style="padding-bottom: 4rem;"> Мы стремимся создавать уникальные гастрономические впечатления, которые дополняют важные моменты вашей жизни. <br>
+                Команда наших шеф-поваров использует лучшие ингредиенты и инновационные рецепты, чтобы предлагать вам блюда, которые радуют вкусом.
+                OLIVIA — это не просто ресторан, это пространство для уютных встреч, торжеств и незабываемых вечеров, где каждый гость получает внимание и заботу.<br>
             </p>
-        </div>
-
-
-
-        <div class="row row-custom-delivery d-flex justify-content-center" style="max-width: 100%">
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="card h-100 custom-card-delivery">
-                    <div class="card-body">
-                        <h5 class="card-title">Доставка по городу</h5>
-                        <p class="card-text">Курьером по городу 300₽</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="card h-100 custom-card-delivery">
-                    <div class="card-body">
-                        <h5 class="card-title">Бесплатная доставка</h5>
-                        <p class="card-text">При заказе от 3000₽</p>
-                    </div>
-                </div>
-            </div>
         </div>
 
     </div>

@@ -181,7 +181,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
                                     <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
                                 </svg>
-                                <a class="custom-link category-link" href="/profile">Активные заказы</a>
+                                <a class="custom-link category-link" href="/courierProfile">Активные заказы</a>
                             </p>
                             <p class="icon-text">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-history" viewBox="0 0 16 16">
@@ -189,7 +189,7 @@
                                     <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/>
                                     <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/>
                                 </svg>
-                                <a class="custom-link category-link" href="/historyOrders">История заказов</a>
+                                <a class="custom-link category-link" href="/courierHistoryOrders">История заказов</a>
                             </p>
                             <form action="/logout" method="post">
                                 <button type="submit" class="btn btn-custom">Выйти</button>
@@ -220,7 +220,7 @@
                     <div class="col-md-9">
                         <#if finishedOrders?size = 0>
                             <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
-                                <h5>Вы еще ничего не заказывали</h5>
+                                <h5>Нет истории заказов</h5>
                             </div>
 
                         <#else>
@@ -258,6 +258,10 @@
                                             <h6>Контактный номер:</h6>
                                             <p>${order.user.phoneNumber!}</p>
                                         </div>
+                                        <div class="flex-fill">
+                                            <h6>Дата и время доставки курьером:</h6>
+                                            <p>${order.courierDateTimeDelivery!}</p>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -267,7 +271,7 @@
                                 <div id="orderItemsDiv_${order.id}" style="display:none;" >
                                     <br>
                                     <#assign y = 0>
-                                    <#list toDeliverDishes[x] as dish>
+                                    <#list finishedDishes[x] as dish>
                                         <div class="row" style="width: 36rem;">
                                             <div class="col-md-3" style="margin-bottom: 1rem;">
                                                 <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
@@ -280,7 +284,7 @@
                                                 <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
                                             </div>
                                             <div class="col-md-3">
-                                                ${toDeliverAmounts[x][y]} шт
+                                                ${finishedAmounts[x][y]} шт
                                             </div>
                                             <div class="col-md-3">
                                                 ${dish.price} ₽
@@ -288,23 +292,6 @@
                                         </div>
                                     </#list>
                                     <#assign y++>
-
-                                    <#if toDeliverPostcards[x]??>
-                                        <div class="row" style="width: 36rem;">
-                                            <div class="col-md-3" style="margin-bottom: 1rem;">
-                                                <img src="/images/${toDeliverPostcards[x].image.id}" class="image"alt="Фото" style="max-width: 6rem;" class="me-2">
-                                            </div>
-                                            <div class="col-md-3">
-                                                ${order.textPostcard!'Открытка без текста'}
-                                            </div>
-                                            <div class="col-md-3">
-                                                1 шт
-                                            </div>
-                                            <div class="col-md-3">
-                                                0 ₽
-                                            </div>
-                                        </div>
-                                    </#if>
                                     <#assign x++>
                                 </div>
                                 <div class="horizontal-line"></div> <!-- Горизонтальная линия -->

@@ -2,7 +2,6 @@
 <div style="margin-left: 2rem; padding-top: 0.5rem;">
     <p><a href="/adminOrderList" class="custom-link category-link">Активные заказы</a></p>
     <p><a href="/adminFinishedOrderList" class="custom-link category-link">Доставленные заказы</a></p>
-    <p><a href="/adminCanceledOrderList" class="custom-link category-link">Отмененные заказы</a></p>
 </div>
 <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Блюда:</h6>
 <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
@@ -15,3 +14,7 @@
 <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
     <p><a href="/adminAllUsers" class="custom-link category-link">Пользователи</a></p>
 </div>
+
+<form action="/logout" method="post">
+    <button type="submit" class="btn btn-custom">Выйти</button>
+</form>

@@ -30,10 +30,9 @@ public class User implements UserDetails {
     private String surname;
     @Column (name = "phoneNumber", unique = true)
     private String phoneNumber;
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    private Role role;
 
     @Column (name = "activationCode")
     private String activationCode;
@@ -44,7 +43,7 @@ public class User implements UserDetails {
     // Security
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return Collections.singletonList(role);
     }
 
     @Override

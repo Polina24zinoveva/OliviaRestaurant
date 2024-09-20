@@ -216,7 +216,7 @@
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="d-flex align-items-baseline">
-                                                <h5>Заказ №${order.id}. Доставка: ${order.dateDelivery.format('dd.MM.yyyy')},  ${order.timeDelivery!},  ${order.addressDelivery}</h5>
+                                                <h5>Заказ №${order.id}. Доставка: ${order.dateDelivery},  ${order.timeDelivery!},  ${order.address}</h5>
                                             </div>
                                         </div>
                                         <div class="row"  style="margin-top: 1rem;">
@@ -244,24 +244,6 @@
                                                     </div>
                                                 </#list>
                                                 <#assign y++>
-                                                <#if toDeliverPostcards[x]??>
-                                                    <div class="row" style="width: 36rem;">
-                                                        <div class="col-md-3" style="margin-bottom: 1rem;">
-                                                            <img src="/images/${toDeliverPostcards[x].image.id}" class="image" alt="Фото" style="max-width: 6rem;" class="me-2">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            ${order.textPostcard!'Открытка без текста'}
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            1 шт
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            0 ₽
-                                                        </div>
-                                                    </div>
-                                                <#else>
-                                                    Без открытки
-                                                </#if>
                                             </div>
 
                                             <div class="col-md-1 vertical-line">
@@ -269,33 +251,31 @@
 
                                             <div class="col-4">
                                                 <h6>Доставка по адресу:</h6>
-                                                <p>${order.addressDelivery}</p>
+                                                <p>${order.address}</p>
                                                 <h6>Дата доставки:</h6>
-                                                <p>${order.dateDelivery.format('dd.MM.yyyy')}</p>
+                                                <p>${order.dateDelivery}</p>
                                                 <h6>Время доставки:</h6>
                                                 <p>${order.timeDelivery!}</p>
                                                 <h6>Id покупателя:</h6>
                                                 <p>${order.user.id}</p>
                                                 <h6>Контактный номер:</h6>
-                                                <p>${order.phoneNumber!}</p>
-                                                <h6>Стоимость доставки:</h6>
-                                                <p>${order.sumDelivery} ₽</p>
+                                                <p>${order.user.phoneNumber!}</p>
                                                 <h6>Сумма заказа:</h6>
-                                                <p>${order.sumOrder} ₽</p>
+                                                <p>${order.totalPrice} ₽</p>
                                                 <h6>Дата оплаты:</h6>
-                                                <p>${order.datePayment.format('dd.MM.yyyy HH:mm')}</p>
+                                                <p>${order.dateTimePayment}</p>
+                                                <h6>Дата и время доставки курьером:</h6>
+                                                <p>${order.courierDateTimeDelivery!}</p>
+                                                <h6>Курьер:</h6>
+                                                <p>${order.courier.surname!} ${order.courier.name!}</p>
+                                            </div>
                                             </div>
                                             <#assign x++>
                                         </div>
                                         <div class="row" style="padding-top:1rem; padding-bottom:1rem;">
                                             <div class="col-md-6">
-                                                <form action = "deliver_order/${order.id}" method="post">
+                                                <form action = "adminFinishOrder/${order.id}" method="post">
                                                     <button type="submit" class="btn btn-custom2">Доставлен</button>
-                                                </form>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <form action = "cancel_order/${order.id}" method="post">
-                                                    <button type="submit" class="btn btn-custom2">Отменить</button>
                                                 </form>
                                             </div>
                                         </div>

@@ -220,7 +220,7 @@
                     <div class="col-md-9">
                         <#if finishedOrders?size = 0>
                             <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
-                                <h5>Вы еще ничего не заказывали</h5>
+                                <h5>Нет истории заказов</h5>
                             </div>
 
                         <#else>
@@ -258,6 +258,14 @@
                                             <h6>Контактный номер:</h6>
                                             <p>${order.user.phoneNumber!}</p>
                                         </div>
+                                        <div class="flex-fill">
+                                            <h6>Дата и время доставки курьером:</h6>
+                                            <p>${order.courierDateTimeDelivery!}</p>
+                                        </div>
+                                        <div class="flex-fill">
+                                            <h6>Курьер:</h6>
+                                            <p>${order.courier.surname!} ${order.courier.name!}</p>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -267,7 +275,7 @@
                                 <div id="orderItemsDiv_${order.id}" style="display:none;" >
                                     <br>
                                     <#assign y = 0>
-                                    <#list toDeliverDishes[x] as dish>
+                                    <#list finishedDishes[x] as dish>
                                         <div class="row" style="width: 36rem;">
                                             <div class="col-md-3" style="margin-bottom: 1rem;">
                                                 <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
@@ -280,7 +288,7 @@
                                                 <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
                                             </div>
                                             <div class="col-md-3">
-                                                ${toDeliverAmounts[x][y]} шт
+                                                ${finishedAmounts[x][y]} шт
                                             </div>
                                             <div class="col-md-3">
                                                 ${dish.price} ₽
@@ -288,23 +296,6 @@
                                         </div>
                                     </#list>
                                     <#assign y++>
-
-                                    <#if toDeliverPostcards[x]??>
-                                        <div class="row" style="width: 36rem;">
-                                            <div class="col-md-3" style="margin-bottom: 1rem;">
-                                                <img src="/images/${toDeliverPostcards[x].image.id}" class="image"alt="Фото" style="max-width: 6rem;" class="me-2">
-                                            </div>
-                                            <div class="col-md-3">
-                                                ${order.textPostcard!'Открытка без текста'}
-                                            </div>
-                                            <div class="col-md-3">
-                                                1 шт
-                                            </div>
-                                            <div class="col-md-3">
-                                                0 ₽
-                                            </div>
-                                        </div>
-                                    </#if>
                                     <#assign x++>
                                 </div>
                                 <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
