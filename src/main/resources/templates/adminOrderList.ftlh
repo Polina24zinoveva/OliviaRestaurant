@@ -264,6 +264,11 @@
                                                 <p>${order.totalPrice} ₽</p>
                                                 <h6>Дата оплаты:</h6>
                                                 <p>${order.dateTimePayment}</p>
+                                                <h6>Дата и время доставки курьером:</h6>
+                                                <p>${order.courierDateTimeDelivery!}</p>
+                                                <h6>Курьер:</h6>
+                                                <p>${order.courier.surname!} ${order.courier.name!}</p>
+                                            </div>
                                             </div>
                                             <#assign x++>
                                         </div>
@@ -271,11 +276,6 @@
                                             <div class="col-md-6">
                                                 <form action = "adminFinishOrder/${order.id}" method="post">
                                                     <button type="submit" class="btn btn-custom2">Доставлен</button>
-                                                </form>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <form action = "adminCancelOrder/${order.id}" method="post">
-                                                    <button type="submit" class="btn btn-custom2">Отменить</button>
                                                 </form>
                                             </div>
                                         </div>

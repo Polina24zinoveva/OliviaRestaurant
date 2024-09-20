@@ -8,9 +8,11 @@ import com.example.OliviaRestaurant.services.DishService;
 import com.example.OliviaRestaurant.services.OrderHasDishService;
 import com.example.OliviaRestaurant.services.OrderService;
 import com.example.OliviaRestaurant.services.UserService;
+import com.example.OliviaRestaurant.statics.StaticMethods;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -45,7 +49,9 @@ public class AdminController {
 
 
     @GetMapping("/adminAllDish")
-    public String admin(Model model){
+    public String admin(Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
+
         model.addAttribute("allDishes", dishService.listAllDishes());
         model.addAttribute("toDeliverOrders", orderService.ListAllOrdersToDeliver());
         model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(orderService.ListAllOrdersToDeliver()));
@@ -55,7 +61,9 @@ public class AdminController {
     }
 
     @GetMapping("/adminFindDishByName")
-    public String adminFindDishByName(@RequestParam(name = "name", required = false) String name, Model model){
+    public String adminFindDishByName(@RequestParam(name = "name", required = false) String name,
+                                      Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
         model.addAttribute("foundDishesByName", dishService.listAllDishesByName(name));
         model.addAttribute("allDishes", dishService.listAllDishes());
         return "admin";
@@ -145,6 +153,7 @@ public class AdminController {
         try{
             Order order = orderService.getOrderByID(id);
             order.setStatus("Доставлен");
+            order.setCourierDateTimeDelivery(LocalDateTime.now());
             orderService.saveOrder(order);
             redirectAttributes.addFlashAttribute("message", "Заказ доставлен");
         } catch(Exception e){
@@ -154,29 +163,18 @@ public class AdminController {
         return"redirect:/adminOrderList";
     }
 
-    @PostMapping("adminCancelOrder/{id}")
-    public String adminCancelOrder(@PathVariable Long id, RedirectAttributes redirectAttributes){
-        try{
-            Order order = orderService.getOrderByID(id);
-            orderService.CancelOrder(order);
-
-            redirectAttributes.addFlashAttribute("message", "Заказ отменён");
-        }catch(Exception e){
-            redirectAttributes.addFlashAttribute("message", "Ошибка при отмене заказа");
-        }
-
-        return"redirect:/adminOrderList";
-    }
-
     @GetMapping("/adminAddDish")
-    public String addDish(Model model){
+    public String addDish(Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
 
         return "adminAddDish";
     }
 
 
     @GetMapping("/adminOrderList")
-    public String adminOrderList(Model model){
+    public String adminOrderList(Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
+
         List<Order> orders = orderService.ListAllOrdersToDeliver();
 
         // Сортируем заказы по дате доставки
@@ -191,7 +189,9 @@ public class AdminController {
     }
 
     @GetMapping("/adminFinishedOrderList")
-    public String adminFinishedOrderList(Model model){
+    public String adminFinishedOrderList(Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
+
         List<Order> orders = orderService.ListOrdersFinished();
 
         // Сортируем заказы по дате доставки
@@ -206,24 +206,11 @@ public class AdminController {
         return "adminFinishedOrderList";
     }
 
-    @GetMapping("/adminCanceledOrderList")
-    public String adminCanceledOrderList(Model model){
-        List<Order> orders = orderService.ListOrdersCanceled();
-
-        // Сортируем заказы по дате доставки
-        List<Order> sortedOrders = orders.stream()
-                .sorted((o1, o2) -> o2.getDateDelivery().compareTo(o1.getDateDelivery()))
-                .collect(Collectors.toList());
-
-        model.addAttribute("toDeliverOrders", sortedOrders);
-        model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(sortedOrders));
-        model.addAttribute("toDeliverAmounts", orderHasDishService.getPendingAmount(sortedOrders));
-
-        return "adminCanceledOrderList";
-    }
 
     @GetMapping("/adminAllUsers")
-    public String adminAllUsers(Model model){
+    public String adminAllUsers(Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
+
         model.addAttribute("allUsers", userService.listAllUsers());
         return "adminAllUsers";
     }

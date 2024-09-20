@@ -58,6 +58,10 @@ public class OrderService {
         return orderRepository.findAllByStatus("Оплачен");
     }
 
+    public List<Order> ListAllOrdersToDeliverByCourier(User courier){
+        return orderRepository.findByCourierAndStatus(courier, "Оплачен");
+    }
+
     @Transactional
     public void CheckoutOrder(Principal principal,
                               String addressDelivery, LocalDateTime datePayment,
@@ -104,6 +108,10 @@ public class OrderService {
     }
     public List<Order> ListOrdersFinished(){
         return orderRepository.findAllByStatus("Доставлен");
+    }
+
+    public List<Order> ListOrdersFinishedByCourier(User courier){
+        return orderRepository.findByCourierAndStatus(courier, "Доставлен");
     }
 
     public List<Order> ListOrdersCanceled(){

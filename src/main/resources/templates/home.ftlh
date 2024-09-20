@@ -96,7 +96,7 @@
 
 <body>
     <div>
-        <#include "blocks/headerAdmin.ftlh">
+        <#include "blocks/header.ftlh">
 
 
         <div class="image-container">

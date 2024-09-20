@@ -235,6 +235,14 @@
                                             <h6>Контактный номер:</h6>
                                             <p>${order.user.phoneNumber!}</p>
                                         </div>
+                                        <div class="flex-fill">
+                                            <h6>Дата и время доставки курьером:</h6>
+                                            <p>${order.courierDateTimeDelivery!}</p>
+                                        </div>
+                                        <div class="flex-fill">
+                                            <h6>Курьер:</h6>
+                                            <p>${order.courier.surname!} ${order.courier.name!}</p>
+                                        </div>
                                     </div>
                                 </div>
 

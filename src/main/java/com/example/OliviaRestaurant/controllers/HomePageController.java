@@ -1,12 +1,14 @@
 package com.example.OliviaRestaurant.controllers;
 
 import com.example.OliviaRestaurant.models.Restaurant;
+import com.example.OliviaRestaurant.models.User;
 import com.example.OliviaRestaurant.repositories.RestaurantRepository;
+import com.example.OliviaRestaurant.statics.StaticMethods;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -17,7 +19,9 @@ public class HomePageController {
     RestaurantRepository restaurantRepository;
 
     @GetMapping("/")
-    public String adminFindDishByName(Model model){
+    public String adminFindDishByName(Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
+
         Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(1L);
 
         if (optionalRestaurant.isPresent()) {
@@ -28,7 +32,6 @@ public class HomePageController {
         } else {
             model.addAttribute("error", "Restaurant not found.");
         }
-
         return "home";
     }
 }

@@ -45,6 +45,13 @@ public class Order {
     @Column(name = "time_delivery")
     private String timeDelivery;
 
+    @ManyToOne
+    @JoinColumn(name = "id_courier", referencedColumnName = "idUser")
+    private User courier;
+
+    @Column(name = "courier_time_delivery")
+    private LocalDateTime courierDateTimeDelivery;
+
 
     @OneToMany(mappedBy = "order")
     private List<OrderHasDish> orderHasDishes;
