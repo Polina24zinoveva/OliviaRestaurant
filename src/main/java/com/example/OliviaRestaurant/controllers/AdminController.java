@@ -1,6 +1,7 @@
 package com.example.OliviaRestaurant.controllers;
 
 import com.example.OliviaRestaurant.models.*;
+import com.example.OliviaRestaurant.models.enums.Role;
 import com.example.OliviaRestaurant.repositories.CuisineRepository;
 import com.example.OliviaRestaurant.repositories.DishRepository;
 import com.example.OliviaRestaurant.repositories.DishTypeRepository;
@@ -26,7 +27,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -241,14 +241,24 @@ public class AdminController {
     @GetMapping("/adminAddEmployee")
     public String adminAddEmployee(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
+        model.addAttribute("allUsers", userService.listAllUsersExceptAdmin());
         return "adminAddEmployee";
     }
 
-    @PostMapping("/adminAddEmployee")
-    public String adminAddEmployee(RedirectAttributes redirectAttributes) {
 
+    @PostMapping("/adminChangeRole")
+    public String adminChangeRole(@RequestParam("id") Long userId, @RequestParam("role") String newRole, RedirectAttributes redirectAttributes) {
+        User user = userService.getUserById(userId);
+        if (user != null) {
+            user.setRole(Role.valueOf(newRole));
+            userService.save(user);
+            redirectAttributes.addFlashAttribute("successMessage", "Роль пользователя успешно изменена.");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Пользователь не найден.");
+        }
         return "redirect:/adminAddEmployee";
     }
+
 
 
 
