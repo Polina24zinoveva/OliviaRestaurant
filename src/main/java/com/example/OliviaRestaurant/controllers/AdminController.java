@@ -2,8 +2,8 @@ package com.example.OliviaRestaurant.controllers;
 
 import com.example.OliviaRestaurant.models.*;
 import com.example.OliviaRestaurant.repositories.CuisineRepository;
+import com.example.OliviaRestaurant.repositories.DishRepository;
 import com.example.OliviaRestaurant.repositories.DishTypeRepository;
-import com.example.OliviaRestaurant.repositories.ImageRepository;
 import com.example.OliviaRestaurant.services.DishService;
 import com.example.OliviaRestaurant.services.OrderHasDishService;
 import com.example.OliviaRestaurant.services.OrderService;
@@ -25,8 +25,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -46,7 +46,7 @@ public class AdminController {
 
     private final CuisineRepository CuisineRepository;
     private final DishTypeRepository DishTypeRepository;
-
+    private final DishRepository dishRepository;
 
     @GetMapping("/adminAllDish")
     public String admin(Model model, @AuthenticationPrincipal User user){
@@ -112,6 +112,30 @@ public class AdminController {
         }
         return "redirect:/adminAllDish";
     }
+
+    @GetMapping("/adminChoiceDish")
+    public String adminChoiceDish(Model model, @AuthenticationPrincipal User user){
+        StaticMethods.header(user, model);
+
+        model.addAttribute("allDishes", dishService.listAllDishes());
+        return "adminChoiceDish";
+    }
+
+    @PostMapping("adminChoiceDish")
+    public String adminChoiceDish(@RequestParam List<Long> dishes){
+        List<Dish> allDishes = dishService.listAllDishes();
+        for(Dish dish : allDishes){
+            dish.setInMenu(false);
+            dishRepository.save(dish);
+        }
+        for(Long dishId : dishes){
+            Dish dish = dishService.getDishByID(dishId);
+            dish.setInMenu(true);
+            dishRepository.save(dish);
+        }
+        return"redirect:/adminChoiceDish";
+    }
+
 
     @PostMapping("/addToCartDish/{id}")
     public String addToCartDish(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {

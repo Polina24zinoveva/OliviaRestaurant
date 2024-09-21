@@ -117,6 +117,10 @@ public class DishService {
     public Dish getDishByID(Long id){
         return dishRepository.findById(id).orElse(null);
     }
+
+    public List<Dish> listDishesInMenu(){
+        return dishRepository.findAll().stream().filter(dish -> dish.getInMenu() == true).collect(Collectors.toList()) ;
+    }
 //
 //    public List<Bouquet> listAuthorBouquets() {
 //        return dishRepository.findByType("Авторский");

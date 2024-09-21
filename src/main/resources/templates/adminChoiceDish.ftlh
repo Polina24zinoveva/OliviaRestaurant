@@ -9,7 +9,6 @@
     </title>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         function showMessage(message) {
             Swal.fire({
@@ -89,6 +88,7 @@
             background-color: #f0eade; /* Основной цвет кнопки */
             border-color: #f0eade; /* Цвет границы кнопки */
             color: #333; /* Цвет текста кнопки */
+            margin-bottom: 2rem;
         }
 
         .btn-custom2:hover {
@@ -144,7 +144,6 @@
         .category-link.active {
             text-decoration: underline; /* Подчеркиваем выбранную категорию */
         }
-
         .custom-link {
             font-size: 1.05rem; /* Размер шрифта */
             color: #333;
@@ -203,31 +202,95 @@
                     </div>
 
                     <div class="col-md-9">
-                        <h5 style="margin-top: 10px; margin-bottom: 2rem;">Выбор букетов для главного экрана</h5>
-                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-                        <form action="/add_bouquets_to_homepage" method="post">
-                            <div class="mb-3">
-                                <label for="bouquet2" class="form-label">ID букета 1:</label>
-                                <input type="text" class="form-control" id="bouquet1" name="bouquet1" value="${bouquet1}">
-                                <label for="description1" class="form-label">Описание букета:</label>
-                                <textarea class="form-control" id="description1" name="description1" style="height: auto">${description1}</textarea>
+                        <#if allDishes?size = 0>
+                            <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
+                                <h5>Нет блюд в базе</h5>
                             </div>
-                            <div class="mb-3">
-                                <label for="bouquet2" class="form-label">ID букета 2:</label>
-                                <input type="text" class="form-control" id="bouquet2" name="bouquet2" value="${bouquet2}">
-                                <label for="description2" class="form-label">Описание букета:</label>
-                                <textarea class="form-control" id="description2" name="description2" style="height: auto">${description2}</textarea>
 
-                            </div>
-                            <div class="mb-3">
-                                <label for="bouquet3" class="form-label">ID букета 3:</label>
-                                <input type="text" class="form-control" id="bouquet3" name="bouquet3" value="${bouquet3}">
-                                <label for="description3" class="form-label">Описание букета:</label>
-                                <textarea class="form-control" id="description3" name="description3" style="height: auto">${description3}</textarea>
+                        <#else>
+                            <form action="/adminChoiceDish" method="post" id="dishForm">
+                                <h5 style="margin-top: 10px; margin-bottom: 2rem;">Выбор блюд для добавления в меню</h5>
+                                <button type="button" class="btn btn-custom2" id="buttonSelectAll" name="buttonSelectAll" onclick="selectAll()">Выбрать все</button>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>ID</th>
+                                        <th>Название</th>
+                                        <th>Состав</th>
+                                        <th>Калорийность</th>
+                                        <th>Вес</th>
+                                        <th>Цена</th>
+                                        <th>Фото</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <#list allDishes as dish>
+                                        <tr>
+                                            <td>
+                                                <input id="dish_${dish.id}" name="dishes" value="${dish.id}" type="checkbox">
+                                            </td>
+                                            <td>${dish.id}</td>
+                                            <td>${dish.name}</td>
+                                            <td>${dish.composition}</td>
+                                            <td>${dish.calories}</td>
+                                            <td>${dish.weight}</td>
+                                            <td>${dish.price}</td>
+                                            <td>
+                                                <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
+                                                    <img src="/images/${dish.images[0].id}" alt="Фото" style="max-width: 100px; max-height: 100px;">
+                                                <#else>
+                                                    <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
+                                                </#if>
 
-                            </div>
-                            <button type="submit" class="btn btn-custom">Добавить на главный экран</button>
-                        </form>
+                                                <#if dish.images[1]?has_content && dish.images[1]?size gt 1>
+                                                    <img src="/images/${dish.images[1].id}" alt="Фото"  style="max-width: 100px; max-height: 100px;">
+                                                <#else>
+                                                    <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
+                                                </#if>
+
+                                                <#if dish.images[2]?has_content && dish.images[2]?size gt 1>
+                                                    <img src="/images/${dish.images[2].id}" alt="Фото" style="max-width: 100px; max-height: 100px;">
+                                                <#else>
+                                                    <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
+                                                </#if>
+
+                                            </td>
+                                            <td>
+                                                <a href="/dish/${dish.id}" class="btn btn-custom2">Просмотр</a>
+                                                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+                                                <form action="/adminDeleteDish/${dish.id}" method="post">
+                                                    <button type="submit" class="btn btn-custom2">Удалить</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </#list>
+                                    </tbody>
+                                </table>
+                                <button type="submit" class="btn btn-custom2">Выбрать</button>
+
+                                <script>
+                                    function selectAll() {
+                                        // Получаем все чекбоксы с name="dishes"
+                                            let checkboxes = document.querySelectorAll('input[name="dishes"]');
+
+                                            // Проверяем текущее состояние первого чекбокса
+                                            let allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+
+                                            // Переключаем состояние чекбоксов
+                                            checkboxes.forEach((checkbox) => {
+                                                checkbox.checked = !allChecked; // Устанавливаем в true, если все были отмечены, и наоборот
+                                            });
+
+
+
+                                            let button = document.getElementsByName("buttonSelectAll")[0];
+                                            button.textContent = allChecked ? "Выбрать все" : "Снять выбор";
+                                    }
+                                </script>
+                            </form>
+                        </#if>
                     </div>
                 </div>
             </div>
