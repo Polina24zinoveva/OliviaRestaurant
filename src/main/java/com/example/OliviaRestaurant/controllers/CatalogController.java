@@ -46,7 +46,7 @@ public class CatalogController {
     public String catalog(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
 
-        dishes = dishService.listAllDishes();
+        dishes = dishService.listDishesInMenu();
         model.addAttribute("allDishes", dishes);
         String title = "Все блюда: ";
         model.addAttribute("title", title);

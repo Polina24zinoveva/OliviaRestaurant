@@ -44,9 +44,13 @@ public class Dish {
     @JoinColumn(name = "dish_type_id")
     private DishType dishType;
 
+    @Column(name = "in_menu")
+    private Boolean inMenu = false;
+
     @OneToMany(mappedBy = "dish")
     private List<OrderHasDish> orderHasDishes = new ArrayList<>();
 
     @OneToMany(mappedBy = "dish")
     private List<Image> images = new ArrayList<>();
+
 }

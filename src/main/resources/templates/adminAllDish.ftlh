@@ -203,11 +203,11 @@
                     <div class="col-md-9">
                         <#if allDishes?size = 0>
                             <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
-                                <h5>Нет букетов в базе</h5>
+                                <h5>Нет блюд в базе</h5>
                             </div>
 
                         <#else>
-                            <h5 style="margin-top: 10px; margin-bottom: 2rem;">Все букеты</h5>
+                            <h5 style="margin-top: 10px; margin-bottom: 2rem;">Все блюда</h5>
                             <table class="table">
                                 <thead>
                                 <tr>
