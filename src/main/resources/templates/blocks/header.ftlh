@@ -27,11 +27,12 @@
                                     <a class="nav-link active" aria-current="page" href="/courierProfile">Для курьера</a>
                                 </li>
                             <#else>
+                            <a class="nav-link active" aria-current="page" href="/profile">Профиль</a>
                             </#if>
                         </#if>
                     </#if>
                 <#else>
-                    <a class="nav-link active" aria-current="page" href="/profile">Профиль</a>
+                <a class="nav-link active" aria-current="page" href="/profile">Профиль</a>
                 </#if>
             </li>
         </ul>

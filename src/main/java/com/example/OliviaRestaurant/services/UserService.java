@@ -2,7 +2,6 @@ package com.example.OliviaRestaurant.services;
 
 import com.example.OliviaRestaurant.models.User;
 import com.example.OliviaRestaurant.models.UserWithoutLink;
-import com.example.OliviaRestaurant.models.enums.Role;
 import com.example.OliviaRestaurant.repositories.UserRepository;
 import com.example.OliviaRestaurant.repositories.UserWithoutLinkRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -11,11 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.example.OliviaRestaurant.models.enums.Role.ROLE_ADMIN;
+import static com.example.OliviaRestaurant.models.enums.Role.ROLE_USER;
 
 @Service
 @Slf4j
@@ -72,16 +72,16 @@ public class UserService {
         userRepository.save(user);  // Сохраняем изменения в базе данных
     }
 
-    public List<User> listAllUsers(){
-        return userRepository.findAll();
+    public List<User> listAllUsersExceptAdmin(){
+        return userRepository.findAll().stream().filter(user -> user.getRole() != ROLE_ADMIN).collect(Collectors.toList());
     }
 
     public List<User> listAllEmployee(){
-        return userRepository.findAll().stream().filter(user -> user.getRole() != Role.ROLE_USER).collect(Collectors.toList());
+        return userRepository.findAll().stream().filter(user -> user.getRole() != ROLE_USER).collect(Collectors.toList());
     }
 
     public List<User> listAllClient(){
-        return userRepository.findAll().stream().filter(user -> user.getRole() == Role.ROLE_USER).collect(Collectors.toList());
+        return userRepository.findAll().stream().filter(user -> user.getRole() == ROLE_USER).collect(Collectors.toList());
     }
 
 
@@ -97,6 +97,7 @@ public class UserService {
         user.setPhoneNumber(userWithoutLink.getPhoneNumber());
         user.setName(userWithoutLink.getName());
         user.setSurname(userWithoutLink.getSurname());
+        user.setRole(ROLE_USER);
         //user.setActivationCode(null);
 
         userRepository.save(user);
