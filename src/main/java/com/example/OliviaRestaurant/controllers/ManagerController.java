@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -33,11 +34,18 @@ public class ManagerController {
                 .sorted((o1, o2) -> o1.getDateDelivery().compareTo(o2.getDateDelivery()))
                 .collect(Collectors.toList());
 
+        List<User> couriers = sortedOrders.stream()
+                .map(Order::getCourier)  //Курьеры из заказов
+                .filter(Objects::nonNull) //Заказы без курьеров
+                .distinct()               //Без дубликатов курьеров
+                .collect(Collectors.toList());
+
         model.addAttribute("currentUser", user);
         model.addAttribute("toDeliverOrders", sortedOrders);
         model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(sortedOrders));
         model.addAttribute("toDeliverAmounts", orderHasDishService.getPendingAmount(sortedOrders));
         model.addAttribute("couriers", userService.listAllCouriers());
+        model.addAttribute("couriers", couriers);  // Добавляем курьеров в модель
 
         return "managerProfile";
     }
