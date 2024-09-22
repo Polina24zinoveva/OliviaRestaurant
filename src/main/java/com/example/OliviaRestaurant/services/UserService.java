@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.example.OliviaRestaurant.models.enums.Role.ROLE_ADMIN;
-import static com.example.OliviaRestaurant.models.enums.Role.ROLE_USER;
+import static com.example.OliviaRestaurant.models.enums.Role.*;
 
 @Service
 @Slf4j
@@ -82,6 +81,10 @@ public class UserService {
 
     public List<User> listAllClient(){
         return userRepository.findAll().stream().filter(user -> user.getRole() == ROLE_USER).collect(Collectors.toList());
+    }
+
+    public List<User> listAllCouriers(){
+        return userRepository.findAll().stream().filter(user -> user.getRole() == ROLE_COURIER).collect(Collectors.toList());
     }
 
 

@@ -4,6 +4,7 @@ import com.example.OliviaRestaurant.models.Order;
 import com.example.OliviaRestaurant.models.User;
 import com.example.OliviaRestaurant.services.OrderHasDishService;
 import com.example.OliviaRestaurant.services.OrderService;
+import com.example.OliviaRestaurant.services.UserService;
 import com.example.OliviaRestaurant.statics.StaticMethods;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +21,7 @@ public class ManagerController {
 
     private final OrderService orderService;
     private final OrderHasDishService orderHasDishService;
+    private final UserService userService;
 
     @GetMapping("/managerProfile")
     public String profile(Model model, @AuthenticationPrincipal User user){
@@ -35,6 +37,7 @@ public class ManagerController {
         model.addAttribute("toDeliverOrders", sortedOrders);
         model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(sortedOrders));
         model.addAttribute("toDeliverAmounts", orderHasDishService.getPendingAmount(sortedOrders));
+        model.addAttribute("couriers", userService.listAllCouriers());
 
         return "managerProfile";
     }
