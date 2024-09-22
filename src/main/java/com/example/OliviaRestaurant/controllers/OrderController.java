@@ -184,7 +184,7 @@ public class OrderController {
         List<User> couriers = userService.listAllCouriers();
         model.addAttribute("couriers", couriers);
 
-        return "redirect:/orders"; // Возвращаемся на страницу с заказами
+        return "redirect:/managerProfile"; // Возвращаемся на страницу с заказами
     }
 }
 

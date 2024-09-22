@@ -303,19 +303,23 @@
                                         </div>
                                         <div class="row" style="padding-top:1rem; padding-bottom:1rem;">
                                             <div class="col-md-6">
-                                                <form action="/assignCourier/${order.id}" method="post">
-                                                    <div class="mb-3">
-                                                        <label for="courier" class="form-label">Выберите курьера:</label>
-                                                        <select id="courier" name="courierId" class="form-select">
-                                                            <#list couriers as courier>
-                                                                <option value="${courier.id}">
-                                                                    ${courier.name} ${courier.surname} (Заказов: ${courier.orders?size})
-                                                                </option>
-                                                            </#list>
-                                                        </select>
-                                                    </div>
-                                                    <button type="submit" class="btn btn-custom2">Назначить курьера</button>
-                                                </form>
+                                                <#if order.courier??>
+                                                    <p>Курьер: ${order.courier.name} ${order.courier.surname}</p>
+                                                <#else>
+                                                    <form action="/assignCourier/${order.id}" method="post">
+                                                        <div class="mb-3">
+                                                            <label for="courier" class="form-label">Выберите курьера:</label>
+                                                            <select id="courier" name="courierId" class="form-select">
+                                                                <#list couriers as courier>
+                                                                    <option value="${courier.id}">
+                                                                        ${courier.name} ${courier.surname} (Заказов: ${courier.orders?size})
+                                                                    </option>
+                                                                </#list>
+                                                            </select>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-custom2">Назначить курьера</button>
+                                                    </form>
+                                                </#if>
                                             </div>
                                             <div class="col-md-6">
                                                 <form action = "adminFinishOrder/${order.id}" method="post">
