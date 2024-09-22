@@ -169,4 +169,22 @@ public class OrderController {
 
         return "redirect:/profile";
     }
+
+    // Метод для отображения страницы с заказами и курьерами
+    @PostMapping("/assignCourier/{orderId}")
+    public String assignCourier(@PathVariable Long orderId, Long courierId, Model model) {
+        Order order = orderService.getOrderByID(orderId);
+        User courier = userService.getUserById(courierId);
+
+        // Назначаем курьера
+        order.setCourier(courier);
+        orderService.saveOrder(order);
+
+        // Обновляем список курьеров
+        List<User> couriers = userService.listAllCouriers();
+        model.addAttribute("couriers", couriers);
+
+        return "redirect:/orders"; // Возвращаемся на страницу с заказами
+    }
 }
+

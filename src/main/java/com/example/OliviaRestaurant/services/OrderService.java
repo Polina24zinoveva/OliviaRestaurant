@@ -41,6 +41,7 @@ public class OrderService {
         return userRepository.findByEmail(principal.getName());
     }
 
+
     public Order HaveOrderInCardByPrincipal(Principal principal){
         return orderRepository.findByUserAndStatus(getUserByPrincipal(principal), "В корзине");
     }
