@@ -14,7 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -123,7 +126,37 @@ public class OrderService {
         return orderRepository.findByUser(user);
     }
 
-    public Integer findOrdersByCourierAndDate(User user, LocalDate date) {
-        return orderRepository.findByCourierAndDateDelivery(user, date).size();
+
+    public int countOrdersByCourierAndDate(User courier, LocalDate date) {
+        return orderRepository.findByCourierAndDateDelivery(courier, date).size();
     }
+
+    public List<List<Integer>> getCourierOrdersCountForAllDates(List<Order> orders, List<User> couriers) {
+        List<List<Integer>> resultList = new ArrayList<>();
+        LocalDate[] dates = orders.stream()
+                .map(Order::getDateDelivery)
+                .toArray(LocalDate[]::new);
+
+        for(LocalDate date: dates){
+            List<Integer> countOrdersForDay = new ArrayList<>();
+            for(User courier: couriers){
+                countOrdersForDay.add(countOrdersByCourierAndDate(courier, date));
+            }
+            resultList.add(countOrdersForDay);
+        }
+
+        return resultList;
+    }
+
+//    public List<Integer> getCourierOrdersCountForAllDates(LocalDate date, List<User> couriers) {
+//
+//        List<Integer> countOrdersForDay = new ArrayList<>();
+//        for(User courier: couriers){
+//            countOrdersForDay.add(countOrdersByCourierAndDate(courier, date));
+//        }
+//
+//        return countOrdersForDay;
+//    }
+
+
 }

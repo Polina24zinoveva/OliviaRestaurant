@@ -138,7 +138,7 @@
            text-decoration: underline; /* Подчеркиваем выбранную категорию */
        }
        .btn-custom2 {
-           width: 94%;
+           width: 100%;
            margin-top: 10px;
            background-color: #f0eade; /* Основной цвет кнопки */
            border-color: #f0eade; /* Цвет границы кнопки */
@@ -240,7 +240,9 @@
 
                     <div class="col-md-9">
                         <#if activeOrder?size = 0>
-                            <h5>Нет активных заказов</h5>
+
+                            <h5>Нет заказов в доставке</h5>
+                            <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
 
                         <#else>
                             <h5 style="margin-top: 10px; margin-bottom: 2rem;">Сейчас в доставке</h5>
@@ -301,19 +303,14 @@
                                             </div>
                                             <#assign x++>
                                         </div>
-
                                         <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
                                     </div>
                                 </div>
                             </#list>
                         </#if>
 
-
                         <#if toDeliverOrders?size = 0>
-                            <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
-                                <h5>Нет активных заказов</h5>
-                            </div>
-
+                            <h5>Нет активных заказов</h5>
                         <#else>
                             <h5 style="margin-top: 10px; margin-bottom: 2rem;">Заказы к доставке</h5>
                             <#assign x = 0>
@@ -369,22 +366,25 @@
                                                 <h6>Дата оплаты:</h6>
                                                 <p>${order.dateTimePayment}</p>
                                                 <h6>Курьер:</h6>
-                                                <#if order.courier??>
-                                                    <p>${order.courier.name} ${order.courier.surname}</p>
-                                                <#else>
-                                                    <form action="/assignCourier/${order.id}" method="post">
-                                                        <div class="mb-3">
-                                                            <select id="courier" name="courierId" class="form-select">
-                                                                <#list couriers as courier>
-                                                                    <option value="${courier.id}">
-                                                                        ${courier.name} ${courier.surname} (Заказов: ${courier.orders?size})
-                                                                    </option>
-                                                                </#list>
-                                                            </select>
-                                                        </div>
-                                                        <button type="submit" class="btn btn-custom2">Назначить курьера</button>
-                                                    </form>
-                                                </#if>
+                                                <#assign y = 0>
+                                                    <#if order.courier??>
+                                                        <p>${order.courier.name} ${order.courier.surname}</p>
+                                                    <#else>
+                                                        <form action="/assignCourier/${order.id}" method="post">
+                                                            <div class="mb-3">
+                                                                <select id="courier" name="courierId" class="form-select">
+                                                                    <#list couriers as courier>
+                                                                        <option value="${courier.id}">
+                                                                            ${courier.name} ${courier.surname} (Назначено ${courierOrdersCount[x][y]} заказов)
+                                                                        </option>
+                                                                        <#assign y++>
+                                                                    </#list>
+                                                                </select>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-custom2">Назначить курьера</button>
+                                                        </form>
+                                                    </#if>
+
                                             </div>
                                             <#assign x++>
                                         </div>

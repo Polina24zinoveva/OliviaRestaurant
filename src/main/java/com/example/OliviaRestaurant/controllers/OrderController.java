@@ -67,8 +67,8 @@ public class OrderController {
             // Получение текущей даты
             LocalDate minDate = LocalDate.now();
 
-            // Получение текущей даты плюс три месяца
-            LocalDate maxDate = minDate.plus(3, ChronoUnit.MONTHS);
+            // Получение текущей даты плюс 1 неделя
+            LocalDate maxDate = minDate.plus(1, ChronoUnit.WEEKS);
 
             int hourNow = LocalTime.now().getHour();
             if(hourNow >= 22){
@@ -162,7 +162,7 @@ public class OrderController {
 
         try{
             orderService.checkoutOrder(principal, addressDelivery, datePayment, dateDelivery, timeDelivery);
-            redirectAttributes.addFlashAttribute("message", "Заказ оформлен. Оплата курьеру при получении");
+            redirectAttributes.addFlashAttribute("message", "Заказ оформлен. Оплата прошла");
         }catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Ошибка при оформлении заказа");
         }

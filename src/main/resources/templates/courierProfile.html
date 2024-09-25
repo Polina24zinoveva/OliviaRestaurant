@@ -148,6 +148,13 @@
               confirmButtonColor: '#e0d8d0'
             });
         }
+        function showError(error) {
+            Swal.fire({
+              text: error,
+              icon: "error",
+              confirmButtonColor: '#e0d8d0'
+            });
+        }
     </script>
 </head>
 <body class="d-flex flex-column h-100">
@@ -157,6 +164,11 @@
     <script>
         showMessage("${message}");
     </script>
+</#if>
+<#if error??>
+<script>
+    showError("${error}");
+</script>
 </#if>
 <div class="d-flex">
     <div class="container">
@@ -277,7 +289,7 @@
                         <p>${activeOrder.timeDelivery!}</p>
                     </div>
                 </div>
-                <form action="/adminFinishOrder/${activeOrder.id}" method="post">
+                <form action="/finishOrder/${activeOrder.id}" method="post">
                     <button type="submit" class="btn btn-custom">Доставлен</button>
                 </form>
                 <div class="horizontal-line"></div> <!-- Горизонтальная линия -->

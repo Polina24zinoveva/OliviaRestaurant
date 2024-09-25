@@ -56,4 +56,9 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     private List<OrderHasDish> orderHasDishes;
+
+    @Override
+    public String toString() {
+        return "Order{dateDelivery=" + dateDelivery + ", user=" + user + "}";
+    }
 }

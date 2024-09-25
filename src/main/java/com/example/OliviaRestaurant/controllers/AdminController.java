@@ -13,6 +13,7 @@ import com.example.OliviaRestaurant.services.UserService;
 import com.example.OliviaRestaurant.statics.StaticMethods;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -50,6 +52,7 @@ public class AdminController {
     private final DishRepository dishRepository;
 
     @GetMapping("/adminAllDish")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String admin(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
 
@@ -62,6 +65,7 @@ public class AdminController {
     }
 
     @GetMapping("/adminFindDishByName")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminFindDishByName(@RequestParam(name = "name", required = false) String name,
                                       Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
@@ -72,6 +76,7 @@ public class AdminController {
 
 
     @PostMapping("/adminCreateDish")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminCreateDish(
             @RequestParam("file1") MultipartFile file1,
             @RequestParam("file2") MultipartFile file2,
@@ -104,6 +109,7 @@ public class AdminController {
 
 
     @PostMapping("/adminDeleteDish/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminDeleteDish(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             dishService.deleteDish(id);
@@ -115,6 +121,7 @@ public class AdminController {
     }
 
     @GetMapping("/adminChoiceDish")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminChoiceDish(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
 
@@ -123,6 +130,7 @@ public class AdminController {
     }
 
     @PostMapping("adminChoiceDish")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminChoiceDish(@RequestParam List<Long> dishes){
         List<Dish> allDishes = dishService.listAllDishes();
         for(Dish dish : allDishes){
@@ -138,44 +146,8 @@ public class AdminController {
     }
 
 
-    @PostMapping("/addToCartDish/{id}")
-    public String addToCartDish(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
-        try{
-            //проверка пользователя администратор он или нет
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            // Пользователь аутентифицирован, можно получить его имя пользователя или другой идентификатор
-            String username = authentication.getName(); // Получить имя пользователя
-            User user = userService.getUserByEmail(username);
-            if (user != null){
-                List<Dish> dishList = orderHasDishService.getDishesByOrder(orderService.haveOrderInCardByUser(user));
-
-                // Проверяем наличие нужного id букета в списке
-                boolean dishExists = false;
-                for (Dish dishB : dishList) {
-                    if (Objects.equals(dishB.getId(), id)) {
-                        dishExists = true;
-                        break;
-                    }
-                }
-
-                if (dishExists) {
-                    redirectAttributes.addFlashAttribute("warning", "Блюдо уже в корзине");
-                } else {
-                    Dish dish = dishService.getDishByID(id);
-                    orderHasDishService.createOrderHasDish(dish, principal);
-                    redirectAttributes.addFlashAttribute("message", "Успешно добавлено в корзину");
-                }
-            }
-
-        }catch (Exception e){
-            redirectAttributes.addFlashAttribute("error", "Ошибка при добавлении в корзину");
-        }
-        return "redirect:/dish/{id}";
-    }
-
-
-
     @GetMapping("/adminAddDish")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String addDish(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
 
@@ -184,6 +156,7 @@ public class AdminController {
 
 
     @GetMapping("/adminOrderList")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminOrderList(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
 
@@ -201,15 +174,13 @@ public class AdminController {
     }
 
     @GetMapping("/adminFinishedOrderList")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminFinishedOrderList(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
 
         List<Order> orders = orderService.listOrdersFinished();
 
-        // Сортируем заказы по дате доставки
-        List<Order> sortedOrders = orders.stream()
-                .sorted((o1, o2) -> o2.getDateDelivery().compareTo(o1.getDateDelivery()))
-                .collect(Collectors.toList());
+        List<Order> sortedOrders = orders.stream().sorted(Comparator.comparing(Order::getCourierDateTimeDelivery)).collect(Collectors.toList());
 
         model.addAttribute("toDeliverOrders", sortedOrders);
         model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(sortedOrders));
@@ -219,6 +190,7 @@ public class AdminController {
     }
 
     @GetMapping("/adminAllEmployee")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminAllEmployee(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
 
@@ -227,6 +199,7 @@ public class AdminController {
     }
 
     @GetMapping("/adminAddEmployee")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminAddEmployee(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
         model.addAttribute("allUsers", userService.listAllUsersExceptAdmin());
@@ -235,6 +208,7 @@ public class AdminController {
 
 
     @PostMapping("/adminChangeRole")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminChangeRole(@RequestParam("id") Long userId, @RequestParam("role") String newRole, RedirectAttributes redirectAttributes) {
         User user = userService.getUserById(userId);
         if (user != null) {
