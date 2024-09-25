@@ -1,0 +1,21 @@
+create 
+
+insert into oliviarestaurant.restaurants values(1, "Волжский проспект 12", "23:00", "11:00");
+
+insert into oliviarestaurant.cuisines values(1, "Русская");
+insert into oliviarestaurant.cuisines values(2, "Европейская");
+insert into oliviarestaurant.cuisines values(3, "Итальянская");
+insert into oliviarestaurant.cuisines values(4, "Азиатская");
+
+
+insert into oliviarestaurant.dish_types values(1, "Роллы");
+insert into oliviarestaurant.dish_types values(2, "Салаты");
+insert into oliviarestaurant.dish_types values(3, "Супы");
+insert into oliviarestaurant.dish_types values(4, "Горячие закуски и гарниры");
+insert into oliviarestaurant.dish_types values(5, "Пицца");
+insert into oliviarestaurant.dish_types values(6, "Горячие блюда");
+insert into oliviarestaurant.dish_types values(7, "Wok");
+insert into oliviarestaurant.dish_types values(8, "Паста");
+insert into oliviarestaurant.dish_types values(9, "Десерты");
+insert into oliviarestaurant.dish_types values(10, "Безалкогольные напитки");
+insert into oliviarestaurant.dish_types values(11, "Алкогольные напитки");

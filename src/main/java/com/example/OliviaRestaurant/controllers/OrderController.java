@@ -53,7 +53,7 @@ public class OrderController {
     public String getOrders(Principal principal, Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
 
-        model.addAttribute("orders", orderService.ListOrders());
+        model.addAttribute("orders", orderService.listOrders());
         model.addAttribute("user", orderService.getUserByPrincipal(principal));
         return "order";
     }
@@ -67,8 +67,8 @@ public class OrderController {
             // Получение текущей даты
             LocalDate minDate = LocalDate.now();
 
-            // Получение текущей даты плюс три месяца
-            LocalDate maxDate = minDate.plus(3, ChronoUnit.MONTHS);
+            // Получение текущей даты плюс 1 неделя
+            LocalDate maxDate = minDate.plus(1, ChronoUnit.WEEKS);
 
             int hourNow = LocalTime.now().getHour();
             if(hourNow >= 22){
@@ -76,10 +76,10 @@ public class OrderController {
             }
 
 
-            model.addAttribute("dishes", orderHasDishService.getDishesByOrder(orderService.HaveOrderInCardByUser(user)));
+            model.addAttribute("dishes", orderHasDishService.getDishesByOrder(orderService.haveOrderInCardByUser(user)));
 
-            model.addAttribute("amounts", orderHasDishService.getAmountsByOrder(orderService.HaveOrderInCardByUser(user)));
-            List<Integer> acAmounts = orderHasDishService.getAmountsByOrder(orderService.HaveOrderInCardByUser(user));
+            model.addAttribute("amounts", orderHasDishService.getAmountsByOrder(orderService.haveOrderInCardByUser(user)));
+            List<Integer> acAmounts = orderHasDishService.getAmountsByOrder(orderService.haveOrderInCardByUser(user));
             Long countDishesInOrder = 0L;
             for(int i = 0; i < acAmounts.size(); i++){
                 countDishesInOrder += acAmounts.get(i);
@@ -91,7 +91,7 @@ public class OrderController {
 
             model.addAttribute("countDishesInOrderString", countDishesInOrderString);
 
-            model.addAttribute("order", orderService.HaveOrderInCardByUser(user));
+            model.addAttribute("order", orderService.haveOrderInCardByUser(user));
 
 
             // Передача номера телефона в модель
@@ -161,8 +161,8 @@ public class OrderController {
         LocalDateTime datePayment = LocalDateTime.now();
 
         try{
-            orderService.CheckoutOrder(principal, addressDelivery, datePayment, dateDelivery, timeDelivery);
-            redirectAttributes.addFlashAttribute("message", "Заказ оформлен. Оплата курьеру при получении");
+            orderService.checkoutOrder(principal, addressDelivery, datePayment, dateDelivery, timeDelivery);
+            redirectAttributes.addFlashAttribute("message", "Заказ оформлен. Оплата прошла");
         }catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Ошибка при оформлении заказа");
         }

@@ -173,60 +173,41 @@
 
 <#if message??>
 <script>
-                showMessage("${message}");
-            </script>
+    showMessage("${message}");
+</script>
 </#if>
 
 <div class="d-flex">
     <div class="container">
         <div class="row">
             <div class="col-md-2">
-                <h6 for="typeRecipient" class="form-label" style="margin-top: 1rem;">Заказы:</h6>
-                <div style="margin-left: 2rem; padding-top: 0.5rem;">
-                    <p><a href="/adminorderlist" class="custom-link category-link">Активные заказы</a></p>
-                    <p><a href="/adminFinishedOrderList" class="custom-link category-link">Доставленные заказы</a></p>
-                    <p><a href="/adminCanceledOrderList" class="custom-link category-link">Отмененные заказы</a></p>
-                </div>
-                <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Букеты:</h6>
-                <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                    <p><a href="/admin" class="custom-link category-link">Все букеты</a></p>
-                    <p><a href="/adminaddbouquet" class="custom-link category-link">Добавление нового букета</a></p>
-                    <p><a href="/adminchoicebouquet" class="custom-link category-link">Выбор букетов на главный экран</a></p>
-                </div>
-                <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Открытки:</h6>
-                <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                    <p><a href="/adminpostcard" class="custom-link category-link">Открытки</a></p>
-                </div>
-                <h6 for="typeRecipient" class="form-label" style="margin-top: 2rem;">Пользователи:</h6>
-                <div style="margin-left: 2rem; margin-right: 2rem; padding-top: 0.5rem;">
-                    <p><a href="/adminAllUsers" class="custom-link category-link">Пользователи</a></p>
-                </div>
+                <#include "blocks/adminMenu.ftlh">
             </div>
             <script>
-                        // Получаем текущий путь
-                        var currentPath = window.location.pathname;
+                // Получаем текущий путь
+                var currentPath = window.location.pathname;
 
-                        // Получаем все ссылки категорий
-                        var categoryLinks = document.querySelectorAll('.category-link');
+                // Получаем все ссылки категорий
+                var categoryLinks = document.querySelectorAll('.category-link');
 
-                        // Проходим по каждой ссылке
-                        categoryLinks.forEach(function(link) {
-                            // Если текущий путь совпадает с атрибутом href этой ссылки
-                            if (link.getAttribute('href') === currentPath) {
-                                // Добавляем класс активности
-                                link.classList.add('active');
-                            }
-                        });
-                    </script>
+                // Проходим по каждой ссылке
+                categoryLinks.forEach(function(link) {
+                    // Если текущий путь совпадает с атрибутом href этой ссылки
+                    if (link.getAttribute('href') === currentPath) {
+                        // Добавляем класс активности
+                        link.classList.add('active');
+                    }
+                });
+            </script>
 
 
             <div class="col-md-1 vertical-line">
             </div>
 
             <div class="col-md-9">
-                <h5 style="margin-top: 10px; margin-bottom: 2rem;">Добавление букета</h5>
+                <h5 style="margin-top: 10px; margin-bottom: 2rem;">Добавление нового блюда</h5>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-                <form action="/bouquet_create" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                <form action="/adminCreateDish" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                     <div class="mb-3">
                         <label for="name" class="form-label">Название:</label>
                         <input type="text" id="required1" class="form-control" id="name" name="name" required>
@@ -248,32 +229,63 @@
                         <textarea class="form-control" id="composition" name="composition" rows="4" required></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="price" class="form-label">Цена:</label>
-                        <input type="number" id="required3" class="form-control" id="price" name="price" required>
+                        <label for="calories" class="form-label">Калорийность:</label>
+                        <input type="number" id="required3" class="form-control" id="calories" name="calories" required>
                     </div>
                     <div class="mb-3">
-                        <h6 for="type" class="form-label">Тип букета:</h6>
-                        <select name="type" id="type" class="form-control">
-                            <option value="Авторский">Авторский</option>
-                            <option value="В коробке">В коробке</option>
-                            <option value="Cвадебный">Cвадебный</option>
+                        <label for="weight" class="form-label">Вес:</label>
+                        <input type="number" id="required4" class="form-control" id="weight" name="weight" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Цена:</label>
+                        <input type="number" id="required5" class="form-control" id="price" name="price" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6 for="type" class="form-label">Тип блюда:</h6>
+                        <select name="dishTypeId" id="type" class="form-control">
+                            <option value="1">Роллы</option>
+                            <option value="2">Салаты</option>
+                            <option value="3">Супы</option>
+                            <option value="4">Горячие закуски и гарниры</option>
+                            <option value="5">Пицца</option>
+                            <option value="6">Горячие блюда</option>
+                            <option value="7">Wok</option>
+                            <option value="8">Паста</option>
+                            <option value="9">Десерты</option>
+                            <option value="10">Безалкогольные напитки</option>
+                            <option value="11">Алкогольные напитки</option>
                         </select>
                     </div>
+
+                    <div class="mb-3">
+                        <h6 for="type" class="form-label">Тип кухни:</h6>
+                        <select name="cuisineId" id="cuisine" class="form-control">
+                            <option value="1">Русская</option>
+                            <option value="2">Европейская</option>
+                            <option value="3">Итальянская</option>
+                            <option value="4">Азиатская</option>
+                        </select>
+                    </div>
+
+
                     <button type="submit" class="btn btn-custom">Добавить</button>
                 </form>
                 <script>
-                            function validateForm() {
-                                var required1 = document.getElementById("required1").value;
-                                var required2 = document.getElementById("required2").value;
-                                var required3 = document.getElementById("required3").value;
-                                var composition = document.getElementById("composition").value;
+                    function validateForm() {
+                        var required1 = document.getElementById("required1").value;
+                        var required2 = document.getElementById("required2").value;
+                        var required3 = document.getElementById("required3").value;
+                        var required4 = document.getElementById("required4").value;
+                        var required5 = document.getElementById("required5").value;
+                        var composition = document.getElementById("composition").value;
 
-                                if (required1 === "" || required1 === "" || required1 === "" || composition === "") {
-                                    alert("Пожалуйста, заполните все обязательные поля.");
-                                    return false;
-                                }
-                            }
-                        </script>
+                        if (required1 === "" || required2 === "" || required3 === "" || required4 === "" || required5 === "" || composition === "") {
+                            alert("Пожалуйста, заполните все обязательные поля.");
+                            return false;
+                        }
+                    }
+                </script>
             </div>
         </div>
     </div>

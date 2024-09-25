@@ -21,6 +21,7 @@
         height: 18rem;
         width: 18rem;
         border-radius: 7px;
+        object-fit: cover;
     }
 
     .image{
@@ -41,6 +42,7 @@
     .sideMargin{
         margin-left: 2rem;
         margin-right: 2rem;
+        margin-bottom: 28px;
     }
 
     .sideMarginRight{
@@ -62,7 +64,7 @@
     }
 
     .card-link-name {
-        font-size: 1.25rem; /* Размер шрифта */
+        font-size: 18px; /* Размер шрифта */
         color: #333;
         text-decoration: none;
     }
@@ -119,7 +121,7 @@
     .info {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: top;
         padding: 10px;
         margin-bottom: 10px;
     }
@@ -142,6 +144,11 @@
         background-color: #e0d8d0; /* Цвет кнопки при наведении */
         border-color: #e0d8d0; /* Цвет границы кнопки при наведении */
     }
+
+    .category-link.active {
+        text-decoration: underline;
+    }
+
 
      #emptyCartMessage {
          display: flex;
@@ -166,449 +173,208 @@
 
 
 <#if allDishes??>
-<#if allDishes?size = 0>
+
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-3 sideMarginRight">
-      <h6 for="typeRecipient" class="form-label" style="margin-top: 0.5rem;">Категория:</h6>
-      <div class="sideMargin" style="padding-top: 1rem;">
-        <p><a class="custom-link category-link" href="/catalog">Все блюда</a></p>
-        <p><a class="custom-link category-link" href="/authorBouquet">Тип 1</a></p>
-        <p><a class="custom-link category-link" href="/boxBouquet">Тип 2</a></p>
-        <p><a class="custom-link category-link" href="/weddingBouquet">Тип 3</a></p>
-      </div>
+      <br>
+      <h6 class="form-label" style="margin-bottom: 1rem;">Сортировка:</h6>
+      <select name="sort" id="typeRecipient" class="form-control">
+        <option value="0">По умолчанию</option>
+        <option value="1">По возрастанию цены</option>
+        <option value="2">По убыванию цены</option>
+      </select>
+
       <script>
-        // Получаем текущий путь
-        var currentPath = window.location.pathname;
+        document.addEventListener("DOMContentLoaded", function() {
+            var selectedSort = "${selectedSort}";  // Получаем значение с сервера
+            var selectedCuisine = "${selectedCuisine}";  // Текущая выбранная кухня
+            var selectedDishType = "${selectedDishType}";  // Текущий выбранный тип блюда
 
-        // Получаем все ссылки категорий
-        var categoryLinks = document.querySelectorAll('.category-link');
+            var selectElement = document.getElementById("typeRecipient");
 
-        // Проходим по каждой ссылке
-        categoryLinks.forEach(function(link) {
-            // Если текущий путь совпадает с атрибутом href этой ссылки
-            if (link.getAttribute('href') === currentPath) {
-                // Добавляем класс активности
-                link.classList.add('active');
+            // Устанавливаем выбранное значение в select
+            if (selectedSort) {
+                selectElement.value = selectedSort;
             }
+
+            // Обработчик изменения значения в select
+            selectElement.addEventListener("change", function() {
+                var selectedSort = selectElement.value;
+
+                // Перенаправляем на страницу с текущими параметрами кухни и блюда
+                var url = "/catalog?sort=" + selectedSort + "&cuisine=" + selectedCuisine + "&dishType=" + selectedDishType;
+                window.location.href = url;
+            });
         });
       </script>
 
       <br>
-      <form action="/filterDishes" method="get">
-        <h6 class="form-label">Сортировка:</h6>
-        <select name="sort" id="typeRecipient" class="form-control">
-          <option value="0">По умолчанию</option>
-          <option value="1">По возрастанию цены</option>
-          <option value="2">По убыванию цены</option>
-        </select>
 
-        <script>
-          document.addEventListener("DOMContentLoaded", function() {
-              // Получаем переданное значение selectedSort
-              var selectedSort = "${selectedSort}";
+      <h6 class="form-label" style="margin-bottom: 28px;">
+        <a href="#" class="custom-link category-link" data-cuisine="all" id="allMenuLink">Все меню</a>
+      </h6>
 
-              // Находим элемент select
-              var selectElement = document.getElementById("typeRecipient");
 
-              // Устанавливаем значение selectedSort в select
-              if (selectedSort) {
-                  selectElement.value = selectedSort;
-              }
-          });
-        </script>
-
-        <br>
-        <div>
-          <h6>Цветы в составе: <i class="bi bi-info-circle"></i></h6>
-          <div class="form-check sideMargin verticalMargin">
-            <#if roses??>
-            <input checked class="form-check-input" type="checkbox" name="roses" id="roses" value="Роза">
-            <#else>
-            <input class="form-check-input" type="checkbox" name="roses" id="roses" value="Роза">
-          </#if>
-          <label class="form-check-label">
-            розы
-          </label>
-        </div>
-        <div class="form-check sideMargin verticalMargin">
-          <#if peonies??>
-          <input checked class="form-check-input" type="checkbox" name="peonies" id="peonies" value="Пион">
-          <#else>
-          <input class="form-check-input" type="checkbox" name="peonies" id="peonies" value="Пион">
-        </#if>
-        <label class="form-check-label">
-          пионы
-        </label>
-    </div>
-    <div class="form-check sideMargin verticalMargin">
-      <#if ranunculus??>
-      <input checked class="form-check-input" type="checkbox" name="ranunculus" id="ranunculus" value="Ранункулюс">
-      <#else>
-      <input class="form-check-input" type="checkbox" name="ranunculus" id="ranunculus" value="Ранункулюс">
-    </#if>
-    <label class="form-check-label">
-      ранункулюсы
-    </label>
-  </div>
-  <div class="form-check sideMargin verticalMargin">
-    <#if eustoma??>
-    <input checked class="form-check-input" type="checkbox" name="eustoma" id="eustoma" value="Эустома">
-    <#else>
-    <input class="form-check-input" type="checkbox" name="eustoma" id="eustoma" value="Эустома">
-  </#if>
-  <label class="form-check-label">
-    эустомы
-  </label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if hortensia??>
-  <input checked class="form-check-input" type="checkbox" name="hortensia" id="hortensia" value="Гортензия">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="hortensia" id="hortensia" value="Гортензия">
-</#if>
-<label class="form-check-label">
-  гортензии
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if alstroemeria??>
-  <input checked class="form-check-input" type="checkbox" name="alstroemeria" id="alstroemeria" value="Альстромерия">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="alstroemeria" id="alstroemeria" value="Альстромерия">
-</#if>
-<label class="form-check-label">
-  альстромерии
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if daisies??>
-  <input checked class="form-check-input" type="checkbox" name="daisies" id="daisies" value="Ромашка">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="daisies" id="daisies" value="Ромашка">
-</#if>
-<label class="form-check-label">
-  ромашки
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if chrysanthemums??>
-  <input checked class="form-check-input" type="checkbox" name="chrysanthemums" id="chrysanthemums" value="Хризантема">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="chrysanthemums" id="chrysanthemums" value="Хризантема">
-</#if>
-<label class="form-check-label">
-  хризантемы
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if gypsophila??>
-  <input checked class="form-check-input" type="checkbox" name="gypsophila" id="gypsophila" value="Гипсофила">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="gypsophila" id="gypsophila" value="Гипсофила">
-</#if>
-<label class="form-check-label">
-  гипсофилы
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if carnation??>
-  <input checked class="form-check-input" type="checkbox" name="carnation" id="carnation" value="Гвоздика">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="carnation" id="carnation" value="Гвоздика">
-</#if>
-<label class="form-check-label">
-  гвоздики
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if tulips??>
-  <input checked class="form-check-input" type="checkbox" name="tulips" id="tulips" value="Тюльпан">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="tulips" id="tulips" value="Тюльпан">
-</#if>
-<label class="form-check-label">
-  тюльпаны
-</label>
-</div>
-
-</div>
-<div>
-  <h6>Цена <i class="bi bi-info-circle"></i></h6>
-  <div class="input-group mb-3">
-    <input type="number" name="minPrice" class="form-control" min="0" max="100000000" placeholder="от ${minPrice}">
-    <input type="number" name="maxPrice" class="form-control" min="1" max="100000000" placeholder="до ${maxPrice}">
-  </div>
-  <div class="form-check sideMargin verticalMargin">
-    <#if priceRangeSmall??>
-    <input checked class="form-check-input" type="checkbox" name="priceRangeSmall" id="price1" value="0-2000">
-    <#else>
-    <input class="form-check-input" type="checkbox" name="priceRangeSmall" id="price1" value="0-2000">
-  </#if>
-  <label class="form-check-label" for="price1">
-    до 2000 ₽
-  </label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if priceRangeAverage??>
-  <input checked class="form-check-input" type="checkbox" name="priceRangeAverage" id="price2" value="2000-4000">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="priceRangeAverage" id="price2" value="2000-4000">
-</#if>
-<label class="form-check-label" for="price2">
-  2000–4000 ₽
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if priceRangeBig??>
-  <input checked class="form-check-input" type="checkbox" name="priceRangeBig" id="price3" value="4000-999999999">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="priceRangeBig" id="price3" value="4000-999999999">
-</#if>
-<label class="form-check-label" for="price3">
-  от 4000 ₽
-</label>
-</div>
-<button type="submit" class="btn btn-custom mt-3">Применить</button>
-</div>
-</form>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybBogGz5oCJ6pFYQ4IHg8DUi4zxtqDShTZ7H25QpYaetFG8L" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-ho+j7jyWK8fNodH5t+1/s+M8fvr57Xj9sx1ztf5d1D3+6sni5BRp8FJaWwMGTOs3" crossorigin="anonymous"></script>
-</div>
-<div class="col-md-9 justify-content-center align-items-center">
-  <div id="emptyCartMessage" class="margin-top:5rem;" style="height: 40%;">
-    <h5>Нет доступных блюд</h5>
-  </div>
-</div>
-</div>
-</div>
-<#else>
-<div class="container mt-5">
-  <div class="row">
-    <div class="col-md-3 sideMarginRight">
-      <h6 for="typeRecipient" class="form-label" style="margin-top: 0.5rem;">Категория:</h6>
-      <div class="sideMargin" style="padding-top: 1rem;">
-        <p><a class="custom-link category-link" href="/catalog">Все блюда</a></p>
-        <p><a class="custom-link category-link" href="/authorBouquet">Тип 1</a></p>
-        <p><a class="custom-link category-link" href="/boxBouquet">Тип 2</a></p>
-        <p><a class="custom-link category-link" href="/weddingBouquet">Тип 3</a></p>
+      <h6 for="typeRecipient" class="form-label" style="margin-bottom: 1rem;">Кухня:</h6>
+      <div class="sideMargin">
+        <p><a class="custom-link category-link" href="#" data-cuisine="russian">Русская</a></p>
+        <p><a class="custom-link category-link" href="#" data-cuisine="european">Европейская</a></p>
+        <p><a class="custom-link category-link" href="#" data-cuisine="italian">Итальянская</a></p>
+        <p><a class="custom-link category-link" href="#" data-cuisine="asian">Азиатская</a></p>
       </div>
-      <script>
-        // Получаем текущий путь
-        var currentPath = window.location.pathname;
 
-        // Получаем все ссылки категорий
-        var categoryLinks = document.querySelectorAll('.category-link');
+      <h6 for="typeRecipient" class="form-label" style="margin-bottom: 1rem;">Тип блюда:</h6>
+      <div class="sideMargin">
+        <p><a class="custom-link category-link" href="#" data-dishType="rolls">Роллы</a></p>
+        <p><a class="custom-link category-link" href="#" data-dishType="salads">Салаты</a></p>
+        <p><a class="custom-link category-link" href="#" data-dishType="soups">Супы</a></p>
+        <p><a class="custom-link category-link" href="#" data-dishType="appetizers">Горячие закуски и гарниры</a></p>
+        <p><a class="custom-link category-link" href="#" data-dishType="pizza">Пицца</a></p>
+        <p><a class="custom-link category-link" href="#" data-dishType="hotDishes">Горячие блюда</a></p>
+        <p><a class="custom-link category-link" href="#" data-dishType="wok">Wok</a></p>
+        <p><a class="custom-link category-link" href="#" data-dishType="pasta">Паста</a></p>
+        <p><a class="custom-link category-link" href="#" data-dishType="desserts">Десерты</a></p>
+        <p><a class="custom-link category-link" href="#" data-dishType="softDrinks">Безалкогольные напитки</a></p>
+        <p><a class="custom-link category-link" href="#" data-dishType="alcoholicDrinks">Алкогольные напитки</a></p>
 
-        // Проходим по каждой ссылке
-        categoryLinks.forEach(function(link) {
-            // Если текущий путь совпадает с атрибутом href этой ссылки
-            if (link.getAttribute('href') === currentPath) {
-                // Добавляем класс активности
-                link.classList.add('active');
-            }
-        });
-      </script>
+      </div>
 
-      <br>
-      <form action="/filterDishes" method="get">
-        <h6 class="form-label">Сортировка:</h6>
-        <select name="sort" id="typeRecipient" class="form-control">
-          <option value="0">По умолчанию</option>
-          <option value="1">По возрастанию цены</option>
-          <option value="2">По убыванию цены</option>
-        </select>
-
-        <script>
-          document.addEventListener("DOMContentLoaded", function() {
-              // Получаем переданное значение selectedSort
-              var selectedSort = "${selectedSort}";
-
-              // Находим элемент select
-              var selectElement = document.getElementById("typeRecipient");
-
-              // Устанавливаем значение selectedSort в select
-              if (selectedSort) {
-                  selectElement.value = selectedSort;
-              }
-          });
-        </script>
-
-        <br>
-        <div>
-          <h6>Цветы в составе: <i class="bi bi-info-circle"></i></h6>
-          <div class="form-check sideMargin verticalMargin">
-            <#if roses??>
-            <input checked class="form-check-input" type="checkbox" name="roses" id="roses" value="Роза">
-            <#else>
-            <input class="form-check-input" type="checkbox" name="roses" id="roses" value="Роза">
-          </#if>
-          <label class="form-check-label">
-            розы
-          </label>
-        </div>
-        <div class="form-check sideMargin verticalMargin">
-          <#if peonies??>
-          <input checked class="form-check-input" type="checkbox" name="peonies" id="peonies" value="Пион">
-          <#else>
-          <input class="form-check-input" type="checkbox" name="peonies" id="peonies" value="Пион">
-        </#if>
-        <label class="form-check-label">
-          пионы
-        </label>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybBogGz5oCJ6pFYQ4IHg8DUi4zxtqDShTZ7H25QpYaetFG8L" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-ho+j7jyWK8fNodH5t+1/s+M8fvr57Xj9sx1ztf5d1D3+6sni5BRp8FJaWwMGTOs3" crossorigin="anonymous"></script>
     </div>
-    <div class="form-check sideMargin verticalMargin">
-      <#if ranunculus??>
-      <input checked class="form-check-input" type="checkbox" name="ranunculus" id="ranunculus" value="Ранункулюс">
-      <#else>
-      <input class="form-check-input" type="checkbox" name="ranunculus" id="ranunculus" value="Ранункулюс">
-    </#if>
-    <label class="form-check-label">
-      ранункулюсы
-    </label>
-  </div>
-  <div class="form-check sideMargin verticalMargin">
-    <#if eustoma??>
-    <input checked class="form-check-input" type="checkbox" name="eustoma" id="eustoma" value="Эустома">
-    <#else>
-    <input class="form-check-input" type="checkbox" name="eustoma" id="eustoma" value="Эустома">
-  </#if>
-  <label class="form-check-label">
-    эустомы
-  </label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if hortensia??>
-  <input checked class="form-check-input" type="checkbox" name="hortensia" id="hortensia" value="Гортензия">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="hortensia" id="hortensia" value="Гортензия">
-</#if>
-<label class="form-check-label">
-  гортензии
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if alstroemeria??>
-  <input checked class="form-check-input" type="checkbox" name="alstroemeria" id="alstroemeria" value="Альстромерия">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="alstroemeria" id="alstroemeria" value="Альстромерия">
-</#if>
-<label class="form-check-label">
-  альстромерии
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if daisies??>
-  <input checked class="form-check-input" type="checkbox" name="daisies" id="daisies" value="Ромашка">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="daisies" id="daisies" value="Ромашка">
-</#if>
-<label class="form-check-label">
-  ромашки
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if chrysanthemums??>
-  <input checked class="form-check-input" type="checkbox" name="chrysanthemums" id="chrysanthemums" value="Хризантема">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="chrysanthemums" id="chrysanthemums" value="Хризантема">
-</#if>
-<label class="form-check-label">
-  хризантемы
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if gypsophila??>
-  <input checked class="form-check-input" type="checkbox" name="gypsophila" id="gypsophila" value="Гипсофила">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="gypsophila" id="gypsophila" value="Гипсофила">
-</#if>
-<label class="form-check-label">
-  гипсофилы
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if carnation??>
-  <input checked class="form-check-input" type="checkbox" name="carnation" id="carnation" value="Гвоздика">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="carnation" id="carnation" value="Гвоздика">
-</#if>
-<label class="form-check-label">
-  гвоздики
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if tulips??>
-  <input checked class="form-check-input" type="checkbox" name="tulips" id="tulips" value="Тюльпан">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="tulips" id="tulips" value="Тюльпан">
-</#if>
-<label class="form-check-label">
-  тюльпаны
-</label>
-</div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          // Находим все ссылки для выбора кухни и типа блюда
+          var cuisineLinks = document.querySelectorAll('.category-link[data-cuisine]');
+          var dishTypeLinks = document.querySelectorAll('.category-link[data-dishType]');
+          var allMenuLink = document.getElementById('allMenuLink'); // "Все меню"
 
-</div>
-<div>
-  <h6>Цена <i class="bi bi-info-circle"></i></h6>
-  <div class="input-group mb-3">
-    <input type="number" name="minPrice" class="form-control" min="0" max="100000000" placeholder="от ${minPrice}">
-    <input type="number" name="maxPrice" class="form-control" min="1" max="100000000" placeholder="до ${maxPrice}">
-  </div>
-  <div class="form-check sideMargin verticalMargin">
-    <#if priceRangeSmall??>
-    <input checked class="form-check-input" type="checkbox" name="priceRangeSmall" id="price1" value="0-2000">
-    <#else>
-    <input class="form-check-input" type="checkbox" name="priceRangeSmall" id="price1" value="0-2000">
-  </#if>
-  <label class="form-check-label" for="price1">
-    до 2000 ₽
-  </label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if priceRangeAverage??>
-  <input checked class="form-check-input" type="checkbox" name="priceRangeAverage" id="price2" value="2000-4000">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="priceRangeAverage" id="price2" value="2000-4000">
-</#if>
-<label class="form-check-label" for="price2">
-  2000–4000 ₽
-</label>
-</div>
-<div class="form-check sideMargin verticalMargin">
-  <#if priceRangeBig??>
-  <input checked class="form-check-input" type="checkbox" name="priceRangeBig" id="price3" value="4000-999999999">
-  <#else>
-  <input class="form-check-input" type="checkbox" name="priceRangeBig" id="price3" value="4000-999999999">
-</#if>
-<label class="form-check-label" for="price3">
-  от 4000 ₽
-</label>
-</div>
-<button type="submit" class="btn btn-custom mt-3">Применить</button>
-</div>
-</form>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybBogGz5oCJ6pFYQ4IHg8DUi4zxtqDShTZ7H25QpYaetFG8L" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-ho+j7jyWK8fNodH5t+1/s+M8fvr57Xj9sx1ztf5d1D3+6sni5BRp8FJaWwMGTOs3" crossorigin="anonymous"></script>
-</div>
-<div class="col-md-9">
-  <h4>${title}</h4>
-  <div class="row">
-    <#list allDishes as dish>
-    <div class="col-md-4">
-      <div class="product">
-        <a href="/dish/${dish.id}" class="image">
-          <img src="/images/${dish.images[0].id}" alt="Фото">
-        </a>
-        <div class="info">
-          <a href="/dish/${dish.id}" class="card-link-name">${dish.name}</a>
-          <div>${dish.price}</div>
-        </div>
+          // Обработчик клика для кухонь
+          cuisineLinks.forEach(function(link) {
+              link.addEventListener("click", function(event) {
+                  event.preventDefault();  // Отключаем стандартное поведение ссылки
+
+                  // Снимаем класс 'active' со всех ссылок
+                  cuisineLinks.forEach(function(l) {
+                      l.classList.remove('active');
+                  });
+
+                  dishTypeLinks.forEach(function(l) {
+                      l.classList.remove('active');
+                  });
+
+                  allMenuLink.classList.remove('active');
+
+                  // Устанавливаем класс 'active' для выбранной кухни
+                  this.classList.add('active');
+
+                  // Получаем значение выбранной кухни
+                  var selectedCuisine = this.getAttribute("data-cuisine");
+
+                  // Формируем URL
+                  var url = "/catalog?cuisine=" + selectedCuisine;
+                  window.location.href = url;
+              });
+          });
+
+          // Обработчик клика для типов блюд
+          dishTypeLinks.forEach(function(link) {
+              link.addEventListener("click", function(event) {
+                  event.preventDefault();  // Отключаем стандартное поведение ссылки
+
+                  // Снимаем класс 'active' со всех ссылок
+                  dishTypeLinks.forEach(function(l) {
+                      l.classList.remove('active');
+                  });
+
+                  cuisineLinks.forEach(function(l) {
+                      l.classList.remove('active');
+                  });
+
+                  allMenuLink.classList.remove('active');
+
+                  // Устанавливаем класс 'active' для выбранного типа блюда
+                  this.classList.add('active');
+
+                  // Получаем значение выбранного типа блюда
+                  var selectedDishType = this.getAttribute("data-dishType");
+
+                  // Формируем URL
+                  var url = "/catalog?dishType=" + selectedDishType;
+                  window.location.href = url;
+              });
+          });
+
+          // Обработчик клика для ссылки "Все меню"
+          allMenuLink.addEventListener("click", function(event) {
+              event.preventDefault();  // Отключаем стандартное поведение ссылки
+
+              // Снимаем класс 'active' со всех ссылок
+              cuisineLinks.forEach(function(l) {
+                  l.classList.remove('active');
+              });
+
+              dishTypeLinks.forEach(function(l) {
+                  l.classList.remove('active');
+              });
+
+              // Устанавливаем класс 'active' для "Все меню"
+              allMenuLink.classList.add('active');
+
+              // Перенаправляем на все меню
+              window.location.href = "/catalog?cuisine=all&dishType=all";
+          });
+
+          // Установка активных элементов при загрузке страницы
+          var selectedCuisine = "${selectedCuisine}";
+          var selectedDishType = "${selectedDishType}";
+
+          if (selectedCuisine && selectedCuisine !== "all") {
+              var activeCuisineLink = document.querySelector(`.category-link[data-cuisine="${selectedCuisine}"]`);
+              if (activeCuisineLink) {
+                  activeCuisineLink.classList.add('active');
+              }
+          } else if (!selectedDishType || selectedDishType === "all") {
+              // Если нет выбранного типа блюда, активируем ссылку "Все меню"
+              allMenuLink.classList.add('active');
+          }
+
+          if (selectedDishType && selectedDishType !== "all") {
+              var activeDishTypeLink = document.querySelector(`.category-link[data-dishType="${selectedDishType}"]`);
+              if (activeDishTypeLink) {
+                  activeDishTypeLink.classList.add('active');
+              }
+          }
+      });
+    </script>
+
+
+
+    <#if allDishes?size = 0>
+    <div class="col-md-9 justify-content-center align-items-center">
+      <div id="emptyCartMessage" class="margin-top:5rem;" style="height: 40%;">
+        <h5>Нет доступных блюд</h5>
       </div>
     </div>
-  </#list>
-</div>
-</div>
+    <#else>
+    <div class="col-md-9">
+      <div class="row">
+        <#list allDishes as dish>
+        <div class="col-md-4">
+          <div class="product">
+            <a href="/dish/${dish.id}" class="image">
+              <img src="/images/${dish.images[0].id}" alt="Фото">
+            </a>
+            <div class="info">
+              <a href="/dish/${dish.id}" class="card-link-name">${dish.name}</a>
+              <div style=" font-size: 18px;">${dish.price} ₽</div>
+            </div>
+          </div>
+        </div>
+      </#list>
+    </div>
+  </div>
 </div>
 </div>
 </#if>

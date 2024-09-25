@@ -53,7 +53,7 @@ public class ProfileController {
     public String historyOrders(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
 
-        List<Order> finishedOrders = orderService.ListOrdersFinished(user); // Получаем заказы пользователя
+        List<Order> finishedOrders = orderService.listOrdersFinished(user); // Получаем заказы пользователя
         // Сортируем заказы по дате доставки
         List<Order> sortedFinishedOrders = finishedOrders.stream()
                 .sorted((o1, o2) -> o2.getDateDelivery().compareTo(o1.getDateDelivery()))

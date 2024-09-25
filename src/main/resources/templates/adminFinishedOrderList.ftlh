@@ -271,9 +271,8 @@
                                                 ${dish.price} ₽
                                             </div>
                                         </div>
+                                        <#assign y++>
                                     </#list>
-                                    <#assign y++>
-
                                     <#assign x++>
                                 </div>
                                 <div class="horizontal-line"></div> <!-- Горизонтальная линия -->

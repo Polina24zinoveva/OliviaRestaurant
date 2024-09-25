@@ -4,6 +4,7 @@ import com.example.OliviaRestaurant.models.Dish;
 import com.example.OliviaRestaurant.models.OrderHasDish;
 import com.example.OliviaRestaurant.models.Order;
 import com.example.OliviaRestaurant.models.User;
+import com.example.OliviaRestaurant.models.enums.OrderStatus;
 import com.example.OliviaRestaurant.repositories.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -83,6 +84,9 @@ public class OrderHasDishService {
     }
 
 
+
+
+
     public boolean saveOrderHasDish(Order order, Dish dish) {
         Long idOrder = order.getId();
         Long idBouquet = dish.getId();
@@ -104,22 +108,26 @@ public class OrderHasDishService {
 
     public boolean createOrderHasDish(Dish dish, Principal principal) {
         if (principal == null || dish == null) return false;
-        if(orderRepository.findByUserAndStatus(getUserByPrincipal(principal), "В корзине") == null){
-            Order order = new Order();
+        Order order;
+        if(orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART) == null){
+            order = new Order();
             order.setUser(getUserByPrincipal(principal));
-            order.setStatus("В корзине");
+            order.setStatus(OrderStatus.STATUS_IN_CART);
             order.setTotalPrice(dish.getPrice());
             orderRepository.save(order);
         }
-        Order order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), "В корзине");
+        else{
+            order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART);
+            order.setTotalPrice(order.getTotalPrice() + dish.getPrice());
+            orderRepository.save(order);
+        }
         return saveOrderHasDish(order, dish);
-
     }
 
     @Transactional
     public void removeOrderHasDish(Dish dish, Principal principal){
         try{
-            Order order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), "В корзине");
+            Order order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART);
             OrderHasDish orderHasDish = orderHasDishRepository.findByDishAndOrder(dish, order);
             Double delta = orderHasDish.getCount()*dish.getPrice();
             orderHasDishRepository.deleteByDishAndOrder(dish, order);
@@ -137,7 +145,7 @@ public class OrderHasDishService {
 
     public void changeAmount(Dish dish, Principal principal, Integer amount){
         try{
-            Order order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), "В корзине");
+            Order order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART);
             Integer oldAmount = orderHasDishRepository.findByDishAndOrder(dish, order).getCount();
             Double deltaSum = amount*dish.getPrice() - oldAmount*dish.getPrice();
             OrderHasDish orderHasDish = orderHasDishRepository.findByDishAndOrder(dish, order);
