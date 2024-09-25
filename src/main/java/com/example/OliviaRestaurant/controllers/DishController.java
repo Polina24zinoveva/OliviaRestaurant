@@ -6,9 +6,7 @@ import com.example.OliviaRestaurant.services.*;
 import com.example.OliviaRestaurant.statics.StaticMethods;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +38,7 @@ public class DishController {
 
         if (user != null) {
             //model.addAttribute("isAdmin", user.getIsAdministrator());
-            List<Dish> dishList = orderHasDishService.getDishesByOrder(orderService.HaveOrderInCardByUser(user));
+            List<Dish> dishList = orderHasDishService.getDishesByOrder(orderService.haveOrderInCardByUser(user));
 
             // Проверяем наличие нужного id букета в списке
             boolean dishExists = false;

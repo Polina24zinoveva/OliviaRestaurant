@@ -244,19 +244,27 @@
                             <div class="mb-3">
                                 <h6 for="type" class="form-label">Тип блюда:</h6>
                                 <select name="dishTypeId" id="type" class="form-control">
-                                    <option value="1">Один</option>
-                                    <option value="2">Два</option>
-                                    <option value="3">Три</option>
+                                    <option value="1">Роллы</option>
+                                    <option value="2">Салаты</option>
+                                    <option value="3">Супы</option>
+                                    <option value="4">Горячие закуски и гарниры</option>
+                                    <option value="5">Пицца</option>
+                                    <option value="6">Горячие блюда</option>
+                                    <option value="7">Wok</option>
+                                    <option value="8">Паста</option>
+                                    <option value="9">Десерты</option>
+                                    <option value="10">Безалкогольные напитки</option>
+                                    <option value="11">Алкогольные напитки</option>
                                 </select>
                             </div>
 
                             <div class="mb-3">
                                 <h6 for="type" class="form-label">Тип кухни:</h6>
                                 <select name="cuisineId" id="cuisine" class="form-control">
-                                    <option value="1">Один</option>
-                                    <option value="2">Два</option>
-                                    <option value="3">Три</option>
-                                    <option value="4">Четыре</option>
+                                    <option value="1">Русская</option>
+                                    <option value="2">Европейская</option>
+                                    <option value="3">Итальянская</option>
+                                    <option value="4">Азиатская</option>
                                 </select>
                             </div>
 

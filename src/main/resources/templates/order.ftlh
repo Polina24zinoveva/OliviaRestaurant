@@ -432,32 +432,7 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-auto">
-                                                <div id="postcardCarousel" class="carousel carousel-dark slide custom-card" style="display:none">
-                                                    <div class="carousel-inner">
-                                                        <#list allPostcards as postcard>
-                                                            <div class="carousel-item<#if postcard_index == 0> active</#if>">
-                                                                <img src="/images/${postcard.image.id}" data-postcard-id="${postcard.id}" class="d-block w-100 custom-card" alt="Фото открытки">
-                                                                <input type="hidden" id="postcardId" name="dataPostcardId" value="${postcard.id}">
-                                                            </div>
-                                                        </#list>
-                                                    </div>
-                                                    <button class="carousel-control-prev" type="button" data-bs-target="#postcardCarousel" data-bs-slide="prev">
-                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                        <span class="visually-hidden">Previous</span>
-                                                    </button>
-                                                    <button class="carousel-control-next" type="button" data-bs-target="#postcardCarousel" data-bs-slide="next">
-                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                        <span class="visually-hidden">Next</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div id = "textPostcardContainer" class ="mb-3" style = "display:none">
-                                                   <label for="textPostcard" class="form-label">Текст открытки:</label>
-                                                   <textarea class="form-control" id="textPostcard" name="textPostcard" rows="5"></textarea>
-                                                </div>
-                                            </div>
+
                                         </#if>
                                         <div class="col-12 mb-3">
                                             <div class="form-group" id="addressDelivery">

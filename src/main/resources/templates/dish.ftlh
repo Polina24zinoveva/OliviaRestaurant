@@ -32,7 +32,7 @@
         .row-custom {
             border: 2px solid #f0eade;
             border-radius: 10px;
-            max-width: 1000px;
+            max-width: 1200px;
             margin-left: auto;
             margin-right: auto;
             margin-top: 3rem;
@@ -55,8 +55,9 @@
         }
 
         .btn-custom {
-            width: 240px;
-            margin-top: 10px;
+            width: 360px;
+            height: 46px;
+            border-radius: 8px;
             background-color: #f0eade; /* Основной цвет кнопки */
             border-color: #f0eade; /* Цвет границы кнопки */
             color: #333; /* Цвет текста кнопки */
@@ -68,7 +69,9 @@
         }
 
         .btn-custom2 {
-            width: 240px;
+            width: 360px;
+            height: 46px;
+            border-radius: 8px;
             margin-top: 10px;
             background-color: #ffffff;
             border-color: #e0d8d0;
@@ -81,20 +84,6 @@
             border-color: #e0d8d0;
         }
 
-        .btn-custom-fav {
-            width: 50px;
-            margin-top: 10px;
-            margin-right: 10px;
-            background-color: #ffffff;
-            border-color: #e0d8d0;
-            color: #333;
-        }
-
-        .btn-custom-fav:hover {
-            color: #333;
-            background-color: #e0d8d0;
-            border-color: #e0d8d0;
-        }
 
         .carousel-item img {
             margin-top: auto;
@@ -127,6 +116,7 @@
             display: block;
             border-radius: 7px;
         }
+
 
         /* Для футера внизу страницы: html, body, wrapper */
         html, body {
@@ -200,47 +190,49 @@
             <div class="flex-grow-1">
                 <h4 class="text" style="margin-top: 3rem;">${dish.name}</h4>
             </div>
+
             <div class="flex-grow-1">
-                <h6 class="text">Состав:</h6>
-                <p><#list (dish.composition)?split("\n") as line>
-                    ${line}<br>
-                </#list></p>
-                <p class="text">Калорийность: ${dish.calories}</p>
-                <p class="text">Вес: ${dish.weight}</p>
-                <p class="text">Кухня: ${dish.cuisine.name}</p>
-                <p class="text">Тип блюда: ${dish.dishType.name}</p>
-                <h6 class="text">${dish.price} рублей</h6>
+                <p><span style="font-size: 1rem; font-weight: 600;">Состав:</span> <#list (dish.composition)?split("\n") as line>${line}<br></#list></p>
+                <p><span style="font-size: 1rem; font-weight: 600;">Вес:</span> ${dish.weight} грамм</p>
+                <p><span style="font-size: 1rem; font-weight: 600;">Калорийность:</span> ${dish.calories} ккал</p>
             </div>
-            <div class="d-flex justify-content-between" style="margin-bottom: 50px;"> <!-- Добавляем классы d-flex и justify-content-between -->
-                <!-- Кнопка "Добавить в корзину" -->
-                <#if inCard==false>
-                    <form id="addButton" onclick="addOrAdded()" action="/addDishToOrder/${dish.id}" method="post">
-                        <button type="submit" class="btn btn-custom">Добавить в корзину</button>
-                    </form>
-                    <form id="addedButton" action="/order" style="display:none;">
-                        <button type="submit" class="btn btn-custom2">Перейти в корзину</button>
-                    </form>
-                <#else>
-                    <form id="addButton" onclick="addOrAdded()" action="/addDishToOrder/${dish.id}" method="post" style="display:none;">
-                        <button type="submit" class="btn btn-custom">Добавить в корзину</button>
-                    </form>
-                    <form id="addedButton" action="/order">
-                        <button type="submit" class="btn btn-custom2">Перейти в корзину</button>
-                    </form>
-                </#if>
+            <div class="flex-grow-1">
+            <h5>${dish.price} рублей</h5>
+            </div>
+            <div class="flex-grow-1">
+                <div class="d-flex justify-content-between">
 
-                <script>
-                    function addOrAdded() {
-                        if (document.getElementById("addedButton").style.display === "none") {
-                            document.getElementById("addedButton").style.display = "block"
-                            document.getElementById("addButton").style.display = "none"
-                        } else {
-                            document.getElementById("addedButton").style.display = "none"
-                            document.getElementById("addButton").style.display = "block"
+
+                    <!-- Кнопка "Добавить в корзину" -->
+                    <#if inCard==false>
+                        <form id="addButton" onclick="addOrAdded()" action="/addDishToOrder/${dish.id}" method="post">
+                            <button type="submit" class="btn btn-custom">Добавить в корзину</button>
+                        </form>
+                        <form id="addedButton" action="/order" style="display:none;">
+                            <button type="submit" class="btn btn-custom2">Перейти в корзину</button>
+                        </form>
+                    <#else>
+                        <form id="addButton" onclick="addOrAdded()" action="/addDishToOrder/${dish.id}" method="post" style="display:none;">
+                            <button type="submit" class="btn btn-custom">Добавить в корзину</button>
+                        </form>
+                        <form id="addedButton" action="/order">
+                            <button type="submit" class="btn btn-custom2">Перейти в корзину</button>
+                        </form>
+                    </#if>
+
+                    <script>
+                        function addOrAdded() {
+                            if (document.getElementById("addedButton").style.display === "none") {
+                                document.getElementById("addedButton").style.display = "block"
+                                document.getElementById("addButton").style.display = "none"
+                            } else {
+                                document.getElementById("addedButton").style.display = "none"
+                                document.getElementById("addButton").style.display = "block"
+                            }
                         }
-                    }
-                </script>
+                    </script>
 
+                </div>
             </div>
         </div>
 

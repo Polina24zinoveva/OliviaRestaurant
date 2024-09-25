@@ -1,6 +1,7 @@
 package com.example.OliviaRestaurant.controllers;
 
 import com.example.OliviaRestaurant.models.*;
+import com.example.OliviaRestaurant.models.enums.OrderStatus;
 import com.example.OliviaRestaurant.models.enums.Role;
 import com.example.OliviaRestaurant.repositories.CuisineRepository;
 import com.example.OliviaRestaurant.repositories.DishRepository;
@@ -53,9 +54,9 @@ public class AdminController {
         StaticMethods.header(user, model);
 
         model.addAttribute("allDishes", dishService.listAllDishes());
-        model.addAttribute("toDeliverOrders", orderService.ListAllOrdersToDeliver());
-        model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(orderService.ListAllOrdersToDeliver()));
-        model.addAttribute("toDeliverAmounts", orderHasDishService.getPendingDishes(orderService.ListAllOrdersToDeliver()));
+        model.addAttribute("toDeliverOrders", orderService.listAllOrdersToDeliver());
+        model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(orderService.listAllOrdersToDeliver()));
+        model.addAttribute("toDeliverAmounts", orderHasDishService.getPendingDishes(orderService.listAllOrdersToDeliver()));
 
         return "adminAllDish";
     }
@@ -146,7 +147,7 @@ public class AdminController {
             String username = authentication.getName(); // Получить имя пользователя
             User user = userService.getUserByEmail(username);
             if (user != null){
-                List<Dish> dishList = orderHasDishService.getDishesByOrder(orderService.HaveOrderInCardByUser(user));
+                List<Dish> dishList = orderHasDishService.getDishesByOrder(orderService.haveOrderInCardByUser(user));
 
                 // Проверяем наличие нужного id букета в списке
                 boolean dishExists = false;
@@ -172,20 +173,7 @@ public class AdminController {
         return "redirect:/dish/{id}";
     }
 
-    @PostMapping("adminFinishOrder/{id}")
-    public String adminFinishOrder(@PathVariable Long id, RedirectAttributes redirectAttributes){
-        try{
-            Order order = orderService.getOrderByID(id);
-            order.setStatus("Доставлен");
-            order.setCourierDateTimeDelivery(LocalDateTime.now());
-            orderService.saveOrder(order);
-            redirectAttributes.addFlashAttribute("message", "Заказ доставлен");
-        } catch(Exception e){
-            redirectAttributes.addFlashAttribute("message", "Ошибка при доставке заказа");
-        }
 
-        return"redirect:/adminOrderList";
-    }
 
     @GetMapping("/adminAddDish")
     public String addDish(Model model, @AuthenticationPrincipal User user){
@@ -199,7 +187,7 @@ public class AdminController {
     public String adminOrderList(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
 
-        List<Order> orders = orderService.ListAllOrdersToDeliver();
+        List<Order> orders = orderService.listAllOrdersToDeliver();
 
         // Сортируем заказы по дате доставки
         List<Order> sortedOrders = orders.stream()
@@ -216,7 +204,7 @@ public class AdminController {
     public String adminFinishedOrderList(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
 
-        List<Order> orders = orderService.ListOrdersFinished();
+        List<Order> orders = orderService.listOrdersFinished();
 
         // Сортируем заказы по дате доставки
         List<Order> sortedOrders = orders.stream()

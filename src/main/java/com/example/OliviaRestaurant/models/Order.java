@@ -1,5 +1,6 @@
 package com.example.OliviaRestaurant.models;
 
+import com.example.OliviaRestaurant.models.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,8 +37,8 @@ public class Order {
     @Column(name = "date_time_payment")
     private LocalDateTime dateTimePayment;
 
-    @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     @Column(name = "date_delivery")
     private LocalDate dateDelivery;

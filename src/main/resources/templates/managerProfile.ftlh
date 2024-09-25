@@ -239,6 +239,76 @@
                     </div>
 
                     <div class="col-md-9">
+                        <#if activeOrder?size = 0>
+                            <h5>Нет активных заказов</h5>
+
+                        <#else>
+                            <h5 style="margin-top: 10px; margin-bottom: 2rem;">Сейчас в доставке</h5>
+                            <#assign x = 0>
+                            <#list activeOrder as order>
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="d-flex align-items-baseline">
+                                                <h5>Заказ №${order.id}. Доставка: ${order.dateDelivery},  ${order.timeDelivery!},  ${order.address}</h5>
+                                            </div>
+                                        </div>
+                                        <div class="row"  style="margin-top: 1rem;">
+                                            <div class="col-7">
+                                                <h6>Товары в заказе:</h6>
+                                                <#assign y = 0>
+                                                <#list activeOrderDishes[x] as dish>
+                                                    <div class="row" style="width: 36rem;">
+                                                        <div class="col-md-3" style="margin-bottom: 1rem;">
+                                                            <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
+                                                                <img src="/images/${dish.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
+                                                            <#else>
+                                                                <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
+                                                            </#if>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            ${toDeliverAmounts[x][y]} шт
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            ${dish.price} ₽
+                                                        </div>
+                                                    </div>
+                                                    <#assign y++>
+                                                </#list>
+                                            </div>
+
+                                            <div class="col-md-1 vertical-line">
+                                            </div>
+
+                                            <div class="col-4">
+                                                <h6>Доставка по адресу:</h6>
+                                                <p>${order.address}</p>
+                                                <h6>Дата доставки:</h6>
+                                                <p>${order.dateDelivery}</p>
+                                                <h6>Время доставки:</h6>
+                                                <p>${order.timeDelivery!}</p>
+                                                <h6>Контактный номер:</h6>
+                                                <p>${order.user.phoneNumber!}</p>
+                                                <h6>Сумма заказа:</h6>
+                                                <p>${order.totalPrice} ₽</p>
+                                                <h6>Дата оплаты:</h6>
+                                                <p>${order.dateTimePayment}</p>
+                                                <h6>Курьер:</h6>
+                                                <p>${order.courier.name} ${order.courier.surname}</p>
+                                            </div>
+                                            <#assign x++>
+                                        </div>
+
+                                        <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
+                                    </div>
+                                </div>
+                            </#list>
+                        </#if>
+
+
                         <#if toDeliverOrders?size = 0>
                             <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
                                 <h5>Нет активных заказов</h5>
@@ -278,8 +348,8 @@
                                                             ${dish.price} ₽
                                                         </div>
                                                     </div>
+                                                    <#assign y++>
                                                 </#list>
-                                                <#assign y++>
                                             </div>
 
                                             <div class="col-md-1 vertical-line">
@@ -298,17 +368,12 @@
                                                 <p>${order.totalPrice} ₽</p>
                                                 <h6>Дата оплаты:</h6>
                                                 <p>${order.dateTimePayment}</p>
-                                            </div>
-                                            <#assign x++>
-                                        </div>
-                                        <div class="row" style="padding-top:1rem; padding-bottom:1rem;">
-                                            <div class="col-md-6">
+                                                <h6>Курьер:</h6>
                                                 <#if order.courier??>
-                                                    <p>Курьер: ${order.courier.name} ${order.courier.surname}</p>
+                                                    <p>${order.courier.name} ${order.courier.surname}</p>
                                                 <#else>
                                                     <form action="/assignCourier/${order.id}" method="post">
                                                         <div class="mb-3">
-                                                            <label for="courier" class="form-label">Выберите курьера:</label>
                                                             <select id="courier" name="courierId" class="form-select">
                                                                 <#list couriers as courier>
                                                                     <option value="${courier.id}">
@@ -321,12 +386,9 @@
                                                     </form>
                                                 </#if>
                                             </div>
-                                            <div class="col-md-6">
-                                                <form action = "adminFinishOrder/${order.id}" method="post">
-                                                    <button type="submit" class="btn btn-custom2">Доставлен</button>
-                                                </form>
-                                            </div>
+                                            <#assign x++>
                                         </div>
+
                                         <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
                                     </div>
                                 </div>

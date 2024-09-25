@@ -2,6 +2,7 @@ package com.example.OliviaRestaurant.services;
 
 import com.example.OliviaRestaurant.models.Order;
 import com.example.OliviaRestaurant.models.User;
+import com.example.OliviaRestaurant.models.enums.OrderStatus;
 import com.example.OliviaRestaurant.repositories.OrderRepository;
 import com.example.OliviaRestaurant.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -42,12 +43,12 @@ public class OrderService {
     }
 
 
-    public Order HaveOrderInCardByPrincipal(Principal principal){
-        return orderRepository.findByUserAndStatus(getUserByPrincipal(principal), "В корзине");
+    public Order haveOrderInCardByPrincipal(Principal principal){
+        return orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART);
     }
 
-    public Order HaveOrderInCardByUser(User user){
-        return orderRepository.findByUserAndStatus(user, "В корзине");
+    public Order haveOrderInCardByUser(User user){
+        return orderRepository.findByUserAndStatus(user, OrderStatus.STATUS_IN_CART);
     }
 
     public Order getOrderByID(Long id){
@@ -55,25 +56,25 @@ public class OrderService {
     }
 
 
-    public List<Order> ListAllOrdersToDeliver(){
-        return orderRepository.findAllByStatus("Оплачен");
+    public List<Order> listAllOrdersToDeliver(){
+        return orderRepository.findAllByStatus(OrderStatus.STATUS_PAID);
     }
 
-    public List<Order> ListAllOrdersToDeliverByCourier(User courier){
-        return orderRepository.findByCourierAndStatus(courier, "Оплачен");
+    public List<Order> listAllOrdersToDeliverByCourier(User courier){
+        return orderRepository.findByCourierAndStatus(courier, OrderStatus.STATUS_PAID);
     }
 
     @Transactional
-    public void CheckoutOrder(Principal principal,
+    public void checkoutOrder(Principal principal,
                               String addressDelivery, LocalDateTime datePayment,
                               LocalDate dateDelivery, String timeDelivery){
         try{
-            Order order = HaveOrderInCardByPrincipal(principal);
+            Order order = haveOrderInCardByPrincipal(principal);
             order.setAddress(addressDelivery);
             order.setDateTimePayment(datePayment);
             order.setDateDelivery(dateDelivery);
             order.setTimeDelivery(timeDelivery);
-            order.setStatus("Оплачен");
+            order.setStatus(OrderStatus.STATUS_PAID);
             orderRepository.save(order);
         }catch (Exception e){
             e.printStackTrace();
@@ -91,44 +92,30 @@ public class OrderService {
         }
     }*/
 
-    @Transactional
-    public void CancelOrder(Order order){
-        try{
-            order.setStatus("Отменен"); //активность - отменён
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
 
-
-
-
-
-    public List<Order> ListOrders() {
+    public List<Order> listOrders() {
         return orderRepository.findAll();
     }
-    public List<Order> ListOrdersFinished(){
-        return orderRepository.findAllByStatus("Доставлен");
+
+    public List<Order> listOrdersFinished(){
+        return orderRepository.findAllByStatus(OrderStatus.STATUS_DELIVERED);
     }
 
     public List<Order> ListOrdersFinishedByCourier(User courier){
-        return orderRepository.findByCourierAndStatus(courier, "Доставлен");
+        return orderRepository.findByCourierAndStatus(courier, OrderStatus.STATUS_DELIVERED);
     }
 
-    public List<Order> ListOrdersCanceled(){
-        return orderRepository.findAllByStatus("Отменен");
-    }
 
     public List<Order> ListOrdersActive(User user){
-        return orderRepository.findAllByUserAndStatus(user, "Оплачен");
+        return orderRepository.findAllByUserAndStatus(user, OrderStatus.STATUS_PAID);
     }
 
     public List<Order> ListOrdersInactive(Principal principal){
-        return orderRepository.findAllByUserAndStatus(getUserByPrincipal(principal),  "В корзине");
+        return orderRepository.findAllByUserAndStatus(getUserByPrincipal(principal),  OrderStatus.STATUS_IN_CART);
     }
 
-    public List<Order> ListOrdersFinished(User user){
-        return orderRepository.findAllByUserAndStatus(user,  "Доставлен");
+    public List<Order> listOrdersFinished(User user){
+        return orderRepository.findAllByUserAndStatus(user,  OrderStatus.STATUS_DELIVERED);
     }
 
 
@@ -136,6 +123,7 @@ public class OrderService {
         return orderRepository.findByUser(user);
     }
 
-
-
+    public Integer findOrdersByCourierAndDate(User user, LocalDate date) {
+        return orderRepository.findByCourierAndDateDelivery(user, date).size();
+    }
 }
