@@ -69,11 +69,12 @@
         }
 
         .btn-custom {
-            width: 100%;
+            width: 94%;
             margin-top: 10px;
             background-color: #f0eade; /* Основной цвет кнопки */
             border-color: #f0eade; /* Цвет границы кнопки */
             color: #333; /* Цвет текста кнопки */
+            margin-bottom: 2rem;
         }
 
         .btn-custom:hover {
@@ -85,10 +86,10 @@
         .btn-custom2 {
             width: 94%;
             margin-top: 10px;
-            background-color: #f0eade; /* Основной цвет кнопки */
             border-color: #f0eade; /* Цвет границы кнопки */
             color: #333; /* Цвет текста кнопки */
             margin-bottom: 2rem;
+            border-width: 2px;
         }
 
         .btn-custom2:hover {
@@ -210,7 +211,11 @@
                         <#else>
                             <form action="/adminChoiceDish" method="post" id="dishForm">
                                 <h5 style="margin-top: 10px; margin-bottom: 2rem;">Выбор блюд для добавления в меню</h5>
-                                <button type="button" class="btn btn-custom2" id="buttonSelectAll" name="buttonSelectAll" onclick="selectAll()">Выбрать все</button>
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn btn-custom2" id="buttonSelectAll" name="buttonSelectAll" onclick="selectAll()">Выбрать все</button>
+                                    <button type="submit" class="btn btn-custom" style="margin-left:1rem;">Выбрать</button>
+                                </div>
+
                                 <table class="table">
                                     <thead>
                                     <tr>
@@ -222,14 +227,13 @@
                                         <th>Вес</th>
                                         <th>Цена</th>
                                         <th>Фото</th>
-                                        <th>Действия</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <#list allDishes as dish>
                                         <tr>
                                             <td>
-                                                <input id="dish_${dish.id}" name="dishes" value="${dish.id}" type="checkbox">
+                                                <input id="dish_${dish.id}" name="dishes" value="${dish.id}" type="checkbox" <#if dish.inMenu == true>checked</#if>>
                                             </td>
                                             <td>${dish.id}</td>
                                             <td>${dish.name}</td>
@@ -257,18 +261,10 @@
                                                 </#if>
 
                                             </td>
-                                            <td>
-                                                <a href="/dish/${dish.id}" class="btn btn-custom2">Просмотр</a>
-                                                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-                                                <form action="/adminDeleteDish/${dish.id}" method="post">
-                                                    <button type="submit" class="btn btn-custom2">Удалить</button>
-                                                </form>
-                                            </td>
                                         </tr>
                                     </#list>
                                     </tbody>
                                 </table>
-                                <button type="submit" class="btn btn-custom2">Выбрать</button>
 
                                 <script>
                                     function selectAll() {

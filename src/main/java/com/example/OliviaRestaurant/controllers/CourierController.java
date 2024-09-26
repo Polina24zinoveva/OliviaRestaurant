@@ -49,6 +49,8 @@ public class CourierController {
             model.addAttribute("activeOrder", activeOrder.getFirst());
             model.addAttribute("activeOrderDishes", orderHasDishService.getPendingDishes(activeOrder).getFirst());
             model.addAttribute("activeOrderAmounts", orderHasDishService.getPendingAmount(activeOrder).getFirst());
+
+            model.addAttribute("activeDatesDelivery", orderHasDishService.getDatesDelivery(activeOrder));
         }
 
         model.addAttribute("currentUser", user);
@@ -56,6 +58,8 @@ public class CourierController {
         model.addAttribute("toDeliverOrders", sortedOrders);
         model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(sortedOrders));
         model.addAttribute("toDeliverAmounts", orderHasDishService.getPendingAmount(sortedOrders));
+
+        model.addAttribute("datesDelivery", orderHasDishService.getDatesDelivery(sortedOrders));
 
         return "courierProfile";
     }
@@ -67,7 +71,6 @@ public class CourierController {
 
         List<Order> orders = orderRepository.findByCourierAndStatus(user, OrderStatus.STATUS_DELIVERED);
 
-
         // Сортируем заказы по дате доставки
         List<Order> sortedOrders = orders.stream().sorted(Comparator.comparing(Order::getCourierDateTimeDelivery)).collect(Collectors.toList());
 
@@ -75,6 +78,10 @@ public class CourierController {
         model.addAttribute("finishedOrders", sortedOrders);
         model.addAttribute("finishedDishes", orderHasDishService.getPendingDishes(sortedOrders));
         model.addAttribute("finishedAmounts", orderHasDishService.getPendingAmount(sortedOrders));
+
+        model.addAttribute("datesDelivery", orderHasDishService.getDatesDelivery(sortedOrders));
+        model.addAttribute("datesTimePayment", orderHasDishService.getDatesTimePayment(sortedOrders));
+        model.addAttribute("courierDatesTimeDelivery", orderHasDishService.getCourierDatesTimeDelivery(sortedOrders));
 
         return "courierHistoryOrders";
     }

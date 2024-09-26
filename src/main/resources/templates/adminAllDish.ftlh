@@ -217,6 +217,8 @@
                                     <th>Калорийность</th>
                                     <th>Вес</th>
                                     <th>Цена</th>
+                                    <th>Вид кухни</th>
+                                    <th>Тип блюда</th>
                                     <th>Фото</th>
                                     <th>Действия</th>
                                 </tr>
@@ -230,6 +232,8 @@
                                         <td>${dish.calories}</td>
                                         <td>${dish.weight}</td>
                                         <td>${dish.price}</td>
+                                        <td>${dish.cuisine.name}</td>
+                                        <td>${dish.dishType.name}</td>
                                         <td>
                                             <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
                                                 <img src="/images/${dish.images[0].id}" alt="Фото" style="max-width: 100px; max-height: 100px;">
@@ -251,8 +255,11 @@
 
                                         </td>
                                         <td>
-                                            <a href="/dish/${dish.id}" class="btn btn-custom2">Просмотр</a>
+                                            <a href="/dish/${dish.id}" class="btn btn-custom2">Посмотреть</a>
                                             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+                                            <form action="/adminEditDish/${dish.id}" method="get">
+                                                <button type="submit" class="btn btn-custom2">Редактировать</button>
+                                            </form>
                                             <form action="/adminDeleteDish/${dish.id}" method="post">
                                                 <button type="submit" class="btn btn-custom2">Удалить</button>
                                             </form>

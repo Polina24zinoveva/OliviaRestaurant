@@ -203,7 +203,7 @@
                             <#list toDeliverOrders as order>
                                 <div class="row">
                                     <div class="col d-flex align-items-center justify-content-between">
-                                        <h5>Заказ №${order.id} от ${order.dateTimePayment}</h5>
+                                        <h5>Заказ №${order.id} от ${datesTimePayment[x]}</h5>
                                         <div class="d-flex align-items-center">
                                             <p class="mb-0 me-2">оплачено</p>
                                             <h5 class="mb-0">${order.totalPrice} ₽</h5>
@@ -221,7 +221,7 @@
                                         </div>
                                         <div class="flex-fill">
                                             <h6>Дата доставки:</h6>
-                                            <p>${order.dateDelivery}</p>
+                                            <p>${datesDelivery[x]}</p>
                                         </div>
                                         <div class="flex-fill">
                                             <h6>Время доставки:</h6>
@@ -237,7 +237,7 @@
                                         </div>
                                         <div class="flex-fill">
                                             <h6>Дата и время доставки курьером:</h6>
-                                            <p>${order.courierDateTimeDelivery!}</p>
+                                            <p>${courierDatesTimeDelivery[x]!}</p>
                                         </div>
                                         <div class="flex-fill">
                                             <h6>Курьер:</h6>

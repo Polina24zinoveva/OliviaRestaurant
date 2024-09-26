@@ -230,7 +230,7 @@
                             <#list finishedOrders as order>
                                 <div class="row">
                                     <div class="col d-flex align-items-center justify-content-between">
-                                        <h5>Заказ №${order.id} от ${order.dateTimePayment}</h5>
+                                        <h5>Заказ №${order.id} от ${datesTimePayment[x]}</h5>
                                         <div class="d-flex align-items-center">
                                             <p class="mb-0 me-2">оплачено</p>
                                             <h5 class="mb-0">${order.totalPrice} ₽</h5>
@@ -248,7 +248,7 @@
                                         </div>
                                         <div class="flex-fill">
                                             <h6>Дата доставки:</h6>
-                                            <p>${order.dateDelivery}</p>
+                                            <p>${datesDelivery[x]}</p>
                                         </div>
                                         <div class="flex-fill">
                                             <h6>Время доставки:</h6>
@@ -286,25 +286,8 @@
                                                 ${dish.price} ₽
                                             </div>
                                         </div>
+                                        <#assign y++>
                                     </#list>
-                                    <#assign y++>
-
-                                    <#if toDeliverPostcards[x]??>
-                                        <div class="row" style="width: 36rem;">
-                                            <div class="col-md-3" style="margin-bottom: 1rem;">
-                                                <img src="/images/${toDeliverPostcards[x].image.id}" class="image"alt="Фото" style="max-width: 6rem;" class="me-2">
-                                            </div>
-                                            <div class="col-md-3">
-                                                ${order.textPostcard!'Открытка без текста'}
-                                            </div>
-                                            <div class="col-md-3">
-                                                1 шт
-                                            </div>
-                                            <div class="col-md-3">
-                                                0 ₽
-                                            </div>
-                                        </div>
-                                    </#if>
                                     <#assign x++>
                                 </div>
                                 <div class="horizontal-line"></div> <!-- Горизонтальная линия -->

@@ -216,7 +216,7 @@
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="d-flex align-items-baseline">
-                                                <h5>Заказ №${order.id}. Доставка: ${order.dateDelivery},  ${order.timeDelivery!},  ${order.address}</h5>
+                                                <h5>Заказ №${order.id}. Доставка: ${datesDelivery[x]} к ${order.timeDelivery!},  ${order.address}</h5>
                                             </div>
                                         </div>
                                         <div class="row"  style="margin-top: 1rem;">
@@ -253,7 +253,7 @@
                                                 <h6>Доставка по адресу:</h6>
                                                 <p>${order.address}</p>
                                                 <h6>Дата доставки:</h6>
-                                                <p>${order.dateDelivery}</p>
+                                                <p>${datesDelivery[x]}</p>
                                                 <h6>Время доставки:</h6>
                                                 <p>${order.timeDelivery!}</p>
                                                 <h6>Id покупателя:</h6>
@@ -263,7 +263,7 @@
                                                 <h6>Сумма заказа:</h6>
                                                 <p>${order.totalPrice} ₽</p>
                                                 <h6>Дата оплаты:</h6>
-                                                <p>${order.dateTimePayment}</p>
+                                                <p>${datesTimePayment[x]}</p>
                                                 <h6>Курьер:</h6>
                                                 <#if order.courier??>
                                                     <p>${order.courier.surname!} ${order.courier.name!}</p>

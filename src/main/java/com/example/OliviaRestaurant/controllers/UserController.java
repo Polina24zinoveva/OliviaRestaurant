@@ -68,7 +68,8 @@ public class UserController {
         model.addAttribute("maxDate", maxDate);
 
         boolean isActivated = userService.activateUser(code);
-        model.addAttribute("message", isActivated ? "Ваш аккаунт активирован" : "Код не найден");
+        if (isActivated) model.addAttribute("message", "Ваш аккаунт активирован");
+        else model.addAttribute("error", "Код не найден");
         return "login";
     }
 

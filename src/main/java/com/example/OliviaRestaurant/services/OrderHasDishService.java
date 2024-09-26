@@ -83,8 +83,29 @@ public class OrderHasDishService {
         return listOfLists;
     }
 
+    public List<String> getDatesDelivery(List<Order> orderList){
+        List<String> listDates = new ArrayList<>();
+        orderList.forEach(order -> {
+            listDates.add(order.getFormattedDateDelivery());
+        });
+        return listDates;
+    }
 
+    public List<String> getDatesTimePayment(List<Order> orderList){
+        List<String> listDates = new ArrayList<>();
+        orderList.forEach(order -> {
+            listDates.add(order.getFormattedDateTimePayment());
+        });
+        return listDates;
+    }
 
+    public List<String> getCourierDatesTimeDelivery(List<Order> orderList){
+        List<String> listDates = new ArrayList<>();
+        orderList.forEach(order -> {
+            listDates.add(order.getFormattedCourierDateTimeDelivery());
+        });
+        return listDates;
+    }
 
 
     public boolean saveOrderHasDish(Order order, Dish dish) {
@@ -109,7 +130,7 @@ public class OrderHasDishService {
     public boolean createOrderHasDish(Dish dish, Principal principal) {
         if (principal == null || dish == null) return false;
         Order order;
-        if(orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART) == null){
+        if(orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART).isEmpty()){
             order = new Order();
             order.setUser(getUserByPrincipal(principal));
             order.setStatus(OrderStatus.STATUS_IN_CART);
@@ -117,7 +138,7 @@ public class OrderHasDishService {
             orderRepository.save(order);
         }
         else{
-            order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART);
+            order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART).getFirst();
             order.setTotalPrice(order.getTotalPrice() + dish.getPrice());
             orderRepository.save(order);
         }
@@ -127,7 +148,7 @@ public class OrderHasDishService {
     @Transactional
     public void removeOrderHasDish(Dish dish, Principal principal){
         try{
-            Order order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART);
+            Order order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART).getFirst();
             OrderHasDish orderHasDish = orderHasDishRepository.findByDishAndOrder(dish, order);
             Double delta = orderHasDish.getCount()*dish.getPrice();
             orderHasDishRepository.deleteByDishAndOrder(dish, order);
@@ -145,7 +166,7 @@ public class OrderHasDishService {
 
     public void changeAmount(Dish dish, Principal principal, Integer amount){
         try{
-            Order order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART);
+            Order order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART).getFirst();
             Integer oldAmount = orderHasDishRepository.findByDishAndOrder(dish, order).getCount();
             Double deltaSum = amount*dish.getPrice() - oldAmount*dish.getPrice();
             OrderHasDish orderHasDish = orderHasDishRepository.findByDishAndOrder(dish, order);

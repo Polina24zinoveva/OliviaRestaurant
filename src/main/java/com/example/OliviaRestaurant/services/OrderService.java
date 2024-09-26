@@ -47,11 +47,13 @@ public class OrderService {
 
 
     public Order haveOrderInCardByPrincipal(Principal principal){
-        return orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART);
+        return orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART).getFirst();
     }
 
     public Order haveOrderInCardByUser(User user){
-        return orderRepository.findByUserAndStatus(user, OrderStatus.STATUS_IN_CART);
+        List<Order> orders = orderRepository.findByUserAndStatus(user, OrderStatus.STATUS_IN_CART);
+        if (!orders.isEmpty()) return orderRepository.findByUserAndStatus(user, OrderStatus.STATUS_IN_CART).getFirst();
+        else return null;
     }
 
     public Order getOrderByID(Long id){

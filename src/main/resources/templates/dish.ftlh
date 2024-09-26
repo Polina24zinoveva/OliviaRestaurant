@@ -205,14 +205,14 @@
 
                     <!-- Кнопка "Добавить в корзину" -->
                     <#if inCard==false>
-                        <form id="addButton" onclick="addOrAdded()" action="/addDishToOrder/${dish.id}" method="post">
+                        <form id="addButton" onclick="addOrAdded()" action="/addToCartDish/${dish.id}" method="post">
                             <button type="submit" class="btn btn-custom">Добавить в корзину</button>
                         </form>
                         <form id="addedButton" action="/order" style="display:none;">
                             <button type="submit" class="btn btn-custom2">Перейти в корзину</button>
                         </form>
                     <#else>
-                        <form id="addButton" onclick="addOrAdded()" action="/addDishToOrder/${dish.id}" method="post" style="display:none;">
+                        <form id="addButton" onclick="addOrAdded()" action="/addToCartDish/${dish.id}" method="post" style="display:none;">
                             <button type="submit" class="btn btn-custom">Добавить в корзину</button>
                         </form>
                         <form id="addedButton" action="/order">

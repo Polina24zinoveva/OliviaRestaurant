@@ -68,38 +68,51 @@ public class DishController {
     }
 
     @PostMapping("/addToCartDish/{id}")
-    public String addToCartDish(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
-        try{
-            //проверка пользователя администратор он или нет
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            // Пользователь аутентифицирован, можно получить его имя пользователя или другой идентификатор
-            String username = authentication.getName(); // Получить имя пользователя
-            User user = userService.getUserByEmail(username);
-            if (user != null){
-                List<Dish> dishList = orderHasDishService.getDishesByOrder(orderService.haveOrderInCardByUser(user));
-
-                // Проверяем наличие нужного id блюда в списке
-                boolean dishExists = false;
-                for (Dish dishB : dishList) {
-                    if (Objects.equals(dishB.getId(), id)) {
-                        dishExists = true;
-                        break;
-                    }
-                }
-
-                if (dishExists) {
-                    redirectAttributes.addFlashAttribute("warning", "Блюдо уже в корзине");
-                } else {
-                    Dish dish = dishService.getDishByID(id);
-                    orderHasDishService.createOrderHasDish(dish, principal);
-                    redirectAttributes.addFlashAttribute("message", "Успешно добавлено в корзину");
-                }
-            }
-
-        }catch (Exception e){
-            redirectAttributes.addFlashAttribute("error", "Ошибка при добавлении в корзину");
+    public String addToCartDish(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes){
+        try {
+            Dish dish  = dishService.getDishByID(id);
+            orderHasDishService.createOrderHasDish(dish, principal);
+            redirectAttributes.addFlashAttribute("message", "Блюдо добавлено в корзину");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Ошибка при добавлении блюда в корзину");
         }
+
         return "redirect:/dish/{id}";
     }
+//
+//    @PostMapping("/addToCartDish/{id}")
+//    public String addToCartDish(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
+//        try{
+//            //проверка пользователя администратор он или нет
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            // Пользователь аутентифицирован, можно получить его имя пользователя или другой идентификатор
+//            String username = authentication.getName(); // Получить имя пользователя
+//            User user = userService.getUserByEmail(username);
+//            if (user != null){
+//                List<Dish> dishList = orderHasDishService.getDishesByOrder(orderService.haveOrderInCardByUser(user));
+//
+//                // Проверяем наличие нужного id блюда в списке
+//                boolean dishExists = false;
+//                for (Dish dishB : dishList) {
+//                    if (Objects.equals(dishB.getId(), id)) {
+//                        dishExists = true;
+//                        break;
+//                    }
+//                }
+//
+//                if (dishExists) {
+//                    redirectAttributes.addFlashAttribute("warning", "Блюдо уже в корзине");
+//                } else {
+//                    Dish dish = dishService.getDishByID(id);
+//                    orderHasDishService.createOrderHasDish(dish, principal);
+//                    redirectAttributes.addFlashAttribute("message", "Успешно добавлено в корзину");
+//                }
+//            }
+//
+//        } catch (Exception e){
+//            redirectAttributes.addFlashAttribute("error", "Ошибка при добавлении в корзину");
+//        }
+//        return "redirect:/dish/{id}";
+//    }
 
 }

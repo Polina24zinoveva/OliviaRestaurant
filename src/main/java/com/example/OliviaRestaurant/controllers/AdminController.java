@@ -28,7 +28,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -120,6 +122,41 @@ public class AdminController {
         return "redirect:/adminAllDish";
     }
 
+    @GetMapping("/adminEditDish/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String adminEditDishGet(@PathVariable Long id, Model model) {
+        model.addAttribute("dish", dishService.getDishByID(id));
+        return "adminEditDish";
+    }
+
+    @PostMapping("/adminEditDish/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String adminEditDish(@RequestParam("dishTypeId") Long dishTypeId,
+                                @RequestParam("cuisineId") Long cuisineId,
+                                Dish dish,
+                                RedirectAttributes redirectAttributes) throws IOException {
+
+        try {
+            //Dish dish1 = dishRepository.findById(dish.getId()).orElseThrow();
+
+            // Получаем тип блюда и кухню по их ID
+            DishType dishType = DishTypeRepository.findById(dishTypeId)
+                    .orElseThrow(() -> new IllegalArgumentException("Тип блюда не найден"));
+            Cuisine cuisine = CuisineRepository.findById(cuisineId)
+                    .orElseThrow(() -> new IllegalArgumentException("Кухня не найдена"));
+
+            // Присваиваем их объекту Dish
+            dish.setDishType(dishType);
+            dish.setCuisine(cuisine);
+
+            dishRepository.save(dish);
+            redirectAttributes.addFlashAttribute("message", "Блюдо успешно отредактировано");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Ошибка при редактировании блюда");
+        }
+        return "redirect:/adminAllDish";
+    }
+
     @GetMapping("/adminChoiceDish")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminChoiceDish(Model model, @AuthenticationPrincipal User user){
@@ -131,17 +168,25 @@ public class AdminController {
 
     @PostMapping("adminChoiceDish")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String adminChoiceDish(@RequestParam List<Long> dishes){
-        List<Dish> allDishes = dishService.listAllDishes();
-        for(Dish dish : allDishes){
-            dish.setInMenu(false);
-            dishRepository.save(dish);
+    public String adminChoiceDish(@RequestParam List<Long> dishes, RedirectAttributes redirectAttributes){
+        try {
+            List<Dish> allDishes = dishService.listAllDishes();
+            for(Dish dish : allDishes){
+                dish.setInMenu(false);
+                dishRepository.save(dish);
+            }
+            for(Long dishId : dishes){
+                Dish dish = dishService.getDishByID(dishId);
+                dish.setInMenu(true);
+                dishRepository.save(dish);
+            }
+            redirectAttributes.addFlashAttribute("message", "Блюда успешно добавлены в меню");
+
         }
-        for(Long dishId : dishes){
-            Dish dish = dishService.getDishByID(dishId);
-            dish.setInMenu(true);
-            dishRepository.save(dish);
+        catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Ошибка в добавлении блюд в меню");
         }
+
         return"redirect:/adminChoiceDish";
     }
 
@@ -170,6 +215,9 @@ public class AdminController {
         model.addAttribute("toDeliverOrders", sortedOrders);
         model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(sortedOrders));
         model.addAttribute("toDeliverAmounts", orderHasDishService.getPendingAmount(sortedOrders));
+
+        model.addAttribute("datesDelivery", orderHasDishService.getDatesDelivery(sortedOrders));
+        model.addAttribute("datesTimePayment", orderHasDishService.getDatesTimePayment(sortedOrders));
         return "adminOrderList";
     }
 
@@ -186,15 +234,33 @@ public class AdminController {
         model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(sortedOrders));
         model.addAttribute("toDeliverAmounts", orderHasDishService.getPendingAmount(sortedOrders));
 
+        model.addAttribute("datesDelivery", orderHasDishService.getDatesDelivery(sortedOrders));
+        model.addAttribute("datesTimePayment", orderHasDishService.getDatesTimePayment(sortedOrders));
+        model.addAttribute("courierDatesTimeDelivery", orderHasDishService.getCourierDatesTimeDelivery(sortedOrders));
         return "adminFinishedOrderList";
     }
 
     @GetMapping("/adminAllEmployee")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String adminAllEmployee(Model model, @AuthenticationPrincipal User user){
+    public String adminAllEmployee(Model model, @AuthenticationPrincipal User user,
+                                   @RequestParam(name = "role", required = false, defaultValue = "all") String role){
         StaticMethods.header(user, model);
 
-        model.addAttribute("allEmployee", userService.listAllEmployee());
+        List<User> employees = new ArrayList<>();
+        switch (role){
+            case "all":
+                employees = userService.listAllEmployee();
+                break;
+            case "ROLE_MANAGER":
+                employees = userService.listAllManagers();
+                break;
+            case "ROLE_COURIER":
+                employees = userService.listAllCouriers();
+                break;
+        }
+
+        model.addAttribute("allEmployee", employees);
+        model.addAttribute("role", role);
         return "adminAllEmployee";
     }
 
@@ -214,9 +280,9 @@ public class AdminController {
         if (user != null) {
             user.setRole(Role.valueOf(newRole));
             userService.save(user);
-            redirectAttributes.addFlashAttribute("successMessage", "Роль пользователя успешно изменена.");
+            redirectAttributes.addFlashAttribute("message", "Роль пользователя успешно изменена");
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Пользователь не найден.");
+            redirectAttributes.addFlashAttribute("error", "Пользователь не найден");
         }
         return "redirect:/adminAddEmployee";
     }

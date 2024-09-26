@@ -83,6 +83,10 @@ public class UserService {
         return userRepository.findAll().stream().filter(user -> user.getRole() == ROLE_USER).collect(Collectors.toList());
     }
 
+    public List<User> listAllManagers(){
+        return userRepository.findAll().stream().filter(user -> user.getRole() == ROLE_MANAGER).collect(Collectors.toList());
+    }
+
     public List<User> listAllCouriers(){
         return userRepository.findAll().stream().filter(user -> user.getRole() == ROLE_COURIER).collect(Collectors.toList());
     }

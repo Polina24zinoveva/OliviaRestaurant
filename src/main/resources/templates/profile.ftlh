@@ -243,6 +243,14 @@
                                 <div class="row mb-4">
                                     <div class="col-12">
                                         <div class="row">
+                                            <#if order.status=="STATUS_PAID">
+                                                <p>Оплачен</p>
+                                            <#else>
+                                                <#if order.status=="STATUS_IN_DELIVERY">
+                                                    <p>В пути</p>
+                                                <#else>
+                                                </#if>
+                                            </#if>
                                             <div class="d-flex align-items-baseline">
                                                 <h5>Заказ №${order.id} </h5>
                                                 <p class="mb-0 me-2">&nbsp на сумму</p>
@@ -283,7 +291,7 @@
                                                 <h6>Доставка по адресу:</h6>
                                                 <p>${order.address}</p>
                                                 <h6>Дата доставки:</h6>
-                                                <p>${order.dateDelivery}</p>
+                                                <p>${datesDelivery[x]}</p>
                                                 <h6>Время доставки:</h6>
                                                 <p>${order.timeDelivery!}</p>
                                             </div>

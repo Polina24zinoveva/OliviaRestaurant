@@ -8,9 +8,21 @@
         Администратор
     </title>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function showMessage(message) {
-            alert(message);
+            Swal.fire({
+              text: message,
+              icon: "success",
+              confirmButtonColor: '#e0d8d0'
+            });
+        }
+        function showError(error) {
+            Swal.fire({
+              text: error,
+              icon: "error",
+              confirmButtonColor: '#e0d8d0'
+            });
         }
     </script>
 
@@ -158,11 +170,18 @@
 </head>
 <body class="d-flex flex-column h-100">
     <div class="wrapper flex-grow-1">
-        <#if isAdmin?? && isAdmin == true>
-            <#include "blocks/headerAdmin.ftlh">
-        <#else>
-            <#include "blocks/header.ftlh">
+        <#include "blocks/header.ftlh">
+        <#if message??>
+            <script>
+                showMessage("${message}");
+            </script>
         </#if>
+        <#if error??>
+            <script>
+                showError("${error}");
+            </script>
+        </#if>
+
         <div class="d-flex">
             <div class="container">
                 <div class="row">

@@ -101,31 +101,13 @@ public class OrderController {
             model.addAttribute("maxDate", maxDate);
 
 
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication != null && authentication.isAuthenticated()) {
-                // Пользователь аутентифицирован, можно получить его имя пользователя или другой идентификатор
-                String username = authentication.getName(); // Получить имя пользователя
-                User user1 = userService.getUserByEmail(username);
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "order";
     }
 
-    @PostMapping("/addDishToOrder/{id}")
-    public String addDishToOrder(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes){
-        try {
-            Dish dish  = dishService.getDishByID(id);
-            orderHasDishService.createOrderHasDish(dish, principal);
-            redirectAttributes.addFlashAttribute("message", "Блюдо добавлено в корзину");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Ошибка при добавлении блюда в корзину");
-        }
 
-        return "redirect:/order";
-    }
 
     @PostMapping("/deleteDishFromOrder/{id}")
     public String deleteDishFromOrder(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes){

@@ -32,15 +32,6 @@
             }
         }
 
-        function showNumberPhone() {
-            if (document.getElementById("me").selected) {
-                document.getElementById("phoneNumberContainer").style.display = "none"
-                document.getElementById("phoneNumber").value = "${phoneNumber}"
-            } else {
-                document.getElementById("phoneNumberContainer").style.display = "block"
-                document.getElementById("phoneNumber").value = ""
-            }
-        }
 
         function showDateTimeDeliverySelect() {
             if (document.getElementById("earliest").selected) {
@@ -423,17 +414,7 @@
                                 <br><br>
                                 <div class="">
                                     <div class="row">
-                                        <#if allPostcards?? && allPostcards?size != 0>
-                                            <div class="col-12 mb-3">
-                                                <h6 for="typePostcard" class="form-label">Тип открытки:</h6>
-                                                <select onchange = "showPostcardText()" name = "typePostcard" id = "typePostcard" class = "form-control">
-                                                    <option id = "noPostcard" value = "-1">Без открытки</option>
-                                                    <option value = "0">C открыткой</option>
-                                                </select>
-                                            </div>
 
-
-                                        </#if>
                                         <div class="col-12 mb-3">
                                             <div class="form-group" id="addressDelivery">
                                                 <h6 class="text-start">Адрес доставки</h6>
