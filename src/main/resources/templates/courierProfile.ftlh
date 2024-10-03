@@ -284,7 +284,7 @@
                                             <h6>Доставка по адресу:</h6>
                                             <p>${activeOrder.address}</p>
                                             <h6>Дата доставки:</h6>
-                                            <p>${activeDatesDelivery[x]}</p>
+                                            <p>${activeDatesDelivery[0]}</p>
                                             <h6>Время доставки:</h6>
                                             <p>${activeOrder.timeDelivery!}</p>
                                         </div>

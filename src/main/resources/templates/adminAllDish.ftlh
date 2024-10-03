@@ -17,6 +17,13 @@
               confirmButtonColor: '#e0d8d0'
             });
         }
+        function showError(error) {
+            Swal.fire({
+              text: error,
+              icon: "error",
+              confirmButtonColor: '#e0d8d0'
+            });
+        }
     </script>
 
     <script>
@@ -171,6 +178,11 @@
         <#if message??>
             <script>
                 showMessage("${message}");
+            </script>
+        </#if>
+        <#if error??>
+            <script>
+                showError("${error}");
             </script>
         </#if>
         <div class="d-flex">

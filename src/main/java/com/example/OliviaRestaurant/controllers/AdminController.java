@@ -3,14 +3,13 @@ package com.example.OliviaRestaurant.controllers;
 import com.example.OliviaRestaurant.models.*;
 import com.example.OliviaRestaurant.models.enums.OrderStatus;
 import com.example.OliviaRestaurant.models.enums.Role;
-import com.example.OliviaRestaurant.repositories.CuisineRepository;
-import com.example.OliviaRestaurant.repositories.DishRepository;
-import com.example.OliviaRestaurant.repositories.DishTypeRepository;
+import com.example.OliviaRestaurant.repositories.*;
 import com.example.OliviaRestaurant.services.DishService;
 import com.example.OliviaRestaurant.services.OrderHasDishService;
 import com.example.OliviaRestaurant.services.OrderService;
 import com.example.OliviaRestaurant.services.UserService;
 import com.example.OliviaRestaurant.statics.StaticMethods;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +29,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -52,6 +52,8 @@ public class AdminController {
     private final CuisineRepository CuisineRepository;
     private final DishTypeRepository DishTypeRepository;
     private final DishRepository dishRepository;
+    private final OrderRepository orderRepository;
+    private final OrderHasDishRepository orderHasDishRepository;
 
     @GetMapping("/adminAllDish")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -98,6 +100,7 @@ public class AdminController {
             // Присваиваем их объекту Dish
             dish.setDishType(dishType);
             dish.setCuisine(cuisine);
+            dish.setDeleted(false);
 
             // Сохраняем блюдо и изображения
             dishService.saveDish(dish, file1, file2, file3);
@@ -112,13 +115,62 @@ public class AdminController {
 
     @PostMapping("/adminDeleteDish/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Transactional
     public String adminDeleteDish(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        try {
-            dishService.deleteDish(id);
-            redirectAttributes.addFlashAttribute("message", "Блюдо успешно удалено");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Ошибка при удалении букета");
+        //проверяем наличие заказов с блюдом
+        List<Order> ordersWithDish = orderRepository.findActiveOrdersByDishId(id, OrderStatus.STATUS_DELIVERED);
+
+        List<Order> ordersInCard = new ArrayList<>();
+
+        // Если есть заказы с этим блюдом, проверяем статусы
+        if (!ordersWithDish.isEmpty()) {
+            for (Order order : ordersWithDish) {
+                if (order.getStatus() == OrderStatus.STATUS_IN_CART) {
+                    ordersInCard.add(order);
+                }
+                else{
+                    redirectAttributes.addFlashAttribute("error", "Блюдо используется в заказах. Подождите доставки этих заказов");
+                    return "redirect:/adminAllDish";
+                }
+            }
         }
+
+        // Если блюдо находится в корзинах, удаляем его и пересчитываем сумму заказов
+        if (!ordersInCard.isEmpty()) {
+            for (Order order: ordersInCard){
+                Dish dish = dishRepository.findById(id).orElse(null);
+                OrderHasDish orderHasDish = orderHasDishRepository.findByDishAndOrder(dish, order);
+
+                // Уменьшаем общую сумму заказа на стоимость удаляемого блюда
+                Double delta = orderHasDish.getCount() * dish.getPrice();
+                order.setTotalPrice(order.getTotalPrice() - delta);
+
+                // Удаляем запись блюда из заказа
+                orderHasDishRepository.delete(orderHasDish);
+
+                // Если заказ пустой, удаляем сам заказ
+                if (orderHasDishRepository.findAllByOrder(order).isEmpty()) {
+                    orderRepository.deleteById(order.getId());
+                } else {
+                    // Иначе сохраняем изменения в заказе
+                    orderRepository.save(order);
+                }
+            }
+        }
+
+        Dish dish = dishRepository.findById(id).orElse(null);
+
+        if (dish != null) {
+            dish.setDeleted(true);
+            dish.setInMenu(false);
+            dishRepository.save(dish);
+            redirectAttributes.addFlashAttribute("message", "Блюдо успешно удалено");
+        }
+        else {
+            redirectAttributes.addFlashAttribute("error", "Блюдо используется в заказах со статусом 'Оплачено' или 'На доставке'.");
+        }
+
+
         return "redirect:/adminAllDish";
     }
 
@@ -208,8 +260,8 @@ public class AdminController {
         List<Order> orders = orderService.listAllOrdersToDeliver();
 
         // Сортируем заказы по дате доставки
-        List<Order> sortedOrders = orders.stream()
-                .sorted((o1, o2) -> o1.getDateDelivery().compareTo(o2.getDateDelivery()))
+        List<Order> sortedOrders = orders.stream().sorted(Comparator.comparing(Order::getDateDelivery)
+                        .thenComparing(order -> LocalTime.parse(order.getTimeDelivery())))
                 .collect(Collectors.toList());
 
         model.addAttribute("toDeliverOrders", sortedOrders);

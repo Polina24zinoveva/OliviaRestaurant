@@ -2,6 +2,7 @@ package com.example.OliviaRestaurant.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,5 +53,8 @@ public class Dish {
 
     @OneToMany(mappedBy = "dish")
     private List<Image> images = new ArrayList<>();
+
+    @Column(name = "is_deleted")
+    private boolean isDeleted = false;
 
 }

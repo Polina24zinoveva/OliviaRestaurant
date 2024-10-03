@@ -239,7 +239,7 @@
                     </div>
 
                     <div class="col-md-9">
-                        <#if activeOrder?size = 0>
+                        <#if !activeOrder?? || activeOrder?size = 0>
 
                             <h5>Нет заказов в доставке</h5>
                             <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
