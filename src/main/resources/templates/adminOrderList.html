@@ -165,58 +165,47 @@
 </head>
 <body class="d-flex flex-column h-100">
 <div class="wrapper flex-grow-1">
-    <#if isAdmin?? && isAdmin == true>
-    <#include "blocks/headerAdmin.ftlh">
-    <#else>
     <#include "blocks/header.ftlh">
-</#if>
-<#if message??>
-<script>
-    showMessage("${message}");
-</script>
-</#if>
-<div class="d-flex">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-2">
-                <#include "blocks/adminMenu.ftlh">
-            </div>
-            <script>
-                // Получаем текущий путь
-                var currentPath = window.location.pathname;
-
-                // Получаем все ссылки категорий
-                var categoryLinks = document.querySelectorAll('.category-link');
-
-                // Проходим по каждой ссылке
-                categoryLinks.forEach(function(link) {
-                    // Если текущий путь совпадает с атрибутом href этой ссылки
-                    if (link.getAttribute('href') === currentPath) {
-                        // Добавляем класс активности
-                        link.classList.add('active');
-                    }
-                });
-            </script>
-
-
-            <div class="col-md-1 vertical-line">
-            </div>
-
-            <div class="col-md-9">
-                <#if toDeliverOrders?size = 0>
-                <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
-                    <h5>Нет активных заказов</h5>
+    <div class="d-flex">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2">
+                    <#include "blocks/adminMenu.ftlh">
                 </div>
 
-                <#else>
-                <h5 style="margin-top: 10px; margin-bottom: 2rem;">Заказы к доставке</h5>
-                <#assign x = 0>
-                <#list toDeliverOrders as order>
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="d-flex align-items-baseline">
-                                <h5>Заказ №${order.id}. Доставка: ${order.dateDelivery},  ${order.timeDelivery!},  ${order.address}</h5>
+                <div class="col-md-1 vertical-line">
+                </div>
+
+                <div class="col-md-9">
+                    <#if toDeliverOrders?size = 0>
+                    <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
+                        <h5>Нет активных заказов</h5>
+                    </div>
+
+                    <#else>
+                    <h5 style="margin-top: 10px; margin-bottom: 2rem;">Заказы к доставке</h5>
+                    <#assign x = 0>
+                    <#list toDeliverOrders as order>
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="d-flex align-items-baseline">
+                                    <h5>Заказ №${order.id}. Доставка: ${datesDelivery[x]} к ${order.timeDelivery!},  ${order.address}</h5>
+                                    <div>
+                                        <p class="text-center"
+                                           style="display: flex;
+                                                            justify-content: center;
+                                                            align-items: center;
+                                                            background: #f0eade;
+                                                            border-radius: 5px;
+                                                            width: 120px;
+                                                            height: 38px;
+                                                            margin-left: 1rem;">
+                                            <#if order.status=="STATUS_PAID">Оплачен
+                                            <#else><#if order.status=="STATUS_IN_DELIVERY">В пути</#if>
+                                    </#if>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                         <div class="row"  style="margin-top: 1rem;">
@@ -253,7 +242,7 @@
                         <h6>Доставка по адресу:</h6>
                         <p>${order.address}</p>
                         <h6>Дата доставки:</h6>
-                        <p>${order.dateDelivery}</p>
+                        <p>${datesDelivery[x]}</p>
                         <h6>Время доставки:</h6>
                         <p>${order.timeDelivery!}</p>
                         <h6>Id покупателя:</h6>
@@ -263,7 +252,7 @@
                         <h6>Сумма заказа:</h6>
                         <p>${order.totalPrice} ₽</p>
                         <h6>Дата оплаты:</h6>
-                        <p>${order.dateTimePayment}</p>
+                        <p>${datesTimePayment[x]}</p>
                         <h6>Курьер:</h6>
                         <#if order.courier??>
                         <p>${order.courier.surname!} ${order.courier.name!}</p>

@@ -133,10 +133,6 @@
            flex-grow: 1;
        }
 
-       /* Добавленный класс активности для выбранной категории */
-       .category-link.active {
-           text-decoration: underline; /* Подчеркиваем выбранную категорию */
-       }
        .btn-custom2 {
            width: 100%;
            margin-top: 10px;
@@ -152,6 +148,7 @@
        }
 
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function showMessage(message) {
@@ -197,7 +194,7 @@
                     </p>
                 </div>
 
-                <h6 style="margin-top: 2rem;">Другое</h6>
+                <h6 style="margin-top: 2rem;">Заказы</h6>
                 <div style="margin-left: 1rem;">
                     <p class="icon-text" style="margin-top: 1rem;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
@@ -218,28 +215,13 @@
                         <button type="submit" class="btn btn-custom">Выйти</button>
                     </form>
                 </div>
-                <script>
-                    // Получаем текущий путь
-                    var currentPath = window.location.pathname;
 
-                    // Получаем все ссылки категорий
-                    var categoryLinks = document.querySelectorAll('.category-link');
-
-                    // Проходим по каждой ссылке
-                    categoryLinks.forEach(function(link) {
-                        // Если текущий путь совпадает с атрибутом href этой ссылки
-                        if (link.getAttribute('href') === currentPath) {
-                            // Добавляем класс активности
-                            link.classList.add('active');
-                        }
-                    });
-                </script>
             </div>
             <div class="col-md-1 vertical-line">
             </div>
 
             <div class="col-md-9">
-                <#if activeOrder?size = 0>
+                <#if !activeOrder?? || activeOrder?size = 0>
 
                 <h5>Нет заказов в доставке</h5>
                 <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
@@ -252,61 +234,76 @@
                     <div class="col-12">
                         <div class="row">
                             <div class="d-flex align-items-baseline">
-                                <h5>Заказ №${order.id}. Доставка: ${order.dateDelivery},  ${order.timeDelivery!},  ${order.address}</h5>
+                                <h5>Заказ №${order.id}. Доставка: ${activeDatesDelivery[x]} к ${order.timeDelivery!},  ${order.address}</h5>
+                                <div>
+                                    <p class="text-center"
+                                       style="display: flex;
+                                                            justify-content: center;
+                                                            align-items: center;
+                                                            background: #f0eade;
+                                                            border-radius: 5px;
+                                                            width: 120px;
+                                                            height: 38px;
+                                                            margin-left: 1rem;">
+                                        <#if order.status=="STATUS_PAID">Оплачен
+                                        <#else><#if order.status=="STATUS_IN_DELIVERY">В пути</#if>
+                                </#if>
+                                </p>
                             </div>
                         </div>
-                        <div class="row"  style="margin-top: 1rem;">
-                            <div class="col-7">
-                                <h6>Товары в заказе:</h6>
-                                <#assign y = 0>
-                                <#list activeOrderDishes[x] as dish>
-                                <div class="row" style="width: 36rem;">
-                                    <div class="col-md-3" style="margin-bottom: 1rem;">
-                                        <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
-                                        <img src="/images/${dish.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
-                                        <#else>
-                                        <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
-                                    </#if>
-                                </div>
-                                <div class="col-md-3">
-                                    <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
-                                </div>
-                                <div class="col-md-3">
-                                    ${toDeliverAmounts[x][y]} шт
-                                </div>
-                                <div class="col-md-3">
-                                    ${dish.price} ₽
-                                </div>
+                    </div>
+                    <div class="row"  style="margin-top: 1rem;">
+                        <div class="col-7">
+                            <h6>Товары в заказе:</h6>
+                            <#assign y = 0>
+                            <#list activeOrderDishes[x] as dish>
+                            <div class="row" style="width: 36rem;">
+                                <div class="col-md-3" style="margin-bottom: 1rem;">
+                                    <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
+                                    <img src="/images/${dish.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
+                                    <#else>
+                                    <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
+                                </#if>
                             </div>
-                            <#assign y++>
-                        </#list>
-                    </div>
-
-                    <div class="col-md-1 vertical-line">
-                    </div>
-
-                    <div class="col-4">
-                        <h6>Доставка по адресу:</h6>
-                        <p>${order.address}</p>
-                        <h6>Дата доставки:</h6>
-                        <p>${order.dateDelivery}</p>
-                        <h6>Время доставки:</h6>
-                        <p>${order.timeDelivery!}</p>
-                        <h6>Контактный номер:</h6>
-                        <p>${order.user.phoneNumber!}</p>
-                        <h6>Сумма заказа:</h6>
-                        <p>${order.totalPrice} ₽</p>
-                        <h6>Дата оплаты:</h6>
-                        <p>${order.dateTimePayment}</p>
-                        <h6>Курьер:</h6>
-                        <p>${order.courier.name} ${order.courier.surname}</p>
-                    </div>
-                    <#assign x++>
+                            <div class="col-md-3">
+                                <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
+                            </div>
+                            <div class="col-md-3">
+                                ${toDeliverAmounts[x][y]} шт
+                            </div>
+                            <div class="col-md-3">
+                                ${dish.price} ₽
+                            </div>
+                        </div>
+                        <#assign y++>
+                    </#list>
                 </div>
-                <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
+
+                <div class="col-md-1 vertical-line">
+                </div>
+
+                <div class="col-4">
+                    <h6>Доставка по адресу:</h6>
+                    <p>${order.address}</p>
+                    <h6>Дата доставки:</h6>
+                    <p>${activeDatesDelivery[x]}</p>
+                    <h6>Время доставки:</h6>
+                    <p>${order.timeDelivery!}</p>
+                    <h6>Контактный номер:</h6>
+                    <p>${order.user.phoneNumber!}</p>
+                    <h6>Сумма заказа:</h6>
+                    <p>${order.totalPrice} ₽</p>
+                    <h6>Дата оплаты:</h6>
+                    <p>${activeDatesTimePayment[x]}</p>
+                    <h6>Курьер:</h6>
+                    <p>${order.courier.name} ${order.courier.surname}</p>
+                </div>
+                <#assign x++>
             </div>
+            <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
         </div>
-    </#list>
+    </div>
+</#list>
 </#if>
 
 <#if toDeliverOrders?size = 0>
@@ -319,71 +316,86 @@
     <div class="col-12">
         <div class="row">
             <div class="d-flex align-items-baseline">
-                <h5>Заказ №${order.id}. Доставка: ${order.dateDelivery},  ${order.timeDelivery!},  ${order.address}</h5>
+                <h5>Заказ №${order.id}. Доставка: ${datesDelivery[x]} к ${order.timeDelivery!},  ${order.address}</h5>
+                <div>
+                    <p class="text-center"
+                       style="display: flex;
+                                                            justify-content: center;
+                                                            align-items: center;
+                                                            background: #f0eade;
+                                                            border-radius: 5px;
+                                                            width: 120px;
+                                                            height: 38px;
+                                                            margin-left: 1rem;">
+                        <#if order.status=="STATUS_PAID">Оплачен
+                        <#else><#if order.status=="STATUS_IN_DELIVERY">В пути</#if>
+                </#if>
+                </p>
             </div>
         </div>
-        <div class="row"  style="margin-top: 1rem;">
-            <div class="col-7">
-                <h6>Товары в заказе:</h6>
-                <#assign y = 0>
-                <#list toDeliverDishes[x] as dish>
-                <div class="row" style="width: 36rem;">
-                    <div class="col-md-3" style="margin-bottom: 1rem;">
-                        <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
-                        <img src="/images/${dish.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
-                        <#else>
-                        <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
-                    </#if>
-                </div>
-                <div class="col-md-3">
-                    <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
-                </div>
-                <div class="col-md-3">
-                    ${toDeliverAmounts[x][y]} шт
-                </div>
-                <div class="col-md-3">
-                    ${dish.price} ₽
-                </div>
-            </div>
-            <#assign y++>
-        </#list>
     </div>
-
-    <div class="col-md-1 vertical-line">
-    </div>
-
-    <div class="col-4">
-        <h6>Доставка по адресу:</h6>
-        <p>${order.address}</p>
-        <h6>Дата доставки:</h6>
-        <p>${order.dateDelivery}</p>
-        <h6>Время доставки:</h6>
-        <p>${order.timeDelivery!}</p>
-        <h6>Контактный номер:</h6>
-        <p>${order.user.phoneNumber!}</p>
-        <h6>Сумма заказа:</h6>
-        <p>${order.totalPrice} ₽</p>
-        <h6>Дата оплаты:</h6>
-        <p>${order.dateTimePayment}</p>
-        <h6>Курьер:</h6>
-        <#assign y = 0>
-        <#if order.courier??>
-        <p>${order.courier.name} ${order.courier.surname}</p>
-        <#else>
-        <form action="/assignCourier/${order.id}" method="post">
-            <div class="mb-3">
-                <select id="courier" name="courierId" class="form-select">
-                    <#list couriers as courier>
-                    <option value="${courier.id}">
-                        ${courier.name} ${courier.surname} (Назначено ${courierOrdersCount[x][y]} заказов)
-                    </option>
-                    <#assign y++>
-                </#list>
-                </select>
+    <div class="row"  style="margin-top: 1rem;">
+        <div class="col-7">
+            <h6>Товары в заказе:</h6>
+            <#assign y = 0>
+            <#list toDeliverDishes[x] as dish>
+            <div class="row" style="width: 36rem;">
+                <div class="col-md-3" style="margin-bottom: 1rem;">
+                    <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
+                    <img src="/images/${dish.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
+                    <#else>
+                    <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
+                </#if>
             </div>
-            <button type="submit" class="btn btn-custom2">Назначить курьера</button>
-        </form>
-    </#if>
+            <div class="col-md-3">
+                <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
+            </div>
+            <div class="col-md-3">
+                ${toDeliverAmounts[x][y]} шт
+            </div>
+            <div class="col-md-3">
+                ${dish.price} ₽
+            </div>
+        </div>
+        <#assign y++>
+    </#list>
+</div>
+
+<div class="col-md-1 vertical-line">
+</div>
+
+<div class="col-4">
+    <h6>Доставка по адресу:</h6>
+    <p>${order.address}</p>
+    <h6>Дата доставки:</h6>
+    <p>${datesDelivery[x]}</p>
+    <h6>Время доставки:</h6>
+    <p>${order.timeDelivery!}</p>
+    <h6>Контактный номер:</h6>
+    <p>${order.user.phoneNumber!}</p>
+    <h6>Сумма заказа:</h6>
+    <p>${order.totalPrice} ₽</p>
+    <h6>Дата оплаты:</h6>
+    <p>${datesTimePayment[x]}</p>
+    <h6>Курьер:</h6>
+    <#assign y = 0>
+    <#if order.courier??>
+    <p>${order.courier.name} ${order.courier.surname}</p>
+    <#else>
+    <form action="/assignCourier/${order.id}" method="post">
+        <div class="mb-3">
+            <select id="courier" name="courierId" class="form-select">
+                <#list couriers as courier>
+                <option value="${courier.id}">
+                    ${courier.name} ${courier.surname} (Назначено ${courierOrdersCount[x][y]} заказов)
+                </option>
+                <#assign y++>
+            </#list>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-custom2">Назначить курьера</button>
+    </form>
+</#if>
 
 </div>
 <#assign x++>
@@ -399,6 +411,7 @@
 </div>
 </div>
 </div>
+<#include "blocks/menuScript.ftlh">
 <footer class="footer mt-auto">
     <#include "blocks/footer.ftlh">
 </footer>

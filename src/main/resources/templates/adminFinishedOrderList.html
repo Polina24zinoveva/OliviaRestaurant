@@ -9,12 +9,6 @@
     </title>
 
     <script>
-        function showMessage(message) {
-            alert(message);
-        }
-    </script>
-
-    <script>
         function request (id){
 
         }
@@ -159,135 +153,114 @@
 </head>
 <body class="d-flex flex-column h-100">
 <div class="wrapper flex-grow-1">
-    <#if isAdmin?? && isAdmin == true>
-    <#include "blocks/headerAdmin.ftlh">
-    <#else>
     <#include "blocks/header.ftlh">
-</#if>
-<div class="d-flex">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-2">
-                <#include "blocks/adminMenu.ftlh">
+    <div class="d-flex">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2">
+                    <#include "blocks/adminMenu.ftlh">
+                </div>
+
+                <div class="col-md-1 vertical-line">
+                </div>
+
+                <div class="col-md-9">
+                    <#if toDeliverOrders?size = 0>
+                    <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
+                        <h5>Нет доставленных заказов</h5>
+                    </div>
+
+                    <#else>
+                    <h5 style="margin-top: 10px; margin-bottom: 2rem;">Доставленные заказы</h5>
+                    <#assign x = 0>
+                    <#list toDeliverOrders as order>
+                    <div class="row">
+                        <div class="col d-flex align-items-center justify-content-between">
+                            <h5>Заказ №${order.id} от ${datesTimePayment[x]}</h5>
+                            <div class="d-flex align-items-center">
+                                <p class="mb-0 me-2">оплачено</p>
+                                <h5 class="mb-0">${order.totalPrice} ₽</h5>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div style="margin-top: 2rem;">
+                        <div class="d-flex">
+                            <div class="flex-fill">
+                                <h6>Доставка по адресу:</h6>
+                                <p>${order.address}</p>
+                            </div>
+                            <div class="flex-fill">
+                                <h6>Дата доставки:</h6>
+                                <p>${datesDelivery[x]}</p>
+                            </div>
+                            <div class="flex-fill">
+                                <h6>Время доставки:</h6>
+                                <p>${order.timeDelivery!}</p>
+                            </div>
+                            <div class="flex-fill">
+                                <h6>Id покупателя:</h6>
+                                <p>${order.user.id}</p>
+                            </div>
+                            <div class="flex-fill">
+                                <h6>Контактный номер:</h6>
+                                <p>${order.user.phoneNumber!}</p>
+                            </div>
+                            <div class="flex-fill">
+                                <h6>Дата и время доставки курьером:</h6>
+                                <p>${courierDatesTimeDelivery[x]!}</p>
+                            </div>
+                            <div class="flex-fill">
+                                <h6>Курьер:</h6>
+                                <p>${order.courier.surname!} ${order.courier.name!}</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <button id="toggleButton_${order.id}" class="btn btn-custom" style="margin-bottom: 1rem;" onclick="showOrder(${order.id})">Товары в заказе</button>
+
+                    <div id="orderItemsDiv_${order.id}" style="display:none;" >
+                        <br>
+                        <#assign y = 0>
+                        <#list toDeliverDishes[x] as dish>
+                        <div class="row" style="width: 36rem;">
+                            <div class="col-md-3" style="margin-bottom: 1rem;">
+                                <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
+                                <img src="/images/${dish.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
+                                <#else>
+                                <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
+                            </#if>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
+                        </div>
+                        <div class="col-md-3">
+                            ${toDeliverAmounts[x][y]} шт
+                        </div>
+                        <div class="col-md-3">
+                            ${dish.price} ₽
+                        </div>
+                    </div>
+                    <#assign y++>
+                </#list>
+                <#assign x++>
             </div>
+            <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
             <script>
-                // Получаем текущий путь
-                var currentPath = window.location.pathname;
-
-                // Получаем все ссылки категорий
-                var categoryLinks = document.querySelectorAll('.category-link');
-
-                // Проходим по каждой ссылке
-                categoryLinks.forEach(function(link) {
-                    // Если текущий путь совпадает с атрибутом href этой ссылки
-                    if (link.getAttribute('href') === currentPath) {
-                        // Добавляем класс активности
-                        link.classList.add('active');
+                function showOrder(orderId) {
+                    var orderItemsDiv = document.getElementById("orderItemsDiv_" + orderId);
+                    if (orderItemsDiv.style.display === "none") {
+                        orderItemsDiv.style.display = "block";
+                    } else {
+                        orderItemsDiv.style.display = "none";
                     }
-                });
-            </script>
-
-
-            <div class="col-md-1 vertical-line">
-            </div>
-
-            <div class="col-md-9">
-                <#if toDeliverOrders?size = 0>
-                <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
-                    <h5>Нет доставленных заказов</h5>
-                </div>
-
-                <#else>
-                <h5 style="margin-top: 10px; margin-bottom: 2rem;">Доставленные заказы</h5>
-                <#assign x = 0>
-                <#list toDeliverOrders as order>
-                <div class="row">
-                    <div class="col d-flex align-items-center justify-content-between">
-                        <h5>Заказ №${order.id} от ${order.dateTimePayment}</h5>
-                        <div class="d-flex align-items-center">
-                            <p class="mb-0 me-2">оплачено</p>
-                            <h5 class="mb-0">${order.totalPrice} ₽</h5>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div style="margin-top: 2rem;">
-                    <div class="d-flex">
-                        <div class="flex-fill">
-                            <h6>Доставка по адресу:</h6>
-                            <p>${order.address}</p>
-                        </div>
-                        <div class="flex-fill">
-                            <h6>Дата доставки:</h6>
-                            <p>${order.dateDelivery}</p>
-                        </div>
-                        <div class="flex-fill">
-                            <h6>Время доставки:</h6>
-                            <p>${order.timeDelivery!}</p>
-                        </div>
-                        <div class="flex-fill">
-                            <h6>Id покупателя:</h6>
-                            <p>${order.user.id}</p>
-                        </div>
-                        <div class="flex-fill">
-                            <h6>Контактный номер:</h6>
-                            <p>${order.user.phoneNumber!}</p>
-                        </div>
-                        <div class="flex-fill">
-                            <h6>Дата и время доставки курьером:</h6>
-                            <p>${order.courierDateTimeDelivery!}</p>
-                        </div>
-                        <div class="flex-fill">
-                            <h6>Курьер:</h6>
-                            <p>${order.courier.surname!} ${order.courier.name!}</p>
-                        </div>
-                    </div>
-                </div>
-
-
-                <button id="toggleButton_${order.id}" class="btn btn-custom" style="max-width: 200px;  margin-bottom: 1rem;" onclick="showOrder(${order.id})">Товары в заказе</button>
-
-                <div id="orderItemsDiv_${order.id}" style="display:none;" >
-                    <br>
-                    <#assign y = 0>
-                    <#list toDeliverDishes[x] as dish>
-                    <div class="row" style="width: 36rem;">
-                        <div class="col-md-3" style="margin-bottom: 1rem;">
-                            <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
-                            <img src="/images/${dish.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
-                            <#else>
-                            <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
-                        </#if>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
-                    </div>
-                    <div class="col-md-3">
-                        ${toDeliverAmounts[x][y]} шт
-                    </div>
-                    <div class="col-md-3">
-                        ${dish.price} ₽
-                    </div>
-                </div>
-                <#assign y++>
-            </#list>
-            <#assign x++>
-        </div>
-        <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
-        <script>
-            function showOrder(orderId) {
-                var orderItemsDiv = document.getElementById("orderItemsDiv_" + orderId);
-                if (orderItemsDiv.style.display === "none") {
-                    orderItemsDiv.style.display = "block";
-                } else {
-                    orderItemsDiv.style.display = "none";
                 }
-            }
-        </script>
-    </#list>
-</#if>
+            </script>
+        </#list>
+    </#if>
 </div>
 </div>
 </div>

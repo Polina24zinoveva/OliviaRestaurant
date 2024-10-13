@@ -9,12 +9,6 @@
     </title>
 
     <script>
-        function showMessage(message) {
-            alert(message);
-        }
-    </script>
-
-    <script>
         function request (id){
 
         }
@@ -158,34 +152,13 @@
 </head>
 <body class="d-flex flex-column h-100">
     <div class="wrapper flex-grow-1">
-        <#if isAdmin?? && isAdmin == true>
-            <#include "blocks/headerAdmin.ftlh">
-        <#else>
-            <#include "blocks/header.ftlh">
-        </#if>
+        <#include "blocks/header.ftlh">
         <div class="d-flex">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
                        <#include "blocks/adminMenu.ftlh">
                     </div>
-                    <script>
-                        // Получаем текущий путь
-                        var currentPath = window.location.pathname;
-
-                        // Получаем все ссылки категорий
-                        var categoryLinks = document.querySelectorAll('.category-link');
-
-                        // Проходим по каждой ссылке
-                        categoryLinks.forEach(function(link) {
-                            // Если текущий путь совпадает с атрибутом href этой ссылки
-                            if (link.getAttribute('href') === currentPath) {
-                                // Добавляем класс активности
-                                link.classList.add('active');
-                            }
-                        });
-                    </script>
-
 
                     <div class="col-md-1 vertical-line">
                     </div>
@@ -197,7 +170,7 @@
                             </div>
 
                         <#else>
-                            <h5 style="margin-top: 10px; margin-bottom: 2rem;">Все пользователи</h5>
+                            <h5 style="margin-top: 10px; margin-bottom: 2rem;">Пользователи</h5>
                             <table class="table">
                                 <thead>
                                 <tr>

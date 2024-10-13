@@ -161,43 +161,23 @@
             flex-grow: 1;
             padding-bottom: 3rem; /* Добавление отступа снизу */
         }
+
+        input[type="checkbox"]:checked {
+            background-color: gray;
+            border-color: gray;
+            accent-color: #000000;
+        }
     </style>
 </head>
 <body class="d-flex flex-column h-100">
     <div class="wrapper flex-grow-1">
-        <#if isAdmin?? && isAdmin == true>
-            <#include "blocks/headerAdmin.ftlh">
-        <#else>
-            <#include "blocks/header.ftlh">
-        </#if>
-        <#if message??>
-            <script>
-                showMessage("${message}");
-            </script>
-        </#if>
+        <#include "blocks/header.ftlh">
         <div class="d-flex">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
                         <#include "blocks/adminMenu.ftlh">
                     </div>
-                    <script>
-                        // Получаем текущий путь
-                        var currentPath = window.location.pathname;
-
-                        // Получаем все ссылки категорий
-                        var categoryLinks = document.querySelectorAll('.category-link');
-
-                        // Проходим по каждой ссылке
-                        categoryLinks.forEach(function(link) {
-                            // Если текущий путь совпадает с атрибутом href этой ссылки
-                            if (link.getAttribute('href') === currentPath) {
-                                // Добавляем класс активности
-                                link.classList.add('active');
-                            }
-                        });
-                    </script>
-
 
                     <div class="col-md-1 vertical-line">
                     </div>
@@ -233,7 +213,7 @@
                                     <#list allDishes as dish>
                                         <tr>
                                             <td>
-                                                <input id="dish_${dish.id}" name="dishes" value="${dish.id}" type="checkbox" <#if dish.inMenu == true>checked</#if>>
+                                                <input class="form-check-input" id="dish_${dish.id}" name="dishes" value="${dish.id}" type="checkbox" <#if dish.inMenu == true>checked</#if>>
                                             </td>
                                             <td>${dish.id}</td>
                                             <td>${dish.name}</td>

@@ -34,4 +34,15 @@ public class HomePageController {
         }
         return "home";
     }
+
+    @GetMapping("/aboutWebsite")
+    public String aboutWebsite(){
+        return "aboutWebsite";
+    }
+
+    @GetMapping("/aboutDevelopers")
+    public String aboutDevelopers(){
+        return "aboutDevelopers";
+    }
+
 }

@@ -196,7 +196,7 @@
                             </p>
                         </div>
 
-                        <h6 style="margin-top: 2rem;">Другое</h6>
+                        <h6 style="margin-top: 2rem;">Заказы</h6>
                         <div style="margin-left: 1rem;">
                             <p class="icon-text" style="margin-top: 1rem;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
@@ -217,22 +217,7 @@
                                 <button type="submit" class="btn btn-custom">Выйти</button>
                             </form>
                         </div>
-                        <script>
-                            // Получаем текущий путь
-                            var currentPath = window.location.pathname;
 
-                            // Получаем все ссылки категорий
-                            var categoryLinks = document.querySelectorAll('.category-link');
-
-                            // Проходим по каждой ссылке
-                            categoryLinks.forEach(function(link) {
-                                // Если текущий путь совпадает с атрибутом href этой ссылки
-                                if (link.getAttribute('href') === currentPath) {
-                                    // Добавляем класс активности
-                                    link.classList.add('active');
-                                }
-                            });
-                        </script>
                     </div>
                     <div class="col-md-1 vertical-line">
                     </div>
@@ -371,6 +356,7 @@
             </div>
         </div>
     </div>
+    <#include "blocks/menuScript.ftlh">
     <footer class="footer mt-auto">
         <#include "blocks/footer.ftlh">
     </footer>

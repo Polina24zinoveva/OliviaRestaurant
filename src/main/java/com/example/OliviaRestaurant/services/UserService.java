@@ -76,7 +76,7 @@ public class UserService {
     }
 
     public List<User> listAllEmployee(){
-        return userRepository.findAll().stream().filter(user -> user.getRole() != ROLE_USER).collect(Collectors.toList());
+        return userRepository.findAll().stream().filter(user -> user.getRole() != ROLE_USER &&  user.getRole() != ROLE_ADMIN).collect(Collectors.toList());
     }
 
     public List<User> listAllClient(){

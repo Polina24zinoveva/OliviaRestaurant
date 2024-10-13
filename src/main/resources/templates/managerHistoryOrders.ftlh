@@ -133,20 +133,11 @@
             flex-grow: 1;
         }
 
-        /* Добавленный класс активности для выбранной категории */
-        .category-link.active {
-            text-decoration: underline; /* Подчеркиваем выбранную категорию */
-        }
-
     </style>
 </head>
 <body class="d-flex flex-column h-100">
     <div class="wrapper flex-grow-1">
-        <#if isAdmin?? && isAdmin == true>
-            <#include "blocks/headerAdmin.ftlh">
-        <#else>
-            <#include "blocks/header.ftlh">
-        </#if>
+        <#include "blocks/header.ftlh">
 
         <div class="d-flex">
             <div class="container">
@@ -175,13 +166,13 @@
 
                         </div>
 
-                        <h6 style="margin-top: 2rem;">Другое</h6>
+                        <h6 style="margin-top: 2rem;">Заказы</h6>
                         <div style="margin-left: 1rem;">
                             <p class="icon-text" style="margin-top: 1rem;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
                                     <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
                                 </svg>
-                                <a class="custom-link category-link" href="/profile">Активные заказы</a>
+                                <a class="custom-link category-link" href="/managerProfile">Активные заказы</a>
                             </p>
                             <p class="icon-text">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-history" viewBox="0 0 16 16">
@@ -189,28 +180,13 @@
                                     <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/>
                                     <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/>
                                 </svg>
-                                <a class="custom-link category-link" href="/historyOrders">История заказов</a>
+                                <a class="custom-link category-link" href="/managerHistoryOrders">История заказов</a>
                             </p>
                             <form action="/logout" method="post">
                                 <button type="submit" class="btn btn-custom">Выйти</button>
                             </form>
                         </div>
-                        <script>
-                            // Получаем текущий путь
-                            var currentPath = window.location.pathname;
 
-                            // Получаем все ссылки категорий
-                            var categoryLinks = document.querySelectorAll('.category-link');
-
-                            // Проходим по каждой ссылке
-                            categoryLinks.forEach(function(link) {
-                                // Если текущий путь совпадает с атрибутом href этой ссылки
-                                if (link.getAttribute('href') === currentPath) {
-                                    // Добавляем класс активности
-                                    link.classList.add('active');
-                                }
-                            });
-                        </script>
                     </div>
 
 
@@ -270,7 +246,7 @@
                                 </div>
 
 
-                                <button id="toggleButton_${order.id}" class="btn btn-custom" style="max-width: 200px;  margin-bottom: 1rem;" onclick="showOrder(${order.id})">Товары в заказе</button>
+                                <button id="toggleButton_${order.id}" class="btn btn-custom" style="margin-bottom: 1rem;" onclick="showOrder(${order.id})">Товары в заказе</button>
 
                                 <div id="orderItemsDiv_${order.id}" style="display:none;" >
                                     <br>
@@ -317,6 +293,7 @@
             </div>
         </div>
     </div>
+    <#include "blocks/menuScript.ftlh">
     <footer class="footer mt-auto">
         <#include "blocks/footer.ftlh">
     </footer>

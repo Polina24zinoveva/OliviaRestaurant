@@ -55,18 +55,80 @@ public class AdminController {
     private final OrderRepository orderRepository;
     private final OrderHasDishRepository orderHasDishRepository;
 
-    @GetMapping("/adminAllDish")
+
+    @GetMapping("/adminAllDishes")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String admin(Model model, @AuthenticationPrincipal User user){
+    public String adminAllDish(Model model, @AuthenticationPrincipal User user,
+                                   @RequestParam(name = "dishTypeId", required = false, defaultValue = "0") String dishTypeId,
+                               @RequestParam(name = "cuisineId", required = false, defaultValue = "0") String cuisineId){
         StaticMethods.header(user, model);
 
-        model.addAttribute("allDishes", dishService.listAllDishes());
-        model.addAttribute("toDeliverOrders", orderService.listAllOrdersToDeliver());
-        model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(orderService.listAllOrdersToDeliver()));
-        model.addAttribute("toDeliverAmounts", orderHasDishService.getPendingDishes(orderService.listAllOrdersToDeliver()));
+        List<Dish> allDishes = dishService.listAllDishes();
 
-        return "adminAllDish";
+        switch (dishTypeId){
+            case "0":
+                break;
+            case "1":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 1).toList();
+                break;
+            case "2":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 2).toList();
+                break;
+            case "3":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 3).toList();
+                break;
+            case "4":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 4).toList();
+                break;
+        }
+
+        switch (cuisineId){
+            case "0":
+                break;
+            case "1":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 1).toList();
+                break;
+            case "2":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 2).toList();
+                break;
+            case "3":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 3).toList();
+                break;
+            case "4":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 4).toList();
+                break;
+            case "5":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 5).toList();
+                break;
+            case "6":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 6).toList();
+                break;
+            case "7":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 7).toList();
+                break;
+            case "8":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 8).toList();
+                break;
+            case "9":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 9).toList();
+                break;
+            case "10":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 10).toList();
+                break;
+            case "11":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 11).toList();
+                break;
+        }
+
+
+        model.addAttribute("allDishes", allDishes);
+        model.addAttribute("dishTypeId", dishTypeId);
+        model.addAttribute("cuisineId", cuisineId);
+
+        return "adminAllDishes";
     }
+
+
 
     @GetMapping("/adminFindDishByName")
     @PreAuthorize("hasRole('ROLE_ADMIN')")

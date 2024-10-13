@@ -5,26 +5,9 @@
     <link rel="icon" href="icon_logo.png" type="image/x-icon">
 
     <title>
+    <title>
         Администратор
     </title>
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function showMessage(message) {
-            Swal.fire({
-              text: message,
-              icon: "success",
-              confirmButtonColor: '#e0d8d0'
-            });
-        }
-        function showError(error) {
-            Swal.fire({
-              text: error,
-              icon: "error",
-              confirmButtonColor: '#e0d8d0'
-            });
-        }
-    </script>
 
     <script>
         function request (id){
@@ -171,40 +154,12 @@
 <body class="d-flex flex-column h-100">
     <div class="wrapper flex-grow-1">
         <#include "blocks/header.ftlh">
-        <#if message??>
-            <script>
-                showMessage("${message}");
-            </script>
-        </#if>
-        <#if error??>
-            <script>
-                showError("${error}");
-            </script>
-        </#if>
-
         <div class="d-flex">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
                        <#include "blocks/adminMenu.ftlh">
                     </div>
-                    <script>
-                        // Получаем текущий путь
-                        var currentPath = window.location.pathname;
-
-                        // Получаем все ссылки категорий
-                        var categoryLinks = document.querySelectorAll('.category-link');
-
-                        // Проходим по каждой ссылке
-                        categoryLinks.forEach(function(link) {
-                            // Если текущий путь совпадает с атрибутом href этой ссылки
-                            if (link.getAttribute('href') === currentPath) {
-                                // Добавляем класс активности
-                                link.classList.add('active');
-                            }
-                        });
-                    </script>
-
 
                     <div class="col-md-1 vertical-line">
                     </div>
@@ -216,7 +171,7 @@
                             </div>
 
                         <#else>
-                            <h5 style="margin-top: 10px; margin-bottom: 2rem;">Все сотрудники</h5>
+                            <h5 style="margin-top: 10px; margin-bottom: 2rem;">Сотрудники</h5>
 
                             <form action="/adminAllEmployee" method="get">
                                 <select name="role" class="form-select" onchange="this.form.submit()">
@@ -248,7 +203,10 @@
                                         <td>${employee.surname}</td>
                                         <td>${employee.phoneNumber}</td>
                                         <td>${employee.email}</td>
-                                        <td>${employee.role}</td>
+                                        <td>
+                                            <#if employee.role == "ROLE_MANAGER">Менеджер</#if>
+                                            <#if employee.role == "ROLE_COURIER">Курьер</#if>
+                                        </td>
                                     </tr>
                                 </#list>
                                 </tbody>

@@ -8,24 +8,6 @@
         Администратор
     </title>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function showMessage(message) {
-            Swal.fire({
-              text: message,
-              icon: "success",
-              confirmButtonColor: '#e0d8d0'
-            });
-        }
-        function showError(error) {
-            Swal.fire({
-              text: error,
-              icon: "error",
-              confirmButtonColor: '#e0d8d0'
-            });
-        }
-    </script>
-
     <script>
         function request (id){
 
@@ -90,7 +72,7 @@
         }
 
         .btn-custom2 {
-            width: 94%;
+            width: 100%;
             margin-top: 10px;
             background-color: #f0eade; /* Основной цвет кнопки */
             border-color: #f0eade; /* Цвет границы кнопки */
@@ -171,39 +153,12 @@
 <body class="d-flex flex-column h-100">
     <div class="wrapper flex-grow-1">
         <#include "blocks/header.ftlh">
-        <#if message??>
-            <script>
-                showMessage("${message}");
-            </script>
-        </#if>
-        <#if error??>
-            <script>
-                showError("${error}");
-            </script>
-        </#if>
-
         <div class="d-flex">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
                        <#include "blocks/adminMenu.ftlh">
                     </div>
-                    <script>
-                        // Получаем текущий путь
-                        var currentPath = window.location.pathname;
-
-                        // Получаем все ссылки категорий
-                        var categoryLinks = document.querySelectorAll('.category-link');
-
-                        // Проходим по каждой ссылке
-                        categoryLinks.forEach(function(link) {
-                            // Если текущий путь совпадает с атрибутом href этой ссылки
-                            if (link.getAttribute('href') === currentPath) {
-                                // Добавляем класс активности
-                                link.classList.add('active');
-                            }
-                        });
-                    </script>
 
 
                     <div class="col-md-1 vertical-line">
@@ -237,7 +192,11 @@
                                        <td>${user.surname}</td>
                                        <td>${user.phoneNumber}</td>
                                        <td>${user.email}</td>
-                                       <td>${user.role}</td>
+                                       <td>
+                                            <#if user.role == "ROLE_MANAGER">Менеджер</#if>
+                                            <#if user.role == "ROLE_COURIER">Курьер</#if>
+                                            <#if user.role == "ROLE_USER">Пользователь</#if>
+                                       </td>
                                        <td>
                                            <form action="/adminChangeRole" method="post">
                                                <input type="hidden" name="id" value="${user.id}">

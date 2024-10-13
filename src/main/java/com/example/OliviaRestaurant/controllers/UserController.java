@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 
@@ -49,7 +50,11 @@ public class UserController {
     }
 
     @GetMapping("/login_not_success")
-    public String login_not_success() {
+    public String login_not_success(@RequestParam(name = "email", required = false) String email) {
+        if (email != null) {
+            System.out.println(email);
+        }
+        System.out.println("Не верный email или пароль");
         error = "Не верный email или пароль";
         return "redirect:/login";
     }
@@ -60,6 +65,7 @@ public class UserController {
 
         return "registration";
     }
+
     @GetMapping("/activate/{code}")
     public String activate(@PathVariable String code, Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
@@ -74,7 +80,15 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String createUser(UserWithoutLink userWithoutLink, Model model) {
+    public String createUser(UserWithoutLink userWithoutLink, Model model,
+                             @RequestParam(name = "password") String password,
+                             @RequestParam(name = "password2") String password2) {
+
+        if (!password.equals(password2)) {
+            error = "Пароли не совпадают. Повторите снова";
+            return "redirect:/login";
+        }
+
         User user = userService.getUserByEmail(userWithoutLink.getEmail());
         if (user != null) {
             warning = "На этот email уже зарегистрирован аккаунт";

@@ -165,39 +165,13 @@
 </head>
 <body class="d-flex flex-column h-100">
     <div class="wrapper flex-grow-1">
-        <#if isAdmin?? && isAdmin == true>
-            <#include "blocks/headerAdmin.ftlh">
-        <#else>
-            <#include "blocks/header.ftlh">
-        </#if>
-        <#if message??>
-            <script>
-                showMessage("${message}");
-            </script>
-        </#if>
+        <#include "blocks/header.ftlh">
         <div class="d-flex">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
                         <#include "blocks/adminMenu.ftlh">
                     </div>
-                    <script>
-                        // Получаем текущий путь
-                        var currentPath = window.location.pathname;
-
-                        // Получаем все ссылки категорий
-                        var categoryLinks = document.querySelectorAll('.category-link');
-
-                        // Проходим по каждой ссылке
-                        categoryLinks.forEach(function(link) {
-                            // Если текущий путь совпадает с атрибутом href этой ссылки
-                            if (link.getAttribute('href') === currentPath) {
-                                // Добавляем класс активности
-                                link.classList.add('active');
-                            }
-                        });
-                    </script>
-
 
                     <div class="col-md-1 vertical-line">
                     </div>
@@ -217,6 +191,21 @@
                                         <div class="row">
                                             <div class="d-flex align-items-baseline">
                                                 <h5>Заказ №${order.id}. Доставка: ${datesDelivery[x]} к ${order.timeDelivery!},  ${order.address}</h5>
+                                                <div>
+                                                    <p class="text-center"
+                                                        style="display: flex;
+                                                            justify-content: center;
+                                                            align-items: center;
+                                                            background: #f0eade;
+                                                            border-radius: 5px;
+                                                            width: 120px;
+                                                            height: 38px;
+                                                            margin-left: 1rem;">
+                                                        <#if order.status=="STATUS_PAID">Оплачен
+                                                        <#else><#if order.status=="STATUS_IN_DELIVERY">В пути</#if>
+                                                        </#if>
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row"  style="margin-top: 1rem;">

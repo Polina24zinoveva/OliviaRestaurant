@@ -133,10 +133,6 @@
            flex-grow: 1;
        }
 
-       /* Добавленный класс активности для выбранной категории */
-       .category-link.active {
-           text-decoration: underline; /* Подчеркиваем выбранную категорию */
-       }
        .btn-custom2 {
            width: 100%;
            margin-top: 10px;
@@ -152,6 +148,7 @@
        }
 
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function showMessage(message) {
@@ -197,7 +194,7 @@
                             </p>
                         </div>
 
-                        <h6 style="margin-top: 2rem;">Другое</h6>
+                        <h6 style="margin-top: 2rem;">Заказы</h6>
                         <div style="margin-left: 1rem;">
                             <p class="icon-text" style="margin-top: 1rem;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
@@ -218,22 +215,7 @@
                                 <button type="submit" class="btn btn-custom">Выйти</button>
                             </form>
                         </div>
-                        <script>
-                            // Получаем текущий путь
-                            var currentPath = window.location.pathname;
 
-                            // Получаем все ссылки категорий
-                            var categoryLinks = document.querySelectorAll('.category-link');
-
-                            // Проходим по каждой ссылке
-                            categoryLinks.forEach(function(link) {
-                                // Если текущий путь совпадает с атрибутом href этой ссылки
-                                if (link.getAttribute('href') === currentPath) {
-                                    // Добавляем класс активности
-                                    link.classList.add('active');
-                                }
-                            });
-                        </script>
                     </div>
                     <div class="col-md-1 vertical-line">
                     </div>
@@ -253,6 +235,21 @@
                                         <div class="row">
                                             <div class="d-flex align-items-baseline">
                                                 <h5>Заказ №${order.id}. Доставка: ${activeDatesDelivery[x]} к ${order.timeDelivery!},  ${order.address}</h5>
+                                                <div>
+                                                    <p class="text-center"
+                                                        style="display: flex;
+                                                            justify-content: center;
+                                                            align-items: center;
+                                                            background: #f0eade;
+                                                            border-radius: 5px;
+                                                            width: 120px;
+                                                            height: 38px;
+                                                            margin-left: 1rem;">
+                                                        <#if order.status=="STATUS_PAID">Оплачен
+                                                        <#else><#if order.status=="STATUS_IN_DELIVERY">В пути</#if>
+                                                        </#if>
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row"  style="margin-top: 1rem;">
@@ -320,6 +317,21 @@
                                         <div class="row">
                                             <div class="d-flex align-items-baseline">
                                                 <h5>Заказ №${order.id}. Доставка: ${datesDelivery[x]} к ${order.timeDelivery!},  ${order.address}</h5>
+                                                <div>
+                                                    <p class="text-center"
+                                                        style="display: flex;
+                                                            justify-content: center;
+                                                            align-items: center;
+                                                            background: #f0eade;
+                                                            border-radius: 5px;
+                                                            width: 120px;
+                                                            height: 38px;
+                                                            margin-left: 1rem;">
+                                                        <#if order.status=="STATUS_PAID">Оплачен
+                                                        <#else><#if order.status=="STATUS_IN_DELIVERY">В пути</#if>
+                                                        </#if>
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row"  style="margin-top: 1rem;">
@@ -399,6 +411,7 @@
             </div>
         </div>
     </div>
+    <#include "blocks/menuScript.ftlh">
     <footer class="footer mt-auto">
         <#include "blocks/footer.ftlh">
     </footer>

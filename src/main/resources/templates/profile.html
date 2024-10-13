@@ -133,11 +133,6 @@
            flex-grow: 1;
        }
 
-       /* Добавленный класс активности для выбранной категории */
-       .category-link.active {
-           text-decoration: underline; /* Подчеркиваем выбранную категорию */
-       }
-
     </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -152,15 +147,11 @@
 </head>
 <body class="d-flex flex-column h-100">
 <div class="wrapper flex-grow-1">
-    <#if isAdmin?? && isAdmin == true>
-    <#include "blocks/headerAdmin.ftlh">
-    <#else>
     <#include "blocks/header.ftlh">
-</#if>
-<#if message??>
-<script>
-    showMessage("${message}");
-</script>
+    <#if message??>
+    <script>
+        showMessage("${message}");
+    </script>
 </#if>
 <div class="d-flex">
     <div class="container">
@@ -188,7 +179,7 @@
                     </p>
                 </div>
 
-                <h6 style="margin-top: 2rem;">Другое</h6>
+                <h6 style="margin-top: 2rem;">Заказы</h6>
                 <div style="margin-left: 1rem;">
                     <p class="icon-text" style="margin-top: 1rem;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
@@ -209,22 +200,6 @@
                         <button type="submit" class="btn btn-custom">Выйти</button>
                     </form>
                 </div>
-                <script>
-                    // Получаем текущий путь
-                    var currentPath = window.location.pathname;
-
-                    // Получаем все ссылки категорий
-                    var categoryLinks = document.querySelectorAll('.category-link');
-
-                    // Проходим по каждой ссылке
-                    categoryLinks.forEach(function(link) {
-                        // Если текущий путь совпадает с атрибутом href этой ссылки
-                        if (link.getAttribute('href') === currentPath) {
-                            // Добавляем класс активности
-                            link.classList.add('active');
-                        }
-                    });
-                </script>
             </div>
             <div class="col-md-1 vertical-line">
             </div>
@@ -232,7 +207,7 @@
             <div class="col-md-9">
                 <#if toDeliverOrders?size = 0>
                 <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
-                    <h5>Вы еще ничего не заказывали</h5>
+                    <h5>У вас нет активных заказов</h5>
                 </div>
 
                 <#else>
@@ -243,53 +218,55 @@
                 <div class="row mb-4">
                     <div class="col-12">
                         <div class="row">
+
                             <div class="d-flex align-items-baseline">
                                 <h5>Заказ №${order.id} </h5>
-                                <p class="mb-0 me-2">&nbsp на сумму</p>
-                                <h5 class="mb-0">${order.sumOrder} ₽</h5>
+                                <p class="mb-0 me-2">&nbsp; на сумму</p>
+                                <h5 class="mb-0">${order.totalPrice} ₽</h5>
+                                <div>
+                                    <p class="text-center"
+                                       style="display: flex;
+                                                              justify-content: center;
+                                                              align-items: center;
+                                                              background: #f0eade;
+                                                              border-radius: 5px;
+                                                              width: 120px;
+                                                              height: 38px;
+                                                              margin-left: 1rem;">
+                                        <#if order.status=="STATUS_PAID">Оплачен
+                                        <#else><#if order.status=="STATUS_IN_DELIVERY">В пути</#if>
+                                </#if>
+                                </p>
                             </div>
                         </div>
-                        <div class="row"  style="margin-top: 1rem;">
-                            <div class="col-7">
-                                <h6>Товары в заказе:</h6>
-                                <#assign y = 0>
-                                <#list toDeliverBouquets[x] as bouquet>
-                                <div class="row" style="width: 36rem;">
-                                    <div class="col-md-3" style="margin-bottom: 1rem;">
-                                        <#if bouquet.images[0]?has_content && bouquet.images[0]?size gt 1>
-                                        <img src="/images/${bouquet.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
-                                        <#else>
-                                        <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
-                                    </#if>
-                                </div>
-                                <div class="col-md-3">
-                                    <a href="/bouquet/${bouquet.id}" class="custom-link me-auto">${bouquet.name}</a>
-                                </div>
-                                <div class="col-md-3">
-                                    ${toDeliverAmounts[x][y]} шт
-                                </div>
-                                <div class="col-md-3">
-                                    ${bouquet.price} ₽
-                                </div>
-                            </div>
-                        </#list>
-                        <#assign y++>
-                        <#if toDeliverPostcards[x]??>
-                        <div class="row" style="width: 36rem;">
-                            <div class="col-md-3" style="margin-bottom: 1rem;">
-                                <img src="/images/${toDeliverPostcards[x].image.id}" class="image" alt="Фото" style="max-width: 6rem;" class="me-2">
+
+
+                    </div>
+                    <div class="row"  style="margin-top: 1rem;">
+                        <div class="col-7">
+                            <h6>Товары в заказе:</h6>
+                            <#assign y = 0>
+                            <#list toDeliverDishes[x] as dish>
+                            <div class="row" style="width: 36rem;">
+                                <div class="col-md-3" style="margin-bottom: 1rem;">
+                                    <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
+                                    <img src="/images/${dish.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
+                                    <#else>
+                                    <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
+                                </#if>
                             </div>
                             <div class="col-md-3">
-                                ${order.textPostcard!'Открытка без текста'}
+                                <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
                             </div>
                             <div class="col-md-3">
-                                1 шт
+                                ${toDeliverAmounts[x][y]} шт
                             </div>
                             <div class="col-md-3">
-                                0 ₽
+                                ${dish.price} ₽
                             </div>
                         </div>
-                    </#if>
+                    </#list>
+                    <#assign y++>
                 </div>
 
                 <div class="col-md-1 vertical-line">
@@ -297,15 +274,11 @@
 
                 <div class="col-4">
                     <h6>Доставка по адресу:</h6>
-                    <p>${order.addressDelivery}</p>
+                    <p>${order.address}</p>
                     <h6>Дата доставки:</h6>
-                    <p>${order.dateDelivery.format('dd.MM.yyyy')}</p>
+                    <p>${datesDelivery[x]}</p>
                     <h6>Время доставки:</h6>
                     <p>${order.timeDelivery!}</p>
-                    <h6>Стоимость доставки:</h6>
-                    <p>${order.sumDelivery} ₽</p>
-                    <h6>Контактный номер:</h6>
-                    <p>${order.phoneNumber!}</p>
                 </div>
                 <#assign x++>
             </div>
@@ -319,6 +292,7 @@
 </div>
 </div>
 </div>
+<#include "blocks/menuScript.ftlh">
 <footer class="footer mt-auto">
     <#include "blocks/footer.ftlh">
 </footer>

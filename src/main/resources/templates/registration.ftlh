@@ -84,44 +84,44 @@
 
             <div class="col-md-6  d-flex flex-column align-items-center">
                 <div class="form-container">
-                     <form action="/registration" method="post">
-                     <br>
-                     <h5 class="mt-4 text-center">Регистрация</h5>
-                                        <div class="form-group">
-                                            <label for="name">Имя:</label>
-                                            <input type="text" class="form-control" id="name" name="name" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="surname">Фамилия:</label>
-                                            <input type="text" class="form-control" id="surname" name="surname" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="email">Эл. почта:</label>
-                                            <input type="email" class="form-control" id="email" name="email" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="phoneNumber">Номер телефона:</label>
-                                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
-                                        </div>
-                                        <script>
-                                            $(document).ready(function(){
-                                                Inputmask({"mask": "8 (999) 999-99-99"}).mask("#phoneNumber");
-                                            });
-                                        </script>
-                                        <div class="form-group">
-                                            <label for="password">Пароль:</label>
-                                            <input type="password" class="form-control" id="password" name="password" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="dateOfBirthday">Дата рождения:</label>
-                                            <input type="date" class="form-control" id="dateOfBirthday" name="dateOfBirthday" required>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary btn-custom">Зарегистрироваться</button>
-                                    </form>
-                                    <div class="d-flex d-flex justify-content-between align-items-center">
-                                        <p class="mb-0 me-2">Уже есть аккаунт?</p>
-                                        <a href="/login" class="btn custom-link text-end" style="font-size: 1rem; margin-right: 0; padding-right: 0;">Войти</a>
-                                    </div>
+                    <form action="/registration" method="post">
+                    <br>
+                    <h5 class="mt-4 text-center">Регистрация</h5>
+                        <div class="form-group">
+                            <label for="name">Имя:</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="surname">Фамилия:</label>
+                            <input type="text" class="form-control" id="surname" name="surname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Эл. почта:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneNumber">Номер телефона:</label>
+                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                        </div>
+                        <script>
+                            $(document).ready(function(){
+                                Inputmask({"mask": "8 (999) 999-99-99"}).mask("#phoneNumber");
+                            });
+                        </script>
+                        <div class="form-group">
+                            <label for="password">Пароль:</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateOfBirthday">Дата рождения:</label>
+                            <input type="date" class="form-control" id="dateOfBirthday" name="dateOfBirthday" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-custom">Зарегистрироваться</button>
+                    </form>
+                    <div class="d-flex d-flex justify-content-between align-items-center">
+                        <p class="mb-0 me-2">Уже есть аккаунт?</p>
+                        <a href="/login" class="btn custom-link text-end" style="font-size: 1rem; margin-right: 0; padding-right: 0;">Войти</a>
+                    </div>
                 </div>
             </div>
         </div>

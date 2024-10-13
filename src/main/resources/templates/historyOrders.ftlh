@@ -133,20 +133,11 @@
             flex-grow: 1;
         }
 
-        /* Добавленный класс активности для выбранной категории */
-        .category-link.active {
-            text-decoration: underline; /* Подчеркиваем выбранную категорию */
-        }
-
     </style>
 </head>
 <body class="d-flex flex-column h-100">
     <div class="wrapper flex-grow-1">
-        <#if isAdmin?? && isAdmin == true>
-            <#include "blocks/headerAdmin.ftlh">
-        <#else>
-            <#include "blocks/header.ftlh">
-        </#if>
+        <#include "blocks/header.ftlh">
 
         <div class="d-flex">
             <div class="container">
@@ -175,7 +166,7 @@
 
                         </div>
 
-                        <h6 style="margin-top: 2rem;">Другое</h6>
+                        <h6 style="margin-top: 2rem;">Заказы</h6>
                         <div style="margin-left: 1rem;">
                             <p class="icon-text" style="margin-top: 1rem;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
@@ -195,22 +186,7 @@
                                 <button type="submit" class="btn btn-custom">Выйти</button>
                             </form>
                         </div>
-                        <script>
-                            // Получаем текущий путь
-                            var currentPath = window.location.pathname;
 
-                            // Получаем все ссылки категорий
-                            var categoryLinks = document.querySelectorAll('.category-link');
-
-                            // Проходим по каждой ссылке
-                            categoryLinks.forEach(function(link) {
-                                // Если текущий путь совпадает с атрибутом href этой ссылки
-                                if (link.getAttribute('href') === currentPath) {
-                                    // Добавляем класс активности
-                                    link.classList.add('active');
-                                }
-                            });
-                        </script>
                     </div>
 
 
@@ -262,7 +238,7 @@
                                 </div>
 
 
-                                <button id="toggleButton_${order.id}" class="btn btn-custom" style="max-width: 200px;  margin-bottom: 1rem;" onclick="showOrder(${order.id})">Товары в заказе</button>
+                                <button id="toggleButton_${order.id}" class="btn btn-custom" style="margin-bottom: 1rem;" onclick="showOrder(${order.id})">Товары в заказе</button>
 
                                 <div id="orderItemsDiv_${order.id}" style="display:none;" >
                                     <br>
@@ -309,6 +285,7 @@
             </div>
         </div>
     </div>
+    <#include "blocks/menuScript.ftlh">
     <footer class="footer mt-auto">
         <#include "blocks/footer.ftlh">
     </footer>
