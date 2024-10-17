@@ -49,20 +49,6 @@
         padding-right: 3rem;
     }
 
-    .verticalMargin{
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-    }
-
-
-    .card-link {
-        margin-bottom: .75rem; /* Отступ снизу */
-        font-size: 1.25rem; /* Размер шрифта */
-        font-weight: 500; /* Жирность шрифта */
-        color: #333;
-        text-decoration: none;
-    }
-
     .card-link-name {
         font-size: 18px; /* Размер шрифта */
         color: #333;
@@ -95,15 +81,19 @@
         padding: 20px;
         border-radius: 8px;
     }
+
     .price-filter h5 {
         font-weight: bold;
     }
+
     .price-filter .input-group {
         margin-bottom: 1rem;
     }
+
     .price-filter .form-check-label {
         font-weight: normal;
     }
+
     .price-filter .form-check-input:checked ~ .form-check-label {
         color: #007bff;
     }
@@ -131,46 +121,24 @@
         text-decoration: underline; /* Подчеркиваем выбранную категорию */
     }
 
-    .btn-custom {
-        width: 100%;
-        margin-top: 10px;
-        background-color: #f0eade; /* Основной цвет кнопки */
-        border-color: #f0eade; /* Цвет границы кнопки */
-        color: #333; /* Цвет текста кнопки */
-    }
-
-    .btn-custom:hover {
-        color: #333; /* Цвет текста кнопки */
-        background-color: #e0d8d0; /* Цвет кнопки при наведении */
-        border-color: #e0d8d0; /* Цвет границы кнопки при наведении */
-    }
-
     .category-link.active {
         text-decoration: underline;
     }
 
-
-     #emptyCartMessage {
-         display: flex;
-         flex-direction: column;
-         justify-content: center;
-         align-items: center;
-         height: 100%;
-         text-align: center;
-     }
+    #emptyCartMessage {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        text-align: center;
+    }
 
   </style>
 </head>
 
 <body>
-<div>
-  <#if isAdmin?? && isAdmin == true>
-  <#include "blocks/headerAdmin.ftlh">
-  <#else>
-  <#include "blocks/header.ftlh">
-</#if>
-</div>
-
+<#include "blocks/header.ftlh">
 
 <#if allDishes??>
 

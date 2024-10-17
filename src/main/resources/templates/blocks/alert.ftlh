@@ -7,6 +7,13 @@
           confirmButtonColor: '#e0d8d0'
         });
     }
+    function showWarning(warning) {
+        Swal.fire({
+          text: warning,
+          icon: "warning",
+          confirmButtonColor: '#e0d8d0'
+        });
+    }
     function showError(error) {
         Swal.fire({
           text: error,
@@ -19,6 +26,11 @@
 <#if message??>
     <script>
         showMessage("${message}");
+    </script>
+</#if>
+<#if warning??>
+    <script>
+        showWarning("${warning}");
     </script>
 </#if>
 <#if error??>

@@ -4,228 +4,86 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="icon" href="icon_logo.png" type="image/x-icon">
     <title>Мой профиль</title>
-    <style>
-        /* Стили для фона */
-        .container-fluid, .navbar-custom{
-            background-color: #f0eade;
-        }
 
-        .profile-buttons a, .profile-buttons button {
-            width: 100%;
-            margin-bottom: 10px;
-            background-color: #f0eade;
-            border-color: #f0eade;
-            color: #333;
-        }
-        .profile-buttons a:hover, .profile-buttons button:hover {
-            background-color: #e0d8d0;
-            border-color: #e0d8d0;
-        }
-        .main-content {
-            padding: 20px;
-            border-left: 1px solid #ccc;
-            margin-left: 220px;
-            flex-grow: 1;
-        }
-
-        .small-text {
-            font-size: 0.8rem;
-        }
-
-        .image{
-            border-radius: 7px;
-            max-width: 10rem;
-            max-height: 10rem;
-            margin-bottom: 2rem;
-        }
-        .container{
-            margin-top: 4rem;
-            margin-bottom: 4rem;
-        }
-
-        .sideMargin{
-            margin-left: 2rem;
-            margin-right: 2rem;
-        }
-
-        .verticalMargin{
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-        }
-        .icon-text {
-            display: flex;
-            align-items: center;
-        }
-
-
-        .icon-text svg {
-            margin-right: 8px; /* Отступ между иконкой и текстом */
-        }
-
-
-        .vertical-line {
-            position: relative;
-        }
-
-        .vertical-line::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            border-left: 2px solid #f0eade; /* Цвет и стиль линии */
-        }
-
-        .horizontal-line {
-            position: relative;
-            height: 2px; /* Высота линии */
-            width: 100%; /* Ширина линии */
-            background-color: #f0eade; /* Цвет линии */
-            margin: 1rem 0; /* Отступы сверху и снизу линии */
-        }
-
-        .p {
-            font-size: 20px;
-        }
-
-        #emptyCartMessage {
-            flex-direction: column; /* Отображаем дочерние элементы в столбце */
-            justify-content: center; /* Выравниваем элементы по вертикали */
-            align-items: center; /* Выравниваем элементы по горизонтали */
-        }
-        .custom-link {
-            font-size: 1.05rem; /* Размер шрифта */
-            color: #333;
-            text-decoration: none;
-        }
-        .custom-link:hover {
-            text-decoration: underline; /* Подчеркивание при наведении */
-        }
-
-        .custom-card {
-          border: 2px solid #f0eade; /* Цвет границы */
-          border-radius: 10px; /* Скругление углов */
-        }
-
-        .btn-custom {
-            width: 100%;
-            margin-top: 10px;
-            background-color: #f0eade; /* Основной цвет кнопки */
-            border-color: #f0eade; /* Цвет границы кнопки */
-            color: #333; /* Цвет текста кнопки */
-        }
-
-        .btn-custom:hover {
-            color: #333; /* Цвет текста кнопки */
-            background-color: #e0d8d0; /* Цвет кнопки при наведении */
-            border-color: #e0d8d0; /* Цвет границы кнопки при наведении */
-        }
-        .image {
-            border-radius: 7px;
-            margin: auto;
-        }
-
-       /* Для футера внизу страницы: html, body, wrapper*/
-       html, body {
-           height: 100%;
-       }
-       .wrapper {
-           flex-grow: 1;
-       }
-
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function showMessage(message) {
-            Swal.fire({
-              text: message,
-              icon: "success",
-              confirmButtonColor: '#e0d8d0'
-            });
-        }
-    </script>
 </head>
 <body class="d-flex flex-column h-100">
 <div class="wrapper flex-grow-1">
     <#include "blocks/header.ftlh">
-    <#if message??>
-    <script>
-        showMessage("${message}");
-    </script>
-</#if>
-<div class="d-flex">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-2">
-                <img class="image" src="user.jpg" alt="Фото пользователя">
-                <h5 style="margin-top: 1rem;">${currentUser.name}</h5>
-                <h5>${currentUser.surname}</h5>
+    <#include "blocks/profileStyles.ftlh">
 
-                <h6 style="margin-top: 2rem;">Личная информация</h6>
+    <div class="d-flex">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2">
+                    <img class="image" src="user.jpg" alt="Фото пользователя">
+                    <h5 style="margin-top: 1rem;">${currentUser.name}</h5>
+                    <h5>${currentUser.surname}</h5>
 
-                <div style="margin-left: 1rem; word-break: break-all;">
+                    <h6 style="margin-top: 2rem;">Личная информация</h6>
 
-                    <p class="icon-text" style="margin-top: 1rem;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" fill="currentColor" class="bi bi-telephone" viewBox="0 0 16 16">
-                            <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
-                        </svg>
-                        ${currentUser.phoneNumber}
-                    </p>
-                    <p class="icon-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
-                            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
-                        </svg>
-                        ${currentUser.email}
-                    </p>
+                    <div style="margin-left: 1rem; word-break: break-all;">
+
+                        <p class="icon-text" style="margin-top: 1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" fill="currentColor" class="bi bi-telephone" viewBox="0 0 16 16">
+                                <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
+                            </svg>
+                            ${currentUser.phoneNumber}
+                        </p>
+                        <p class="icon-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+                            </svg>
+                            ${currentUser.email}
+                        </p>
+                    </div>
+
+                    <h6 style="margin-top: 2rem;">Заказы</h6>
+                    <div style="margin-left: 1rem;">
+                        <p class="icon-text" style="margin-top: 1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
+                                <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
+                            </svg>
+                            <a class="custom-link category-link" href="/profile">Активные заказы</a>
+                        </p>
+                        <p class="icon-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-history" viewBox="0 0 16 16">
+                                <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/>
+                                <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/>
+                                <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/>
+                            </svg>
+                            <a class="custom-link category-link" href="/historyOrders">История заказов</a>
+                        </p>
+
+                        <form action="/logout" method="post">
+                            <button type="submit" class="btn btn-custom">Выйти</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-1 vertical-line">
                 </div>
 
-                <h6 style="margin-top: 2rem;">Заказы</h6>
-                <div style="margin-left: 1rem;">
-                    <p class="icon-text" style="margin-top: 1rem;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
-                            <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
-                        </svg>
-                        <a class="custom-link category-link" href="/profile">Активные заказы</a>
-                    </p>
-                    <p class="icon-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-history" viewBox="0 0 16 16">
-                            <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/>
-                            <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/>
-                            <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/>
-                        </svg>
-                        <a class="custom-link category-link" href="/historyOrders">История заказов</a>
-                    </p>
+                <div class="col-md-9">
+                    <#if toDeliverOrders?size = 0>
+                    <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
+                        <h5>У вас нет активных заказов</h5>
+                    </div>
 
-                    <form action="/logout" method="post">
-                        <button type="submit" class="btn btn-custom">Выйти</button>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-1 vertical-line">
-            </div>
+                    <#else>
+                    <h5>Активные заказы</h5>
+                    <br>
+                    <#assign x = 0>
+                    <#list toDeliverOrders as order>
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="row">
 
-            <div class="col-md-9">
-                <#if toDeliverOrders?size = 0>
-                <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
-                    <h5>У вас нет активных заказов</h5>
-                </div>
-
-                <#else>
-                <h5>Активные заказы</h5>
-                <br>
-                <#assign x = 0>
-                <#list toDeliverOrders as order>
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="row">
-
-                            <div class="d-flex align-items-baseline">
-                                <h5>Заказ №${order.id} </h5>
-                                <p class="mb-0 me-2">&nbsp; на сумму</p>
-                                <h5 class="mb-0">${order.totalPrice} ₽</h5>
-                                <div>
-                                    <p class="text-center"
-                                       style="display: flex;
+                                <div class="d-flex align-items-baseline">
+                                    <h5>Заказ №${order.id} </h5>
+                                    <p class="mb-0 me-2">&nbsp; на сумму</p>
+                                    <h5 class="mb-0">${order.totalPrice} ₽</h5>
+                                    <div>
+                                        <p class="text-center"
+                                           style="display: flex;
                                                               justify-content: center;
                                                               align-items: center;
                                                               background: #f0eade;
@@ -233,59 +91,59 @@
                                                               width: 120px;
                                                               height: 38px;
                                                               margin-left: 1rem;">
-                                        <#if order.status=="STATUS_PAID">Оплачен
-                                        <#else><#if order.status=="STATUS_IN_DELIVERY">В пути</#if>
-                                </#if>
-                                </p>
+                                            <#if order.status=="STATUS_PAID">Оплачен
+                                            <#else><#if order.status=="STATUS_IN_DELIVERY">В пути</#if>
+                                    </#if>
+                                    </p>
+                                </div>
                             </div>
+
+
                         </div>
-
-
+                        <div class="row"  style="margin-top: 1rem;">
+                            <div class="col-7">
+                                <h6>Товары в заказе:</h6>
+                                <#assign y = 0>
+                                <#list toDeliverDishes[x] as dish>
+                                <div class="row" style="width: 36rem;">
+                                    <div class="col-md-3" style="margin-bottom: 1rem;">
+                                        <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
+                                        <img src="/images/${dish.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
+                                        <#else>
+                                        <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
+                                    </#if>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
+                                </div>
+                                <div class="col-md-3">
+                                    ${toDeliverAmounts[x][y]} шт
+                                </div>
+                                <div class="col-md-3">
+                                    ${dish.price} ₽
+                                </div>
+                            </div>
+                        </#list>
+                        <#assign y++>
                     </div>
-                    <div class="row"  style="margin-top: 1rem;">
-                        <div class="col-7">
-                            <h6>Товары в заказе:</h6>
-                            <#assign y = 0>
-                            <#list toDeliverDishes[x] as dish>
-                            <div class="row" style="width: 36rem;">
-                                <div class="col-md-3" style="margin-bottom: 1rem;">
-                                    <#if dish.images[0]?has_content && dish.images[0]?size gt 1>
-                                    <img src="/images/${dish.images[0].id}" alt="Фото" class="image" style="max-width: 6rem; max-height: 6rem;" class="me-2">
-                                    <#else>
-                                    <!-- Здесь можно вывести какое-то сообщение или заглушку для изображения отсутствует -->
-                                </#if>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="/dish/${dish.id}" class="custom-link me-auto">${dish.name}</a>
-                            </div>
-                            <div class="col-md-3">
-                                ${toDeliverAmounts[x][y]} шт
-                            </div>
-                            <div class="col-md-3">
-                                ${dish.price} ₽
-                            </div>
-                        </div>
-                    </#list>
-                    <#assign y++>
-                </div>
 
-                <div class="col-md-1 vertical-line">
-                </div>
+                    <div class="col-md-1 vertical-line">
+                    </div>
 
-                <div class="col-4">
-                    <h6>Доставка по адресу:</h6>
-                    <p>${order.address}</p>
-                    <h6>Дата доставки:</h6>
-                    <p>${datesDelivery[x]}</p>
-                    <h6>Время доставки:</h6>
-                    <p>${order.timeDelivery!}</p>
+                    <div class="col-4">
+                        <h6>Доставка по адресу:</h6>
+                        <p>${order.address}</p>
+                        <h6>Дата доставки:</h6>
+                        <p>${datesDelivery[x]}</p>
+                        <h6>Время доставки:</h6>
+                        <p>${order.timeDelivery!}</p>
+                    </div>
+                    <#assign x++>
                 </div>
-                <#assign x++>
+                <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
             </div>
-            <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
         </div>
-    </div>
-</#list>
+    </#list>
 </#if>
 </div>
 </div>

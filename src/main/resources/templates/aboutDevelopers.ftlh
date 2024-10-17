@@ -5,45 +5,16 @@
     <title>Olivia Flowers</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-
-        .background_color_about_us{
-          background-color: #f0eade;
-        }
-
-        .image-container{
-          background-color: #f0eade;
-          padding-bottom: 2rem;
-        }
-
-        .container{
-            margin-top: 4rem;
-            margin-bottom: 4rem;
-        }
-
-        .vertical-line {
-            position: relative;
-        }
-
-        .vertical-line::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            border-left: 2px solid #f0eade; /* Цвет и стиль линии */
-        }
-
-        /* Стили для заголовка для сезонных цветов */
         .p-custom {
-          text-align: center;
-          font-size: 18px;
+            text-align: center;
+            font-size: 18px;
         }
 
         .p-custom-text {
-          text-align: center;
-          font-size: 16px;
-          max-width: 1000px;
-          margin: auto;
+            text-align: center;
+            font-size: 16px;
+            max-width: 1000px;
+            margin: auto;
         }
 
         .card-link {
@@ -58,25 +29,14 @@
         }
 
         .p-text-center {
-              text-align: center;
-              margin: auto;
-              margin-bottom: 4rem;
-            }
-
-        /* Для футера внизу страницы: html, body, wrapper*/
-        html, body {
-            height: 100%;
+            text-align: center;
+            margin: auto;
+            margin-bottom: 4rem;
         }
-        .wrapper {
-            flex-grow: 1;
-        }
-
-
   </style>
 </head>
 <body class="d-flex flex-column h-100">
     <#include "blocks/header.ftlh">
-    <#include "menuScript.ftlh">
     <div class="wrapper flex-grow-1">
         <div class="d-flex">
             <div class="container">
@@ -114,6 +74,8 @@
             </div>
         </div>
     </div>
+    <#include "blocks/menuScript.ftlh">
+    <#include "blocks/alert.ftlh">
     <footer class="footer mt-auto">
         <#include "blocks/footer.ftlh">
     </footer>

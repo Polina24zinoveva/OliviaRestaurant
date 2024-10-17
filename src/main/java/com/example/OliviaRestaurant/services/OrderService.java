@@ -65,6 +65,7 @@ public class OrderService {
         return orderRepository.findAllByStatus(OrderStatus.STATUS_PAID);
     }
 
+
     public List<Order> listAllOrdersToDeliverByCourier(User courier){
         return orderRepository.findByCourierAndStatus(courier, OrderStatus.STATUS_PAID);
     }

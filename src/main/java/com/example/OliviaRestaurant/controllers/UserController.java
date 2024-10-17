@@ -85,7 +85,7 @@ public class UserController {
                              @RequestParam(name = "password2") String password2) {
 
         if (!password.equals(password2)) {
-            error = "Пароли не совпадают. Повторите снова";
+            error = "Пароли не совпадают. Повторите ввести их снова";
             return "redirect:/login";
         }
 

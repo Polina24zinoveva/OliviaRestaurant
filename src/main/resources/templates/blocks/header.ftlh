@@ -1,3 +1,9 @@
+<style>
+    .container-fluid, .navbar-custom{
+        background-color: #f0eade;
+    }
+</style>
+
 <div class="container-fluid text-center">
     <nav class="navbar navbar-custom navbar-expand-sm">
         <a class="navbar-brand" href="/">Olivia Restaurant</a>
@@ -42,8 +48,3 @@
     </nav>
 </div>
 
-<style>
-    .container-fluid, .navbar-custom{
-        background-color: #f0eade;
-    }
-</style>

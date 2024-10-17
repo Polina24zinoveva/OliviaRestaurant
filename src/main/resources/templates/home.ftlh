@@ -7,26 +7,26 @@
     <style>
 
         .background_color_about_us{
-          background-color: #f0eade;
+            background-color: #f0eade;
         }
 
         .image-container{
-          background-color: #f0eade;
-          padding-bottom: 2rem;
+            background-color: #f0eade;
+            padding-bottom: 2rem;
         }
 
         /* Стили для заголовка для сезонных цветов */
         .p-custom {
-          text-align: center;
-          font-size: 21px;
+            text-align: center;
+            font-size: 21px;
         }
 
         .p-custom-text {
-          text-align: center;
-          font-size: 16px;
-          max-width: 1000px;
-          margin: auto;
-          margin-bottom: 4rem;
+            text-align: center;
+            font-size: 16px;
+            max-width: 1000px;
+            margin: auto;
+            margin-bottom: 4rem;
         }
 
         .card-link {
@@ -41,10 +41,10 @@
         }
 
         .p-text-center {
-              text-align: center;
-              margin: auto;
-              margin-bottom: 4rem;
-            }
+            text-align: center;
+            margin: auto;
+            margin-bottom: 4rem;
+        }
 
         /* Для футера внизу страницы: html, body, wrapper*/
         html, body {

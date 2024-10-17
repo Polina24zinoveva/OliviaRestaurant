@@ -34,9 +34,9 @@ public class ProfileController {
 
         StaticMethods.header(user, model);
 
-        List<Order> orders = orderService.listAllOrdersToDeliver();
+        List<Order> orders = orderRepository.findByUserAndStatus(user, OrderStatus.STATUS_PAID);
 
-        List<Order> activeOrder = orderRepository.findAllByStatus(OrderStatus.STATUS_IN_DELIVERY);
+        List<Order> activeOrder = orderRepository.findByUserAndStatus(user, OrderStatus.STATUS_IN_DELIVERY);
         orders.addAll(activeOrder);
 
 

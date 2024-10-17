@@ -10,11 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
-
-
-
-
-
         .container {
             background-color: #fff;
             border-radius: 30px;
@@ -203,51 +198,9 @@
         }
     </style>
 </head>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    function showMessage(message) {
-        Swal.fire({
-          text: message,
-          icon: "success",
-          confirmButtonColor: '#e0d8d0'
-        });
-    }
-    function showWarning(warning) {
-        Swal.fire({
-          text: warning,
-          icon: "warning",
-          confirmButtonColor: '#e0d8d0'
-        });
-    }
-    function showError(error) {
-        Swal.fire({
-          text: error,
-          icon: "error",
-          confirmButtonColor: '#e0d8d0'
-        });
-    }
-</script>
 <body>
-    <#if isAdmin?? && isAdmin == true>
-        <#include "blocks/headerAdmin.ftlh">
-    <#else>
-        <#include "blocks/header.ftlh">
-    </#if>
-    <#if message??>
-        <script>
-            showMessage("${message}");
-        </script>
-    </#if>
-    <#if warning??>
-        <script>
-            showWarning("${warning}");
-        </script>
-    </#if>
-    <#if error??>
-        <script>
-            showError("${error}");
-        </script>
-    </#if>
+    <#include "blocks/header.ftlh">
+
     <div class="container" id="container">
         <div class="form-container sign-up">
             <form action="/registration" method="post">
@@ -307,9 +260,10 @@
             container.classList.add('active');
         });
     </script>
-</body>
+    <#include "blocks/alert.ftlh">
 
-<footer class="footer mt-auto">
-    <#include "blocks/footer.ftlh">
-</footer>
+    <footer class="footer mt-auto">
+        <#include "blocks/footer.ftlh">
+    </footer>
+</body>
 </html>

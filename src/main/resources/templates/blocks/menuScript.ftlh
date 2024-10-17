@@ -1,3 +1,21 @@
+<style>
+    /* Добавленный класс активности для выбранной категории */
+    .category-link.active {
+        text-decoration: underline; /* Подчеркиваем выбранную категорию */
+    }
+
+    .custom-link {
+        font-size: 1.05rem; /* Размер шрифта */
+        color: #333;
+        text-decoration: none;
+    }
+
+    .custom-link:hover {
+        text-decoration: underline; /* Подчеркивание при наведении */
+    }
+
+</style>
+
 <script>
     // Получаем текущий путь
     var currentPath = window.location.pathname;
@@ -14,11 +32,4 @@
         }
     });
 </script>
-
-<style>
-    /* Добавленный класс активности для выбранной категории */
-    .category-link.active {
-        text-decoration: underline; /* Подчеркиваем выбранную категорию */
-    }
-</style>
 
