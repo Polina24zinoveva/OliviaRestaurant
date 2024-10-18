@@ -63,7 +63,6 @@
                                     <thead>
                                     <tr>
                                         <th></th>
-                                        <th>ID</th>
                                         <th>Название</th>
                                         <th>Состав</th>
                                         <th>Калорийность</th>
@@ -78,7 +77,6 @@
                                             <td>
                                                 <input class="form-check-input" id="dish_${dish.id}" name="dishes" value="${dish.id}" type="checkbox" <#if dish.inMenu == true>checked</#if>>
                                             </td>
-                                            <td>${dish.id}</td>
                                             <td>${dish.name}</td>
                                             <td>${dish.composition}</td>
                                             <td>${dish.calories}</td>

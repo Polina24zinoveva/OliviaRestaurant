@@ -30,10 +30,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -54,6 +51,7 @@ public class AdminController {
     private final DishRepository dishRepository;
     private final OrderRepository orderRepository;
     private final OrderHasDishRepository orderHasDishRepository;
+    private final UserRepository userRepository;
 
 
     @GetMapping("/adminAllDishes")
@@ -357,7 +355,9 @@ public class AdminController {
     @GetMapping("/adminAllEmployee")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminAllEmployee(Model model, @AuthenticationPrincipal User user,
-                                   @RequestParam(name = "role", required = false, defaultValue = "all") String role){
+                                   @RequestParam(name = "role", required = false, defaultValue = "all") String role,
+                                   @RequestParam(name = "searchField", required = false, defaultValue = "") String searchField,
+                                   @RequestParam(name = "searchQuery", required = false, defaultValue = "") String searchQuery){
         StaticMethods.header(user, model);
 
         List<User> employees = new ArrayList<>();
@@ -372,6 +372,43 @@ public class AdminController {
                 employees = userService.listAllCouriers();
                 break;
         }
+
+        switch (searchField){
+            case "id":
+                Long id = Long.parseLong(searchQuery);
+                employees = userRepository.findAllById(Collections.singleton(id));
+                break;
+            case "name":
+                employees = userRepository.findByName(searchQuery);
+                break;
+            case "surname":
+                employees = userRepository.findBySurname(searchQuery);
+                break;
+            case "nameAndSurname":
+                String name = searchQuery.split(" ")[0];
+                String surname = searchQuery.split(" ")[1];
+
+                // Получение списка пользователей с указанным именем
+                List<User> emp = userRepository.findByName(name);
+
+                // Фильтрация пользователей по имени и фамилии
+                employees = emp.stream()
+                        .filter(e -> e.getSurname().equalsIgnoreCase(surname))
+                        .collect(Collectors.toList());
+                break;
+            case "phoneNumber":
+                employees.clear();
+                employees.add(userRepository.findByPhoneNumber(searchQuery));
+                break;
+            case "email":
+                employees.clear();
+                employees.add(userRepository.findByEmail(searchQuery));
+                break;
+        }
+
+        employees = employees.stream()
+                .filter(e -> e.getRole() != Role.ROLE_ADMIN && e.getRole() != Role.ROLE_USER)
+                .collect(Collectors.toList());
 
         model.addAttribute("allEmployee", employees);
         model.addAttribute("role", role);
@@ -405,10 +442,52 @@ public class AdminController {
 
 
     @GetMapping("/adminAllUsers")
-    public String adminAllUsers(Model model, @AuthenticationPrincipal User user){
+    public String adminAllUsers(Model model, @AuthenticationPrincipal User user,
+                                @RequestParam(name = "searchField", required = false, defaultValue = "") String searchField,
+                                @RequestParam(name = "searchQuery", required = false, defaultValue = "") String searchQuery){
         StaticMethods.header(user, model);
 
-        model.addAttribute("allUsers", userService.listAllClient());
+        List<User> users = userService.listAllClient();
+
+        switch (searchField){
+            case "id":
+                Long id = Long.parseLong(searchQuery);
+                users = userRepository.findAllById(Collections.singleton(id));
+                break;
+            case "name":
+                users = userRepository.findByName(searchQuery);
+                break;
+            case "surname":
+                users = userRepository.findBySurname(searchQuery);
+                break;
+            case "nameAndSurname":
+                String name = searchQuery.split(" ")[0];
+                String surname = searchQuery.split(" ")[1];
+
+                // Получение списка пользователей с указанным именем
+                List<User> emp = userRepository.findByName(name);
+
+                // Фильтрация пользователей по имени и фамилии
+                users = emp.stream()
+                        .filter(e -> e.getSurname().equalsIgnoreCase(surname))
+                        .collect(Collectors.toList());
+                break;
+            case "phoneNumber":
+                users.clear();
+                users.add(userRepository.findByPhoneNumber(searchQuery));
+                break;
+            case "email":
+                users.clear();
+                users.add(userRepository.findByEmail(searchQuery));
+                break;
+        }
+
+        users = users.stream()
+                .filter(e -> e.getRole() == Role.ROLE_USER)
+                .collect(Collectors.toList());
+
+
+        model.addAttribute("allUsers", users);
         return "adminAllUsers";
     }
 

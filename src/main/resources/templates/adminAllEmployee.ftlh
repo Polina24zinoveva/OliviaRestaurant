@@ -4,7 +4,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="icon" href="icon_logo.png" type="image/x-icon">
 
-    <title>
+
     <title>
         Администратор
     </title>
@@ -15,6 +15,12 @@
         }
 
     </script>
+
+    <style>
+        select.search-select  {
+            background-color: #eeeeee; /* Цвет фона */
+        }
+    </style>
 
 </head>
 <body class="d-flex flex-column h-100">
@@ -31,25 +37,48 @@
                     </div>
 
                     <div class="col-md-9">
+
+                        <h5 style="margin-top: 10px; margin-bottom: 2rem;">Сотрудники</h5>
+
+                        <h6 style="margin-top: 1rem; margin-bottom: 1rem;">Поиск</h6>
+                        <form class="d-flex mb-3" method="GET" action="/adminAllEmployee">
+                            <div class="input-group">
+                                <!-- Выпадающий список -->
+                                <select name="searchField" class="form-select search-select" style="max-width: 150px; max-height:40px;">
+                                    <option value="id">ID</option>
+                                    <option value="name">Имя</option>
+                                    <option value="surname">Фамилия</option>
+                                    <option value="nameAndSurname">Имя и фамилия</option>
+                                    <option value="phoneNumber">Номер телефона</option>
+                                    <option value="email">Эл. почта</option>
+                                </select>
+
+                                <!-- Поле для ввода текста -->
+                                <input type="text" name="searchQuery" class="form-control" style="max-height:40px;" placeholder="Введите значение для поиска">
+
+                                <!-- Кнопка для поиска -->
+                                <button type="submit" class="btn btn-custom" style="max-width: 150px; max-height:40px; margin-top: 0px;">Найти</button>
+                            </div>
+                        </form>
+
+                        <h6 style="margin-top: 1rem; margin-bottom: 1rem;">Фильтрация</h6>
+
+                        <form action="/adminAllEmployee" method="get">
+                            <select name="role" class="form-select" onchange="this.form.submit()">
+                                <option value="all" <#if role == "all">selected</#if>>Все сотрудники</option>
+                                <option value="ROLE_MANAGER" <#if role == "ROLE_MANAGER">selected</#if>>Менеджеры</option>
+                                <option value="ROLE_COURIER" <#if role == "ROLE_COURIER">selected</#if>>Курьеры</option>
+                            </select>
+                        </form>
+
+                        <div class="horizontal-line" style="margin-top:2rem;"></div> <!-- Горизонтальная линия -->
+
                         <#if allEmployee?size = 0>
                             <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
                                 <h5>Нет сотрудников в базе</h5>
                             </div>
 
                         <#else>
-                            <h5 style="margin-top: 10px; margin-bottom: 2rem;">Сотрудники</h5>
-
-                            <form action="/adminAllEmployee" method="get">
-                                <select name="role" class="form-select" onchange="this.form.submit()">
-                                    <option value="all" <#if role == "all">selected</#if>>Все сотрудники</option>
-                                    <option value="ROLE_MANAGER" <#if role == "ROLE_MANAGER">selected</#if>>Менеджеры</option>
-                                    <option value="ROLE_COURIER" <#if role == "ROLE_COURIER">selected</#if>>Курьеры</option>
-                                </select>
-                            </form>
-
-
-                            <br>
-
                             <table class="table">
                                 <thead>
                                 <tr>

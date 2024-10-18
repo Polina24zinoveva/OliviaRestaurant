@@ -68,7 +68,6 @@
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Название</th>
                                     <th>Состав</th>
                                     <th>Калорийность</th>
@@ -83,7 +82,6 @@
                                 <tbody>
                                 <#list allDishes as dish>
                                     <tr>
-                                        <td>${dish.id}</td>
                                         <td>${dish.name}</td>
                                         <td>${dish.composition}</td>
                                         <td>${dish.calories}</td>

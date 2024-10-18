@@ -1,13 +1,10 @@
 package com.example.OliviaRestaurant.controllers;
 
 import com.example.OliviaRestaurant.models.User;
-import com.example.OliviaRestaurant.models.UserWithoutLink;
 import com.example.OliviaRestaurant.services.UserService;
 import com.example.OliviaRestaurant.statics.StaticMethods;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,21 +63,8 @@ public class UserController {
         return "registration";
     }
 
-    @GetMapping("/activate/{code}")
-    public String activate(@PathVariable String code, Model model, @AuthenticationPrincipal User user){
-        StaticMethods.header(user, model);
-
-        LocalDate maxDate = LocalDate.now();
-        model.addAttribute("maxDate", maxDate);
-
-        boolean isActivated = userService.activateUser(code);
-        if (isActivated) model.addAttribute("message", "Ваш аккаунт активирован");
-        else model.addAttribute("error", "Код не найден");
-        return "login";
-    }
-
     @PostMapping("/registration")
-    public String createUser(UserWithoutLink userWithoutLink, Model model,
+    public String createUser(User user, Model model,
                              @RequestParam(name = "password") String password,
                              @RequestParam(name = "password2") String password2) {
 
@@ -89,14 +73,16 @@ public class UserController {
             return "redirect:/login";
         }
 
-        User user = userService.getUserByEmail(userWithoutLink.getEmail());
-        if (user != null) {
+        if (userService.getUserByEmail(user.getEmail()) != null) {
             warning = "На этот email уже зарегистрирован аккаунт";
         }
         else {
-            message = "На вашу электронную почту отправлен код для активации аккаунта";
-            if (!userService.createUser(userWithoutLink)) {
-                return "redirect:/login?error";
+            try {
+                userService.createUser(user);
+                message = "Вы зарегистрированы";
+            }
+            catch (Exception e){
+                error = "Произошла ошибка";
             }
         }
         return "redirect:/login";
