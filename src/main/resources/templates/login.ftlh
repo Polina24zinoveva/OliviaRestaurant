@@ -227,7 +227,7 @@
         <div class="form-container sign-in">
             <form action="/login" method="post">
                 <h4>Вход</h4>
-                <input type="email" class="form-control" id="email" name="username" placeholder="Email">
+                <input type="email" class="form-control" id="email" name="username" placeholder="Email" <#if userEmail??>value=${userEmail}</#if>>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Пароль">
                 <button>Войти</button>
             </form>

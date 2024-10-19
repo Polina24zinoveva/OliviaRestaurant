@@ -3,7 +3,14 @@ package com.example.OliviaRestaurant.controllers;
 import com.example.OliviaRestaurant.models.User;
 import com.example.OliviaRestaurant.services.UserService;
 import com.example.OliviaRestaurant.statics.StaticMethods;
+import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 
 @Controller
-
 public class UserController {
     @Autowired
     private final UserService userService;
@@ -30,11 +36,11 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(Model model, @AuthenticationPrincipal User user){
+    public String login(Model model, @AuthenticationPrincipal User user, HttpSession session){
         StaticMethods.header(user, model);
 
-        LocalDate maxDate = LocalDate.now();
-        model.addAttribute("maxDate", maxDate);
+
+        if ((String) session.getAttribute("userEmail") != null) model.addAttribute("userEmail", (String) session.getAttribute("userEmail"));
 
         if (message != null) model.addAttribute("message", message);
         if (warning != null) model.addAttribute("warning", warning);
@@ -46,13 +52,18 @@ public class UserController {
         return "login";
     }
 
+
     @GetMapping("/login_not_success")
-    public String login_not_success(@RequestParam(name = "email", required = false) String email) {
-        if (email != null) {
-            System.out.println(email);
+    public String login_not_success(HttpSession session) {
+
+        if (userService.getUserByEmail((String) session.getAttribute("userEmail")) == null){
+            error = "Не верный email";
+            System.out.println("Не верный email");
         }
-        System.out.println("Не верный email или пароль");
-        error = "Не верный email или пароль";
+        else{
+            System.out.println("Не верный пароль");
+            error = "Не верный пароль";
+        }
         return "redirect:/login";
     }
 
