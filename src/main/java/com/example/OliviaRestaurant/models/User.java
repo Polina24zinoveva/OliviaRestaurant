@@ -20,22 +20,24 @@ public class User implements UserDetails {
     @Column (name = "idUser")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column (name = "email", unique = true)
     private String email;
+
     @Column (name = "password")
     private String password;
+
     @Column (name = "name")
     private String name;
+
     @Column (name = "surname")
     private String surname;
+
     @Column (name = "phoneNumber", unique = true)
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    @Column (name = "activationCode")
-    private String activationCode;
 
     @OneToMany(mappedBy="user")
     private List<Order> orders = new ArrayList<>();

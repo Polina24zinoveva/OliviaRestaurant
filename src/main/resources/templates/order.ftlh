@@ -8,20 +8,7 @@
     <link rel="icon" href="icon_logo.png" type="image/x-icon">
     <title>Заказы</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function showMessage(message) {
-            Swal.fire({
-              text: message,
-              icon: "success",
-              confirmButtonColor: '#e0d8d0'
-            });
-        }
-    </script>
-
-    <script>
-
-
         function showPostcardText() {
             if (document.getElementById("noPostcard").selected) {
                 document.getElementById("postcardCarousel").style.display = "none"
@@ -32,15 +19,6 @@
             }
         }
 
-        function showNumberPhone() {
-            if (document.getElementById("me").selected) {
-                document.getElementById("phoneNumberContainer").style.display = "none"
-                document.getElementById("phoneNumber").value = "${phoneNumber}"
-            } else {
-                document.getElementById("phoneNumberContainer").style.display = "block"
-                document.getElementById("phoneNumber").value = ""
-            }
-        }
 
         function showDateTimeDeliverySelect() {
             if (document.getElementById("earliest").selected) {
@@ -140,6 +118,7 @@
             });
         });
     </script>
+
     <style>
         h5 {
             text-align: right;
@@ -151,41 +130,8 @@
             background-color: #f0eade;
         }
 
-        .border {
-            border: 2px solid #f0eade;
-            border-radius: 10px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 4rem;
-            margin-bottom: 4rem;
-        }
-
-        .form-container {
-            max-width: 300px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
         th {
             font-weight: 500; /* Жирность шрифта */
-        }
-
-        .background_color_order {
-            background-color: #ffffff;
-            padding-top: 2rem;
-            padding-bottom: 1rem;
-        }
-
-        .image {
-            border-radius: 10px;
-            margin: auto;
-        }
-
-        .text {
-            margin-top: 2rem;
         }
 
         table {
@@ -193,52 +139,11 @@
         }
 
         .btn-custom {
-            width: 75%;
             margin-top: 10px;
             background-color: #f0eade;
             border-color: #f0eade;
             color: #333;
-        }
-
-        .btn-custom:hover {
-            color: #333;
-            background-color: #e0d8d0;
-            border-color: #e0d8d0;
-        }
-
-        .btn-custom2 {
-          width: 10rem;
-          margin-top: 10px;
-          margin-bottom: 10px;
-          background-color: #ffffff; /* Основной цвет кнопки */
-          border-color: #e0d8d0; /* Цвет границы кнопки */
-          color: #333; /* Цвет текста кнопки */
-        }
-
-        .btn-custom2:hover {
-          color: #333; /* Цвет текста кнопки */
-          background-color: #e0d8d0; /* Цвет кнопки при наведении */
-          border-color: #e0d8d0; /* Цвет границы кнопки при наведении */
-        }
-
-        .btn-custom-order {
             width: 100%;
-            margin-top: 10px;
-            background-color: #f0eade;
-            border-color: #f0eade;
-            color: #333;
-        }
-
-        .btn-custom-order:hover {
-            color: #333;
-            background-color: #e0d8d0;
-            border-color: #e0d8d0;
-        }
-
-
-        .custom-card {
-            max-width: 8rem;
-            margin: auto;
         }
 
         .card-link {
@@ -255,18 +160,15 @@
             border-radius: 10px;
         }
 
-
-
-
         /* Для футера внизу страницы: html, body, wrapper*/
         html, body {
             height: 100%;
         }
+
         .wrapper {
             flex-grow: 1;
             padding-bottom: 3rem; /* Добавление отступа снизу */
         }
-
 
         /* Chrome, Safari, Edge, Opera */
         input::-webkit-outer-spin-button,
@@ -279,7 +181,6 @@
         input[type=number] {
           -moz-appearance: textfield;
         }
-
 
         .vertical-line {
             position: relative;
@@ -315,25 +216,16 @@
 
 <body class="d-flex flex-column h-100">
     <div class="wrapper flex-grow-1">
-        <#if isAdmin?? && isAdmin == true>
-            <#include "blocks/headerAdmin.ftlh">
-        <#else>
-            <#include "blocks/header.ftlh">
-        </#if>
+        <#include "blocks/header.ftlh">
 
-        <#if message??>
-            <script>
-                showMessage("${message}");
-            </script>
-        </#if>
-        <#if dishes?size = 0>
-            <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
-                <h4>Ваша корзина пуста</h4>
-            </div>
-        <#else>
-            <div class="container mt-5">
-                <div class="row">
-                    <div class="col-md-7">
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-7">
+                    <#if dishes?size = 0>
+                        <div id="emptyCartMessage" class="d-flex flex-column justify-content-center align-items-center" style="height: 94%;">
+                            <h4>Ваша корзина пуста</h4>
+                        </div>
+                    <#else>
                         <#assign x = 0>
                         <h4>Корзина:</h4>
                         <table class="table">
@@ -388,113 +280,127 @@
 
                             </tbody>
                         </table>
-                    </div>
+                    </#if>
+                </div>
 
-                    <div class="col-md-1 vertical-line">
-                    </div>
+                <div class="col-md-1 vertical-line">
+                </div>
 
-                    <div class="col-md-4">
-                        <#if dishes?size != 0>
-                            <h4 class="text-start">Заказ:</h4>
-                            <br>
-                            <form action="/orderCheckout" method="post" onsubmit="return validateForm()">
-                                <hr>
+                <div class="col-md-4">
+                    <#if dishes?size != 0>
+                        <h4 class="text-start">Заказ:</h4>
+                        <br>
+                        <form action="/orderCheckout" method="post" onsubmit="return validateForm()">
+                            <hr>
 
+                            <div class="row">
+                                <div class="col-6">
+                                    <p>${countDishesInOrderString}</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-end">${order.totalPrice} руб.</p>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class="text-start">Сумма заказа:</h5>
+                                </div>
+                                <div class="col-6">
+                                    <h5 class="text-end">${order.totalPrice} руб.</h5>
+                                </div>
+                            </div>
+
+                            <br><br>
+                            <div class="">
                                 <div class="row">
-                                    <div class="col-6">
-                                        <p>${countDishesInOrderString}</p>
-                                    </div>
-                                    <div class="col-6">
-                                        <p class="text-end">${order.totalPrice} руб.</p>
-                                    </div>
-                                </div>
 
-                                <hr>
-
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h5 class="text-start">Сумма заказа:</h5>
-                                    </div>
-                                    <div class="col-6">
-                                        <h5 class="text-end">${order.totalPrice} руб.</h5>
-                                    </div>
-                                </div>
-
-                                <br><br>
-                                <div class="">
-                                    <div class="row">
-                                        <#if allPostcards?? && allPostcards?size != 0>
-                                            <div class="col-12 mb-3">
-                                                <h6 for="typePostcard" class="form-label">Тип открытки:</h6>
-                                                <select onchange = "showPostcardText()" name = "typePostcard" id = "typePostcard" class = "form-control">
-                                                    <option id = "noPostcard" value = "-1">Без открытки</option>
-                                                    <option value = "0">C открыткой</option>
-                                                </select>
-                                            </div>
-
-
-                                        </#if>
-                                        <div class="col-12 mb-3">
-                                            <div class="form-group" id="addressDelivery">
-                                                <h6 class="text-start">Адрес доставки</h6>
-                                                <input class="form-control" name="addressDelivery" id="addressDelivery"
-                                                    placeholder="Улица, дом, квартира" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 mb-3">
-                                            <div class="form-group">
-                                                <h6 class="text-start">Дата доставки</h6>
-                                                <div style="display:flex;">
-                                                    <input type="date" class="form-control" style="width:48px" id="dateDelivery" name="dateDelivery" min="${minDate}" max="${maxDate}" onchange="setTime()" required>
-                                                    <input type="text" class="form-control" id="dateDisplay" readonly style="margin-left:4px">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 mb-3">
-                                            <h6 for="dateTimeDelivery" class="form-label">Время доставки:</h6>
-                                            <select name="timeDelivery" id="timeDelivery" class="form-control">
-                                                <option value="11:00">11:00</option>
-                                                <option value="11:30">11:30</option>
-                                                <option value="12:00">12:00</option>
-                                                <option value="12:30">12:30</option>
-                                                <option value="13:00">13:00</option>
-                                                <option value="13:30">13:30</option>
-                                                <option value="14:00">14:00</option>
-                                                <option value="14:30">14:30</option>
-                                                <option value="15:00">15:00</option>
-                                                <option value="15:30">15:30</option>
-                                                <option value="16:00">16:00</option>
-                                                <option value="16:30">16:30</option>
-                                                <option value="17:00">17:00</option>
-                                                <option value="17:30">17:30</option>
-                                                <option value="18:00">18:00</option>
-                                                <option value="18:30">18:30</option>
-                                                <option value="19:00">19:00</option>
-                                                <option value="19:30">19:30</option>
-                                                <option value="20:00">20:00</option>
-                                                <option value="20:30">20:30</option>
-                                                <option value="21:00">21:00</option>
-                                                <option value="21:30">21:30</option>
-                                                <option value="22:00">22:00</option>
-                                                <option value="22:30">22:30</option>
-                                                <option value="23:00">23:00</option>
-                                            </select>
+                                    <div class="col-12 mb-3">
+                                        <div class="form-group" id="addressDelivery">
+                                            <h6 class="text-start">Адрес доставки</h6>
+                                            <input class="form-control" name="addressDelivery" id="addressDelivery"
+                                                placeholder="Улица, дом, квартира" required>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-custom-order">Оформить заказ</button>
+                                    <div class="col-12 mb-3">
+                                        <div class="form-group">
+                                            <h6 class="text-start">Дата доставки</h6>
+                                            <div style="display:flex;">
+                                                <input type="date" class="form-control" style="width:48px" id="dateDelivery" name="dateDelivery" min="${minDate}" max="${maxDate}" onchange="setTime()" required>
+                                                <input type="text" class="form-control" id="dateDisplay" readonly style="margin-left:4px">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-3">
+                                        <h6 for="dateTimeDelivery" class="form-label">Время доставки:</h6>
+                                        <select name="timeDelivery" id="timeDelivery" class="form-control">
+                                            <option value="11:00">11:00</option>
+                                            <option value="11:30">11:30</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="12:30">12:30</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="13:30">13:30</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="14:30">14:30</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="15:30">15:30</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="16:30">16:30</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="17:30">17:30</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="18:30">18:30</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="19:30">19:30</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="20:30">20:30</option>
+                                            <option value="21:00">21:00</option>
+                                            <option value="21:30">21:30</option>
+                                            <option value="22:00">22:00</option>
+                                            <option value="22:30">22:30</option>
+                                            <option value="23:00">23:00</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </form>
-                        </#if>
-                    </div>
+                            </div>
+
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-custom">Оформить заказ</button>
+                            </div>
+                        </form>
+                    <#else>
+                        <h4 class="text-start">Заказ:</h4>
+                        <br>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>0 блюд</p>
+                            </div>
+                            <div class="col-6">
+                                <p class="text-end">0 руб.</p>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <h5 class="text-start">Сумма заказа:</h5>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="text-end">0 руб.</h5>
+                            </div>
+                        </div>
+
+                    </#if>
                 </div>
             </div>
-        </#if>
+        </div>
     </div>
+    <#include "blocks/alert.ftlh">
      <footer class="footer mt-auto">
         <#include "blocks/footer.ftlh">
     </footer>

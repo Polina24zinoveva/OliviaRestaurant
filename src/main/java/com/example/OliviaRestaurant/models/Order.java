@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 // Заказ
 @AllArgsConstructor
@@ -16,6 +17,7 @@ import java.util.List;
 @Table(name = "orders")
 @Data
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idOrder")
@@ -60,5 +62,20 @@ public class Order {
     @Override
     public String toString() {
         return "Order{dateDelivery=" + dateDelivery + ", user=" + user + "}";
+    }
+
+    public String getFormattedDateDelivery() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        return dateDelivery.format(formatter);
+    }
+
+    public String getFormattedDateTimePayment() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        return dateTimePayment.format(formatter);
+    }
+
+    public String getFormattedCourierDateTimeDelivery() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        return courierDateTimeDelivery.format(formatter);
     }
 }

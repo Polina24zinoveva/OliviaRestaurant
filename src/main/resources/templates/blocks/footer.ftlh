@@ -1,3 +1,15 @@
+<style>
+/* Для футера внизу страницы: html, body, wrapper*/
+    html, body {
+        height: 100%;
+    }
+
+    .wrapper {
+        flex-grow: 1;
+        padding-bottom: 3rem; /* Добавление отступа снизу */
+    }
+</style>
+
 <ul class="nav navbar-custom nav-fill footer" style="display: flex; justify-content: center;">
     <li class="nav-item my-3">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">

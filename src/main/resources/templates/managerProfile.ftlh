@@ -4,173 +4,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="icon" href="icon_logo.png" type="image/x-icon">
     <title>Мой профиль</title>
-    <style>
-        /* Стили для фона */
-        .container-fluid, .navbar-custom{
-            background-color: #f0eade;
-        }
-
-        .profile-buttons a, .profile-buttons button {
-            width: 100%;
-            margin-bottom: 10px;
-            background-color: #f0eade;
-            border-color: #f0eade;
-            color: #333;
-        }
-        .profile-buttons a:hover, .profile-buttons button:hover {
-            background-color: #e0d8d0;
-            border-color: #e0d8d0;
-        }
-        .main-content {
-            padding: 20px;
-            border-left: 1px solid #ccc;
-            margin-left: 220px;
-            flex-grow: 1;
-        }
-
-        .small-text {
-            font-size: 0.8rem;
-        }
-
-        .image{
-            border-radius: 7px;
-            max-width: 10rem;
-            max-height: 10rem;
-            margin-bottom: 2rem;
-        }
-        .container{
-            margin-top: 4rem;
-            margin-bottom: 4rem;
-        }
-
-        .sideMargin{
-            margin-left: 2rem;
-            margin-right: 2rem;
-        }
-
-        .verticalMargin{
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-        }
-        .icon-text {
-            display: flex;
-            align-items: center;
-        }
-
-
-        .icon-text svg {
-            margin-right: 8px; /* Отступ между иконкой и текстом */
-        }
-
-
-        .vertical-line {
-            position: relative;
-        }
-
-        .vertical-line::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            border-left: 2px solid #f0eade; /* Цвет и стиль линии */
-        }
-
-        .horizontal-line {
-            position: relative;
-            height: 2px; /* Высота линии */
-            width: 100%; /* Ширина линии */
-            background-color: #f0eade; /* Цвет линии */
-            margin: 1rem 0; /* Отступы сверху и снизу линии */
-        }
-
-        .p {
-            font-size: 20px;
-        }
-
-        #emptyCartMessage {
-            flex-direction: column; /* Отображаем дочерние элементы в столбце */
-            justify-content: center; /* Выравниваем элементы по вертикали */
-            align-items: center; /* Выравниваем элементы по горизонтали */
-        }
-        .custom-link {
-            font-size: 1.05rem; /* Размер шрифта */
-            color: #333;
-            text-decoration: none;
-        }
-        .custom-link:hover {
-            text-decoration: underline; /* Подчеркивание при наведении */
-        }
-
-        .custom-card {
-          border: 2px solid #f0eade; /* Цвет границы */
-          border-radius: 10px; /* Скругление углов */
-        }
-
-        .btn-custom {
-            width: 100%;
-            margin-top: 10px;
-            background-color: #f0eade; /* Основной цвет кнопки */
-            border-color: #f0eade; /* Цвет границы кнопки */
-            color: #333; /* Цвет текста кнопки */
-        }
-
-        .btn-custom:hover {
-            color: #333; /* Цвет текста кнопки */
-            background-color: #e0d8d0; /* Цвет кнопки при наведении */
-            border-color: #e0d8d0; /* Цвет границы кнопки при наведении */
-        }
-        .image {
-            border-radius: 7px;
-            margin: auto;
-        }
-
-       /* Для футера внизу страницы: html, body, wrapper*/
-       html, body {
-           height: 100%;
-       }
-       .wrapper {
-           flex-grow: 1;
-       }
-
-       /* Добавленный класс активности для выбранной категории */
-       .category-link.active {
-           text-decoration: underline; /* Подчеркиваем выбранную категорию */
-       }
-       .btn-custom2 {
-           width: 100%;
-           margin-top: 10px;
-           background-color: #f0eade; /* Основной цвет кнопки */
-           border-color: #f0eade; /* Цвет границы кнопки */
-           color: #333; /* Цвет текста кнопки */
-       }
-
-       .btn-custom2:hover {
-           color: #333; /* Цвет текста кнопки */
-           background-color: #e0d8d0; /* Цвет кнопки при наведении */
-           border-color: #e0d8d0; /* Цвет границы кнопки при наведении */
-       }
-
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function showMessage(message) {
-            Swal.fire({
-              text: message,
-              icon: "success",
-              confirmButtonColor: '#e0d8d0'
-            });
-        }
-    </script>
 </head>
 <body class="d-flex flex-column h-100">
     <div class="wrapper flex-grow-1">
         <#include "blocks/header.ftlh">
-        <#if message??>
-            <script>
-                showMessage("${message}");
-            </script>
-        </#if>
+        <#include "blocks/profileStyles.ftlh">
+
         <div class="d-flex">
             <div class="container">
                 <div class="row">
@@ -197,7 +36,7 @@
                             </p>
                         </div>
 
-                        <h6 style="margin-top: 2rem;">Другое</h6>
+                        <h6 style="margin-top: 2rem;">Заказы</h6>
                         <div style="margin-left: 1rem;">
                             <p class="icon-text" style="margin-top: 1rem;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
@@ -218,28 +57,13 @@
                                 <button type="submit" class="btn btn-custom">Выйти</button>
                             </form>
                         </div>
-                        <script>
-                            // Получаем текущий путь
-                            var currentPath = window.location.pathname;
 
-                            // Получаем все ссылки категорий
-                            var categoryLinks = document.querySelectorAll('.category-link');
-
-                            // Проходим по каждой ссылке
-                            categoryLinks.forEach(function(link) {
-                                // Если текущий путь совпадает с атрибутом href этой ссылки
-                                if (link.getAttribute('href') === currentPath) {
-                                    // Добавляем класс активности
-                                    link.classList.add('active');
-                                }
-                            });
-                        </script>
                     </div>
                     <div class="col-md-1 vertical-line">
                     </div>
 
                     <div class="col-md-9">
-                        <#if activeOrder?size = 0>
+                        <#if !activeOrder?? || activeOrder?size = 0>
 
                             <h5>Нет заказов в доставке</h5>
                             <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
@@ -252,7 +76,22 @@
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="d-flex align-items-baseline">
-                                                <h5>Заказ №${order.id}. Доставка: ${order.dateDelivery},  ${order.timeDelivery!},  ${order.address}</h5>
+                                                <h5>Заказ №${order.id}. Доставка: ${activeDatesDelivery[x]} к ${order.timeDelivery!},  ${order.address}</h5>
+                                                <div>
+                                                    <p class="text-center"
+                                                        style="display: flex;
+                                                            justify-content: center;
+                                                            align-items: center;
+                                                            background: #f0eade;
+                                                            border-radius: 5px;
+                                                            width: 120px;
+                                                            height: 38px;
+                                                            margin-left: 1rem;">
+                                                        <#if order.status=="STATUS_PAID">Оплачен
+                                                        <#else><#if order.status=="STATUS_IN_DELIVERY">В пути</#if>
+                                                        </#if>
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row"  style="margin-top: 1rem;">
@@ -289,7 +128,7 @@
                                                 <h6>Доставка по адресу:</h6>
                                                 <p>${order.address}</p>
                                                 <h6>Дата доставки:</h6>
-                                                <p>${order.dateDelivery}</p>
+                                                <p>${activeDatesDelivery[x]}</p>
                                                 <h6>Время доставки:</h6>
                                                 <p>${order.timeDelivery!}</p>
                                                 <h6>Контактный номер:</h6>
@@ -297,7 +136,7 @@
                                                 <h6>Сумма заказа:</h6>
                                                 <p>${order.totalPrice} ₽</p>
                                                 <h6>Дата оплаты:</h6>
-                                                <p>${order.dateTimePayment}</p>
+                                                <p>${activeDatesTimePayment[x]}</p>
                                                 <h6>Курьер:</h6>
                                                 <p>${order.courier.name} ${order.courier.surname}</p>
                                             </div>
@@ -319,7 +158,22 @@
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="d-flex align-items-baseline">
-                                                <h5>Заказ №${order.id}. Доставка: ${order.dateDelivery},  ${order.timeDelivery!},  ${order.address}</h5>
+                                                <h5>Заказ №${order.id}. Доставка: ${datesDelivery[x]} к ${order.timeDelivery!},  ${order.address}</h5>
+                                                <div>
+                                                    <p class="text-center"
+                                                        style="display: flex;
+                                                            justify-content: center;
+                                                            align-items: center;
+                                                            background: #f0eade;
+                                                            border-radius: 5px;
+                                                            width: 120px;
+                                                            height: 38px;
+                                                            margin-left: 1rem;">
+                                                        <#if order.status=="STATUS_PAID">Оплачен
+                                                        <#else><#if order.status=="STATUS_IN_DELIVERY">В пути</#if>
+                                                        </#if>
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row"  style="margin-top: 1rem;">
@@ -356,7 +210,7 @@
                                                 <h6>Доставка по адресу:</h6>
                                                 <p>${order.address}</p>
                                                 <h6>Дата доставки:</h6>
-                                                <p>${order.dateDelivery}</p>
+                                                <p>${datesDelivery[x]}</p>
                                                 <h6>Время доставки:</h6>
                                                 <p>${order.timeDelivery!}</p>
                                                 <h6>Контактный номер:</h6>
@@ -364,7 +218,7 @@
                                                 <h6>Сумма заказа:</h6>
                                                 <p>${order.totalPrice} ₽</p>
                                                 <h6>Дата оплаты:</h6>
-                                                <p>${order.dateTimePayment}</p>
+                                                <p>${datesTimePayment[x]}</p>
                                                 <h6>Курьер:</h6>
                                                 <#assign y = 0>
                                                     <#if order.courier??>
@@ -399,6 +253,7 @@
             </div>
         </div>
     </div>
+    <#include "blocks/menuScript.ftlh">
     <footer class="footer mt-auto">
         <#include "blocks/footer.ftlh">
     </footer>

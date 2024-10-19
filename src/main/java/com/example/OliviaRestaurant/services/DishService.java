@@ -2,6 +2,7 @@ package com.example.OliviaRestaurant.services;
 
 import com.example.OliviaRestaurant.models.Dish;
 import com.example.OliviaRestaurant.models.Image;
+import com.example.OliviaRestaurant.models.Order;
 import com.example.OliviaRestaurant.repositories.DishRepository;
 import com.example.OliviaRestaurant.repositories.ImageRepository;
 import jakarta.persistence.EntityManager;
@@ -35,8 +36,12 @@ public class DishService {
         if (name != null) return dishRepository.findByName(name);
         return dishRepository.findAll();
     }
+
+
     public List<Dish> listAllDishes(){
-        return dishRepository.findAll();
+        List<Dish> dishes = dishRepository.findAll();
+        dishes = dishes.stream().filter(dish -> !dish.isDeleted()).toList();
+        return dishes;
     }
 
 
@@ -161,5 +166,8 @@ public class DishService {
 
         return dishes;
     }
+
+
+
 
 }

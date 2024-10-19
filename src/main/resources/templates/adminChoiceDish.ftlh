@@ -8,17 +8,6 @@
         Администратор
     </title>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function showMessage(message) {
-            Swal.fire({
-              text: message,
-              icon: "success",
-              confirmButtonColor: '#e0d8d0'
-            });
-        }
-    </script>
-
     <script>
         function request (id){
 
@@ -27,176 +16,31 @@
     </script>
 
     <style>
-
-        .main-content {
-            padding: 20px;
-            border-left: 1px solid #ccc;
-            margin-left: 100px;
-            flex-grow: 1;
-        }
-        .border{
-            border: 2px solid #f0eade; /* Цвет границы */
-            border-radius: 10px; /* Скругление углов */
-            max-width: 500px; /* Максимальная ширина карточки */
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 4rem;
-            margin-bottom: 4rem;
-        }
-
-        .form-container {
-            max-width: 300px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .background_color_pw {
-            background-color: #f0eade;
-            padding-top: 2rem;          /* padding отступ внутри блока */
-            padding-bottom: 1rem;
-        }
-
-
-        .image{
-            border-radius: 10px; /* Скругление углов */
-            margin: auto;
-        }
-
-        .text{
-            margin-top: 2rem;
-        }
-
         .btn-custom {
-            width: 100%;
-            margin-top: 10px;
-            background-color: #f0eade; /* Основной цвет кнопки */
-            border-color: #f0eade; /* Цвет границы кнопки */
-            color: #333; /* Цвет текста кнопки */
-        }
-
-        .btn-custom:hover {
-            color: #333; /* Цвет текста кнопки */
-            background-color: #e0d8d0; /* Цвет кнопки при наведении */
-            border-color: #e0d8d0; /* Цвет границы кнопки при наведении */
-        }
-
-        .btn-custom2 {
-            width: 94%;
-            margin-top: 10px;
-            background-color: #f0eade; /* Основной цвет кнопки */
-            border-color: #f0eade; /* Цвет границы кнопки */
-            color: #333; /* Цвет текста кнопки */
             margin-bottom: 2rem;
         }
 
-        .btn-custom2:hover {
-            color: #333; /* Цвет текста кнопки */
-            background-color: #e0d8d0; /* Цвет кнопки при наведении */
-            border-color: #e0d8d0; /* Цвет границы кнопки при наведении */
+        .btn-custom2 {
+            margin-bottom: 2rem;
+            border-width: 2px;
         }
 
-        /* Для футера внизу страницы: html, body, wrapper*/
-        html, body {
-            height: 100%;
-        }
-        .wrapper {
-            flex-grow: 1;
-            padding-bottom: 3rem; /* Добавление отступа снизу */
-        }
-        .profile-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px;
-            border-radius: 10px;
-            max-width: 600px;
-            margin: 20px;
-        }
-        .vertical-line {
-            position: relative;
-        }
-
-        .vertical-line::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            border-left: 2px solid #f0eade; /* Цвет и стиль линии */
-        }
-
-        .horizontal-line {
-            position: relative;
-            height: 2px; /* Высота линии */
-            width: 100%; /* Ширина линии */
-            background-color: #f0eade; /* Цвет линии */
-            margin: 1rem 0; /* Отступы сверху и снизу линии */
-        }
-
-        .container{
-            margin-top: 4rem;
-            margin-bottom: 4rem;
-        }
-
-        /* Добавленный класс активности для выбранной категории */
-        .category-link.active {
-            text-decoration: underline; /* Подчеркиваем выбранную категорию */
-        }
-        .custom-link {
-            font-size: 1.05rem; /* Размер шрифта */
-            color: #333;
-            text-decoration: none;
-        }
-        .custom-link:hover {
-            text-decoration: underline; /* Подчеркивание при наведении */
-        }
-        /* Для футера внизу страницы: html, body, wrapper*/
-        html, body {
-            height: 100%;
-        }
-        .wrapper {
-            flex-grow: 1;
-            padding-bottom: 3rem; /* Добавление отступа снизу */
+        input[type="checkbox"]:checked {
+            background-color: gray;
+            border-color: gray;
+            accent-color: #000000;
         }
     </style>
 </head>
 <body class="d-flex flex-column h-100">
     <div class="wrapper flex-grow-1">
-        <#if isAdmin?? && isAdmin == true>
-            <#include "blocks/headerAdmin.ftlh">
-        <#else>
-            <#include "blocks/header.ftlh">
-        </#if>
-        <#if message??>
-            <script>
-                showMessage("${message}");
-            </script>
-        </#if>
+        <#include "blocks/header.ftlh">
         <div class="d-flex">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
                         <#include "blocks/adminMenu.ftlh">
                     </div>
-                    <script>
-                        // Получаем текущий путь
-                        var currentPath = window.location.pathname;
-
-                        // Получаем все ссылки категорий
-                        var categoryLinks = document.querySelectorAll('.category-link');
-
-                        // Проходим по каждой ссылке
-                        categoryLinks.forEach(function(link) {
-                            // Если текущий путь совпадает с атрибутом href этой ссылки
-                            if (link.getAttribute('href') === currentPath) {
-                                // Добавляем класс активности
-                                link.classList.add('active');
-                            }
-                        });
-                    </script>
-
 
                     <div class="col-md-1 vertical-line">
                     </div>
@@ -210,28 +54,29 @@
                         <#else>
                             <form action="/adminChoiceDish" method="post" id="dishForm">
                                 <h5 style="margin-top: 10px; margin-bottom: 2rem;">Выбор блюд для добавления в меню</h5>
-                                <button type="button" class="btn btn-custom2" id="buttonSelectAll" name="buttonSelectAll" onclick="selectAll()">Выбрать все</button>
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn btn-custom2" id="buttonSelectAll" name="buttonSelectAll" onclick="selectAll()">Выбрать все</button>
+                                    <button type="submit" class="btn btn-custom" style="margin-left:1rem;">Выбрать</button>
+                                </div>
+
                                 <table class="table">
                                     <thead>
                                     <tr>
                                         <th></th>
-                                        <th>ID</th>
                                         <th>Название</th>
                                         <th>Состав</th>
                                         <th>Калорийность</th>
                                         <th>Вес</th>
                                         <th>Цена</th>
                                         <th>Фото</th>
-                                        <th>Действия</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <#list allDishes as dish>
                                         <tr>
                                             <td>
-                                                <input id="dish_${dish.id}" name="dishes" value="${dish.id}" type="checkbox">
+                                                <input class="form-check-input" id="dish_${dish.id}" name="dishes" value="${dish.id}" type="checkbox" <#if dish.inMenu == true>checked</#if>>
                                             </td>
-                                            <td>${dish.id}</td>
                                             <td>${dish.name}</td>
                                             <td>${dish.composition}</td>
                                             <td>${dish.calories}</td>
@@ -257,18 +102,10 @@
                                                 </#if>
 
                                             </td>
-                                            <td>
-                                                <a href="/dish/${dish.id}" class="btn btn-custom2">Просмотр</a>
-                                                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-                                                <form action="/adminDeleteDish/${dish.id}" method="post">
-                                                    <button type="submit" class="btn btn-custom2">Удалить</button>
-                                                </form>
-                                            </td>
                                         </tr>
                                     </#list>
                                     </tbody>
                                 </table>
-                                <button type="submit" class="btn btn-custom2">Выбрать</button>
 
                                 <script>
                                     function selectAll() {

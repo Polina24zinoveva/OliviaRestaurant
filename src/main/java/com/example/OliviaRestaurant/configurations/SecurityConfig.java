@@ -3,6 +3,7 @@ package com.example.OliviaRestaurant.configurations;
 import com.example.OliviaRestaurant.services.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,6 +26,7 @@ public class SecurityConfig{
 
 
 
+
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
@@ -36,10 +38,14 @@ public class SecurityConfig{
                                  "/bouquet_delete/**", "/add_bouquets_to_homepage", "/find_bouquet_by_name",
                                 "icon_logo.png", "/catalogPostcard", "/lookAll", "/authorBouquet", "/boxBouquet",
                                 "/weddingBouquet", "/filterBouquets", "/login.jpg", "/registration.jpg",
-                                "/activate/*", "/rest.jpg")
+                                "/activate/*", "/rest.jpg", "/restaurant_photos/1.jpg", "/restaurant_photos/2.jpg",
+                                "/restaurant_photos/3.jpg", "/restaurant_photos/4.jpg", "/restaurant_photos/5.jpg",
+                                "/restaurant_photos/6.jpg", "/restaurant_photos/7.jpg", "/restaurant_photos/8.jpg",
+                                "/restaurant_photos/9.jpg", "/aboutDevelopers", "/aboutWebsite")
                         .permitAll()
                         .anyRequest().authenticated()
                 )
+
 
 
                 .formLogin((form) -> form
@@ -50,6 +56,7 @@ public class SecurityConfig{
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());
+
 
 
         return http.build();

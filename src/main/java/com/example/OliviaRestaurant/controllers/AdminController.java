@@ -3,14 +3,13 @@ package com.example.OliviaRestaurant.controllers;
 import com.example.OliviaRestaurant.models.*;
 import com.example.OliviaRestaurant.models.enums.OrderStatus;
 import com.example.OliviaRestaurant.models.enums.Role;
-import com.example.OliviaRestaurant.repositories.CuisineRepository;
-import com.example.OliviaRestaurant.repositories.DishRepository;
-import com.example.OliviaRestaurant.repositories.DishTypeRepository;
+import com.example.OliviaRestaurant.repositories.*;
 import com.example.OliviaRestaurant.services.DishService;
 import com.example.OliviaRestaurant.services.OrderHasDishService;
 import com.example.OliviaRestaurant.services.OrderService;
 import com.example.OliviaRestaurant.services.UserService;
 import com.example.OliviaRestaurant.statics.StaticMethods;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,10 +27,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -50,19 +49,84 @@ public class AdminController {
     private final CuisineRepository CuisineRepository;
     private final DishTypeRepository DishTypeRepository;
     private final DishRepository dishRepository;
+    private final OrderRepository orderRepository;
+    private final OrderHasDishRepository orderHasDishRepository;
+    private final UserRepository userRepository;
 
-    @GetMapping("/adminAllDish")
+
+    @GetMapping("/adminAllDishes")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String admin(Model model, @AuthenticationPrincipal User user){
+    public String adminAllDish(Model model, @AuthenticationPrincipal User user,
+                                   @RequestParam(name = "dishTypeId", required = false, defaultValue = "0") String dishTypeId,
+                               @RequestParam(name = "cuisineId", required = false, defaultValue = "0") String cuisineId){
         StaticMethods.header(user, model);
 
-        model.addAttribute("allDishes", dishService.listAllDishes());
-        model.addAttribute("toDeliverOrders", orderService.listAllOrdersToDeliver());
-        model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(orderService.listAllOrdersToDeliver()));
-        model.addAttribute("toDeliverAmounts", orderHasDishService.getPendingDishes(orderService.listAllOrdersToDeliver()));
+        List<Dish> allDishes = dishService.listAllDishes();
 
-        return "adminAllDish";
+        switch (dishTypeId){
+            case "0":
+                break;
+            case "1":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 1).toList();
+                break;
+            case "2":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 2).toList();
+                break;
+            case "3":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 3).toList();
+                break;
+            case "4":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 4).toList();
+                break;
+        }
+
+        switch (cuisineId){
+            case "0":
+                break;
+            case "1":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 1).toList();
+                break;
+            case "2":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 2).toList();
+                break;
+            case "3":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 3).toList();
+                break;
+            case "4":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 4).toList();
+                break;
+            case "5":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 5).toList();
+                break;
+            case "6":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 6).toList();
+                break;
+            case "7":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 7).toList();
+                break;
+            case "8":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 8).toList();
+                break;
+            case "9":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 9).toList();
+                break;
+            case "10":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 10).toList();
+                break;
+            case "11":
+                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 11).toList();
+                break;
+        }
+
+
+        model.addAttribute("allDishes", allDishes);
+        model.addAttribute("dishTypeId", dishTypeId);
+        model.addAttribute("cuisineId", cuisineId);
+
+        return "adminAllDishes";
     }
+
+
 
     @GetMapping("/adminFindDishByName")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -96,6 +160,7 @@ public class AdminController {
             // Присваиваем их объекту Dish
             dish.setDishType(dishType);
             dish.setCuisine(cuisine);
+            dish.setDeleted(false);
 
             // Сохраняем блюдо и изображения
             dishService.saveDish(dish, file1, file2, file3);
@@ -110,12 +175,96 @@ public class AdminController {
 
     @PostMapping("/adminDeleteDish/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Transactional
     public String adminDeleteDish(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        try {
-            dishService.deleteDish(id);
+        //проверяем наличие заказов с блюдом
+        List<Order> ordersWithDish = orderRepository.findActiveOrdersByDishId(id, OrderStatus.STATUS_DELIVERED);
+
+        List<Order> ordersInCard = new ArrayList<>();
+
+        // Если есть заказы с этим блюдом, проверяем статусы
+        if (!ordersWithDish.isEmpty()) {
+            for (Order order : ordersWithDish) {
+                if (order.getStatus() == OrderStatus.STATUS_IN_CART) {
+                    ordersInCard.add(order);
+                }
+                else{
+                    redirectAttributes.addFlashAttribute("error", "Блюдо используется в заказах. Подождите доставки этих заказов");
+                    return "redirect:/adminAllDish";
+                }
+            }
+        }
+
+        // Если блюдо находится в корзинах, удаляем его и пересчитываем сумму заказов
+        if (!ordersInCard.isEmpty()) {
+            for (Order order: ordersInCard){
+                Dish dish = dishRepository.findById(id).orElse(null);
+                OrderHasDish orderHasDish = orderHasDishRepository.findByDishAndOrder(dish, order);
+
+                // Уменьшаем общую сумму заказа на стоимость удаляемого блюда
+                Double delta = orderHasDish.getCount() * dish.getPrice();
+                order.setTotalPrice(order.getTotalPrice() - delta);
+
+                // Удаляем запись блюда из заказа
+                orderHasDishRepository.delete(orderHasDish);
+
+                // Если заказ пустой, удаляем сам заказ
+                if (orderHasDishRepository.findAllByOrder(order).isEmpty()) {
+                    orderRepository.deleteById(order.getId());
+                } else {
+                    // Иначе сохраняем изменения в заказе
+                    orderRepository.save(order);
+                }
+            }
+        }
+
+        Dish dish = dishRepository.findById(id).orElse(null);
+
+        if (dish != null) {
+            dish.setDeleted(true);
+            dish.setInMenu(false);
+            dishRepository.save(dish);
             redirectAttributes.addFlashAttribute("message", "Блюдо успешно удалено");
+        }
+        else {
+            redirectAttributes.addFlashAttribute("error", "Блюдо используется в заказах со статусом 'Оплачено' или 'На доставке'.");
+        }
+
+
+        return "redirect:/adminAllDish";
+    }
+
+    @GetMapping("/adminEditDish/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String adminEditDishGet(@PathVariable Long id, Model model) {
+        model.addAttribute("dish", dishService.getDishByID(id));
+        return "adminEditDish";
+    }
+
+    @PostMapping("/adminEditDish/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String adminEditDish(@RequestParam("dishTypeId") Long dishTypeId,
+                                @RequestParam("cuisineId") Long cuisineId,
+                                Dish dish,
+                                RedirectAttributes redirectAttributes) throws IOException {
+
+        try {
+            //Dish dish1 = dishRepository.findById(dish.getId()).orElseThrow();
+
+            // Получаем тип блюда и кухню по их ID
+            DishType dishType = DishTypeRepository.findById(dishTypeId)
+                    .orElseThrow(() -> new IllegalArgumentException("Тип блюда не найден"));
+            Cuisine cuisine = CuisineRepository.findById(cuisineId)
+                    .orElseThrow(() -> new IllegalArgumentException("Кухня не найдена"));
+
+            // Присваиваем их объекту Dish
+            dish.setDishType(dishType);
+            dish.setCuisine(cuisine);
+
+            dishRepository.save(dish);
+            redirectAttributes.addFlashAttribute("message", "Блюдо успешно отредактировано");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Ошибка при удалении букета");
+            redirectAttributes.addFlashAttribute("error", "Ошибка при редактировании блюда");
         }
         return "redirect:/adminAllDish";
     }
@@ -131,17 +280,25 @@ public class AdminController {
 
     @PostMapping("adminChoiceDish")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String adminChoiceDish(@RequestParam List<Long> dishes){
-        List<Dish> allDishes = dishService.listAllDishes();
-        for(Dish dish : allDishes){
-            dish.setInMenu(false);
-            dishRepository.save(dish);
+    public String adminChoiceDish(@RequestParam List<Long> dishes, RedirectAttributes redirectAttributes){
+        try {
+            List<Dish> allDishes = dishService.listAllDishes();
+            for(Dish dish : allDishes){
+                dish.setInMenu(false);
+                dishRepository.save(dish);
+            }
+            for(Long dishId : dishes){
+                Dish dish = dishService.getDishByID(dishId);
+                dish.setInMenu(true);
+                dishRepository.save(dish);
+            }
+            redirectAttributes.addFlashAttribute("message", "Блюда успешно добавлены в меню");
+
         }
-        for(Long dishId : dishes){
-            Dish dish = dishService.getDishByID(dishId);
-            dish.setInMenu(true);
-            dishRepository.save(dish);
+        catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Ошибка в добавлении блюд в меню");
         }
+
         return"redirect:/adminChoiceDish";
     }
 
@@ -163,13 +320,16 @@ public class AdminController {
         List<Order> orders = orderService.listAllOrdersToDeliver();
 
         // Сортируем заказы по дате доставки
-        List<Order> sortedOrders = orders.stream()
-                .sorted((o1, o2) -> o1.getDateDelivery().compareTo(o2.getDateDelivery()))
+        List<Order> sortedOrders = orders.stream().sorted(Comparator.comparing(Order::getDateDelivery)
+                        .thenComparing(order -> LocalTime.parse(order.getTimeDelivery())))
                 .collect(Collectors.toList());
 
         model.addAttribute("toDeliverOrders", sortedOrders);
         model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(sortedOrders));
         model.addAttribute("toDeliverAmounts", orderHasDishService.getPendingAmount(sortedOrders));
+
+        model.addAttribute("datesDelivery", orderHasDishService.getDatesDelivery(sortedOrders));
+        model.addAttribute("datesTimePayment", orderHasDishService.getDatesTimePayment(sortedOrders));
         return "adminOrderList";
     }
 
@@ -186,15 +346,72 @@ public class AdminController {
         model.addAttribute("toDeliverDishes", orderHasDishService.getPendingDishes(sortedOrders));
         model.addAttribute("toDeliverAmounts", orderHasDishService.getPendingAmount(sortedOrders));
 
+        model.addAttribute("datesDelivery", orderHasDishService.getDatesDelivery(sortedOrders));
+        model.addAttribute("datesTimePayment", orderHasDishService.getDatesTimePayment(sortedOrders));
+        model.addAttribute("courierDatesTimeDelivery", orderHasDishService.getCourierDatesTimeDelivery(sortedOrders));
         return "adminFinishedOrderList";
     }
 
     @GetMapping("/adminAllEmployee")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String adminAllEmployee(Model model, @AuthenticationPrincipal User user){
+    public String adminAllEmployee(Model model, @AuthenticationPrincipal User user,
+                                   @RequestParam(name = "role", required = false, defaultValue = "all") String role,
+                                   @RequestParam(name = "searchField", required = false, defaultValue = "") String searchField,
+                                   @RequestParam(name = "searchQuery", required = false, defaultValue = "") String searchQuery){
         StaticMethods.header(user, model);
 
-        model.addAttribute("allEmployee", userService.listAllEmployee());
+        List<User> employees = new ArrayList<>();
+        switch (role){
+            case "all":
+                employees = userService.listAllEmployee();
+                break;
+            case "ROLE_MANAGER":
+                employees = userService.listAllManagers();
+                break;
+            case "ROLE_COURIER":
+                employees = userService.listAllCouriers();
+                break;
+        }
+
+        switch (searchField){
+            case "id":
+                Long id = Long.parseLong(searchQuery);
+                employees = userRepository.findAllById(Collections.singleton(id));
+                break;
+            case "name":
+                employees = userRepository.findByName(searchQuery);
+                break;
+            case "surname":
+                employees = userRepository.findBySurname(searchQuery);
+                break;
+            case "nameAndSurname":
+                String name = searchQuery.split(" ")[0];
+                String surname = searchQuery.split(" ")[1];
+
+                // Получение списка пользователей с указанным именем
+                List<User> emp = userRepository.findByName(name);
+
+                // Фильтрация пользователей по имени и фамилии
+                employees = emp.stream()
+                        .filter(e -> e.getSurname().equalsIgnoreCase(surname))
+                        .collect(Collectors.toList());
+                break;
+            case "phoneNumber":
+                employees.clear();
+                employees.add(userRepository.findByPhoneNumber(searchQuery));
+                break;
+            case "email":
+                employees.clear();
+                employees.add(userRepository.findByEmail(searchQuery));
+                break;
+        }
+
+        employees = employees.stream()
+                .filter(e -> e.getRole() != Role.ROLE_ADMIN && e.getRole() != Role.ROLE_USER)
+                .collect(Collectors.toList());
+
+        model.addAttribute("allEmployee", employees);
+        model.addAttribute("role", role);
         return "adminAllEmployee";
     }
 
@@ -214,9 +431,9 @@ public class AdminController {
         if (user != null) {
             user.setRole(Role.valueOf(newRole));
             userService.save(user);
-            redirectAttributes.addFlashAttribute("successMessage", "Роль пользователя успешно изменена.");
+            redirectAttributes.addFlashAttribute("message", "Роль пользователя успешно изменена");
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Пользователь не найден.");
+            redirectAttributes.addFlashAttribute("error", "Пользователь не найден");
         }
         return "redirect:/adminAddEmployee";
     }
@@ -225,10 +442,52 @@ public class AdminController {
 
 
     @GetMapping("/adminAllUsers")
-    public String adminAllUsers(Model model, @AuthenticationPrincipal User user){
+    public String adminAllUsers(Model model, @AuthenticationPrincipal User user,
+                                @RequestParam(name = "searchField", required = false, defaultValue = "") String searchField,
+                                @RequestParam(name = "searchQuery", required = false, defaultValue = "") String searchQuery){
         StaticMethods.header(user, model);
 
-        model.addAttribute("allUsers", userService.listAllClient());
+        List<User> users = userService.listAllClient();
+
+        switch (searchField){
+            case "id":
+                Long id = Long.parseLong(searchQuery);
+                users = userRepository.findAllById(Collections.singleton(id));
+                break;
+            case "name":
+                users = userRepository.findByName(searchQuery);
+                break;
+            case "surname":
+                users = userRepository.findBySurname(searchQuery);
+                break;
+            case "nameAndSurname":
+                String name = searchQuery.split(" ")[0];
+                String surname = searchQuery.split(" ")[1];
+
+                // Получение списка пользователей с указанным именем
+                List<User> emp = userRepository.findByName(name);
+
+                // Фильтрация пользователей по имени и фамилии
+                users = emp.stream()
+                        .filter(e -> e.getSurname().equalsIgnoreCase(surname))
+                        .collect(Collectors.toList());
+                break;
+            case "phoneNumber":
+                users.clear();
+                users.add(userRepository.findByPhoneNumber(searchQuery));
+                break;
+            case "email":
+                users.clear();
+                users.add(userRepository.findByEmail(searchQuery));
+                break;
+        }
+
+        users = users.stream()
+                .filter(e -> e.getRole() == Role.ROLE_USER)
+                .collect(Collectors.toList());
+
+
+        model.addAttribute("allUsers", users);
         return "adminAllUsers";
     }
 

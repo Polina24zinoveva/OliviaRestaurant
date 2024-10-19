@@ -35,4 +35,15 @@ public class Image {
 
     @ManyToOne
     private Dish dish;
+
+    @Override
+    public String toString() {
+        return "Image{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", originalFileName='" + originalFileName + '\'' +
+                ", size=" + size +
+                ", contentType='" + contentType + '\'' +
+                '}';
+    }
 }
