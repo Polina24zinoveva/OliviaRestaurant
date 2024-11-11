@@ -235,7 +235,7 @@
                                                                     </#list>
                                                                 </select>
                                                             </div>
-                                                            <button type="submit" class="btn btn-custom2">Назначить курьера</button>
+                                                            <button type="submit" class="btn btn-custom">Назначить курьера</button>
                                                         </form>
                                                     </#if>
 

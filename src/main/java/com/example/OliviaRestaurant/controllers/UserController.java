@@ -75,14 +75,7 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String createUser(User user, Model model,
-                             @RequestParam(name = "password") String password,
-                             @RequestParam(name = "password2") String password2) {
-
-        if (!password.equals(password2)) {
-            error = "Пароли не совпадают. Повторите ввести их снова";
-            return "redirect:/login";
-        }
+    public String createUser(User user, Model model) {
 
         if (userService.getUserByEmail(user.getEmail()) != null) {
             warning = "На этот email уже зарегистрирован аккаунт";

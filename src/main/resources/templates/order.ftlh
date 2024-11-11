@@ -9,17 +9,6 @@
     <title>Заказы</title>
 
     <script>
-        function showPostcardText() {
-            if (document.getElementById("noPostcard").selected) {
-                document.getElementById("postcardCarousel").style.display = "none"
-                document.getElementById("textPostcardContainer").style.display = "none"
-            } else {
-                document.getElementById("postcardCarousel").style.display = "block"
-                document.getElementById("textPostcardContainer").style.display = "block"
-            }
-        }
-
-
         function showDateTimeDeliverySelect() {
             if (document.getElementById("earliest").selected) {
                 document.getElementById("dateTimeDeliveryContainer").style.display = "none"
@@ -146,6 +135,11 @@
             width: 100%;
         }
 
+        .btn-custom:hover {
+            background-color: #ffffff;
+            border-color: #f0eade;
+        }
+
         .card-link {
             margin-bottom: .75rem; /* Отступ снизу */
             font-size: 1rem; /* Размер шрифта */
@@ -258,20 +252,78 @@
                                             <form action="/changeDishCount/${dish.id}" method="post" >
                                                 <div class="input-group input-group-sm" style="max-width: 5rem;">
                                                     <button class="btn btn-outline-secondary" type="submit" id="decreaseButton_${dish.id}" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">-</button>
-                                                    <input type="number" id="count" name="count" style="text-align: center;" class="form-control form-control-sm" size="1" min="1" max="10" value="${amounts[x]}">
+                                                    <input type="number" id="count" name="count" style="text-align: center;" readonly class="form-control form-control-sm" size="1" min="1" max="50" value="${amounts[x]}">
                                                     <button class="btn btn-outline-secondary" type="submit" id="increaseButton_${dish.id}" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
                                                 </div>
                                             </form>
                                         </td>
+
+                                        <script>
+                                            function validateDishCount() {
+                                                const dishInputs = document.querySelectorAll('input[name="count"]');
+                                                let totalDishes = 0;
+
+                                                dishInputs.forEach(input => {
+                                                    totalDishes += parseInt(input.value, 10);
+                                                });
+
+                                                if (totalDishes > 50) {
+                                                    alert("Общее количество блюд в заказе не должно превышать 50.");
+                                                    return false;
+                                                }
+                                                return true;
+                                            }
+
+                                            // Добавление к существующей функции валидации
+                                            function validateForm() {
+                                                if (!validateDishCount()) {
+                                                    return false;
+                                                }
+
+                                                var addressDelivery = document.getElementById("addressDelivery").value;
+                                                var dateDelivery = document.getElementById("dateDelivery").value;
+                                                var timeDelivery = document.getElementById("timeDelivery").value;
+
+                                                if (addressDelivery === "" || dateDelivery === "" || timeDelivery === "") {
+                                                    alert("Пожалуйста, заполните все обязательные поля.");
+                                                    return false;
+                                                }
+
+                                                return true;
+                                            }
+                                        </script>
+
 
 
                                         <td style="vertical-align: middle; text-align: center;">
                                             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
                                                 integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
                                                 crossorigin="anonymous"></script>
-                                            <form action="/deleteDishFromOrder/${dish.id}" method="post">
-                                                <button type="submit" class="btn btn-custom">Удалить</button>
+                                            <form action="/deleteDishFromOrder/${dish.id}" method="post" id="deleteForm_${dish.id}">
+                                                <button type="button" class="btn btn-custom" onclick="confirmDelete('${dish.id}', this.closest('form'))">Удалить</button>
                                             </form>
+
+                                            <script>
+                                                function confirmDelete(dishId, formElement) {
+                                                    event.preventDefault(); // Предотвращаем стандартное действие (отправка формы)
+
+                                                    Swal.fire({
+                                                        title: 'Вы уверены?',
+                                                        text: 'Это блюдо будет удалено из заказа.',
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonText: 'Удалить',
+                                                        confirmButtonColor: '#333',
+                                                        cancelButtonText: 'Отмена',
+                                                        cancelButtonColor: '#999',
+                                                        reverseButtons: true
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            formElement.submit();
+                                                        }
+                                                    });
+                                                }
+                                            </script>
                                         </td>
 
                                     </tr>
@@ -321,7 +373,7 @@
                                         <div class="form-group" id="addressDelivery">
                                             <h6 class="text-start">Адрес доставки</h6>
                                             <input class="form-control" name="addressDelivery" id="addressDelivery"
-                                                placeholder="Улица, дом, квартира" required>
+                                                placeholder="Улица, дом, квартира" required minlength="10" maxlength="50">
                                         </div>
                                     </div>
 
@@ -401,7 +453,7 @@
         </div>
     </div>
     <#include "blocks/alert.ftlh">
-     <footer class="footer mt-auto">
+    <footer class="footer mt-auto">
         <#include "blocks/footer.ftlh">
     </footer>
 </body>

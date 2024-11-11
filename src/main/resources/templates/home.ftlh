@@ -118,6 +118,7 @@
 
 
     </div>
+    <#include "blocks/alert.ftlh">
     <footer class="footer mt-auto">
        <#include "blocks/footer.ftlh">
     </footer>

@@ -28,17 +28,67 @@
         .subHeadline{
             margin-top:1rem;
         }
+
+        /* Обновим контейнер для выравнивания элементов по горизонтали */
+        .links-container {
+            padding: 1rem 0; /* Добавим отступы сверху и снизу */
+        }
+
+        .vertical-line {
+            position: relative;
+        }
+
+        .vertical-line::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            border-left: 2px solid #f0eade; /* Цвет и стиль линии */
+        }
+
+        /* Стили для кнопки "Наверх" */
+        #scrollToTop {
+            position: fixed; /* Фиксированное позиционирование */
+            bottom: 70px; /* Отступ от нижней части экрана */
+            right: 20px; /* Отступ от правой части экрана */
+            background-color: #white; /* Цвет фона */
+            color: #666; /* Цвет текста */
+            border: 1px solid #666; /* Без границы */
+            border-radius: 5px; /* Скругленные углы */
+            padding: 10px 20px; /* Отступы внутри кнопки */
+            cursor: pointer; /* Курсор-указатель при наведении */
+            z-index: 1000; /* Чтобы кнопка была сверху других элементов */
+            text-decoration: none;
+        }
+
+        /* Добавление эффекта при наведении */
+        #scrollToTop:hover {
+            color: white; /* Цвет текста */
+            background-color: #666; /* Темный оттенок при наведении */
+        }
+
+        img {
+            max-width: 80%;
+            height: auto; /* Сохраняет пропорции изображений */
+            border-radius: 5px; /* Скругляет углы */
+            margin-top: 0.5rem; /* Отступ снизу */
+            margin-bottom: 1rem; /* Отступ снизу */
+            border: 2px solid #f0eade;
+        }
+
+
   </style>
 </head>
 <body class="d-flex flex-column h-100">
     <#include "blocks/header.ftlh">
-    <div class="wrapper flex-grow-1">
+    <div class="wrapper flex-grow-1" style="margin-top:3rem;">
         <div class="d-flex">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
-                        <div style="padding-top: 0.5rem;">
-                            <p><a href="/aboutWebsite" class="custom-link category-link">О веб-приложении</a></p>
+                        <div class="links-container">
+                            <p><a href="/aboutWebsite" class="custom-link category-link" style="padding-top: 1rem;">О веб-приложении</a></p>
                             <div style="padding-left: 1rem;">
                                 <p><a href="#introduction" class="custom-link">Введение</a></p>
                                 <ul>
@@ -65,7 +115,7 @@
                     <div class="col-md-9">
 
                         <div class="div-text">
-                            <p class="p-custom" style="padding-top: 1rem;">О сайте Olivia Restaurant</p>
+                            <p class="p-custom text-center" style="padding-top: 1rem;">О сайте Olivia Restaurant</p>
 
                             <h5 class="headline" id="introduction">Введение</h5>
                             <p class="p-custom-text">
@@ -94,7 +144,7 @@
                                         не зарегистрирован можно перейти по гиперссылке «Зарегистрироваться» для
                                         открытия страницы регистрации.
                                     </p>
-                                    ФОТО ЛОГИНА
+                                    <img src="../login.png">
                                 </li>
                                 <li>
                                     <p class="subHeadline" id="registration">Регистрация</p>
@@ -105,7 +155,7 @@
                                         заполнения всех данных и нажатия кнопки «Зарегистрироваться» вы будете
                                         зарегистрированы в системе.
                                     </p>
-                                    ФОТО РЕГИСТРАЦИИ
+                                    <img src="../registration.png">
                                 </li>
                             </ul>
 
@@ -119,7 +169,7 @@
                                     блюда достаточно нажать на его название, после чего откроется его полное описание
                                     на отдельной странице.
                                     </p>
-                                    ФОТО КАТАЛОГА
+                                    <img src="../catalog.png">
                                 </li>
                                 <li>
                                     <p class="subHeadline" id="addDish">Добавление блюда в корзину</pZZz>
@@ -127,7 +177,7 @@
                                     Любое блюдо можно добавить в корзину, нажав на кнопку "Добавить в корзину" на
                                     странице блюда.
                                     </p>
-                                    ФОТО БЛЮДА
+                                    <img src="../dish.png">
                                 </li>
 
                                 <li>
@@ -138,14 +188,14 @@
                                     Для оформления заказа необходимо ввести данные для доставки: адрес, дату и
                                     время, а затем нажать кнопку «Оформить заказ».
                                     </p>
-                                    ФОТО КОРЗИНЫ
+                                    <img src="../order.png">
                                 </li>
                                 <li>
                                     <p class="subHeadline" id="trackingOrder">Отслеживание заказа</p>
                                     <p class="p-custom-text">
                                     В личном кабинете можно отслеживать статусы заказов.
                                     </p>
-                                    ФОТО ЛИЧНОГО КАБИНЕТА
+                                    <img src="../lk.png">
                                 </li>
                                 <li>
                                     <p class="subHeadline" id="historyUser">Просмотр истории заказов</p>
@@ -153,7 +203,7 @@
                                     Также в личном кабинете можно просматривать историю заказов. Для этого перейдите по
                                     гиперссылке "История заказов".
                                     </p>
-                                    ФОТО ИСТОРИИ ЗАКАЗОВ В ЛИЧНОМ КАБИНЕТЕ
+                                    <img src="../history.png">
                                 </li>
                                 <li>
                                     <p class="subHeadline" id="exitUser">Выход из аккаунта</p>
@@ -162,7 +212,7 @@
                                     </p>
                                 </li>
                             </ul>
-                            <p><a class="custom-link" href="#top" style="align:right">Наверх</a></p>
+                            <p><a id="scrollToTop" href="#top">Наверх</a></p>
                         </div>
                     </div>
                 </div>
@@ -175,5 +225,13 @@
         <#include "blocks/footer.ftlh">
     </footer>
 </body>
+<script>
+    document.getElementById('scrollToTop').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+</script>
+
 </html>
 

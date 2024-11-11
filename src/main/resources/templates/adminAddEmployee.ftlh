@@ -64,15 +64,37 @@
                                             <#if user.role == "ROLE_USER">Пользователь</#if>
                                        </td>
                                        <td>
-                                           <form action="/adminChangeRole" method="post">
+                                           <form action="/adminChangeRole" method="post" id="changeForm_${user.id}">
                                                <input type="hidden" name="id" value="${user.id}">
                                                <select name="role" class="form-select">
                                                    <option value="ROLE_USER" <#if user.role == "ROLE_USER">selected</#if>>Пользователь</option>
                                                    <option value="ROLE_COURIER" <#if user.role == "ROLE_COURIER">selected</#if>>Курьер</option>
                                                    <option value="ROLE_MANAGER" <#if user.role == "ROLE_MANAGER">selected</#if>>Менеджер</option>
                                                </select>
-                                               <button type="submit" class="btn btn-custom mt-2">Сохранить</button>
+                                               <button type="submit" class="btn btn-custom mt-2" onclick="confirmChange(this.closest('form'))">Сохранить</button>
                                            </form>
+
+                                           <script>
+                                               function confirmChange(formElement) {
+                                                   event.preventDefault(); // Предотвращаем стандартное действие (отправка формы)
+
+                                                   Swal.fire({
+                                                       title: 'Подтвердите назначение сотрудника',
+                                                       text: 'Должность сотрудника будет изменена',
+                                                       icon: 'warning',
+                                                       showCancelButton: true,
+                                                       confirmButtonText: 'Назначить',
+                                                       confirmButtonColor: '#333',
+                                                       cancelButtonText: 'Отмена',
+                                                       cancelButtonColor: '#999',
+                                                       reverseButtons: true
+                                                   }).then((result) => {
+                                                       if (result.isConfirmed) {
+                                                           formElement.submit();
+                                                       }
+                                                   });
+                                               }
+                                           </script>
                                        </td>
                                    </tr>
                                </#list>

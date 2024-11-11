@@ -206,29 +206,54 @@
             <form action="/registration" method="post">
 
                 <h4>Регистрация</h4>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Имя" required>
-                <input type="text" class="form-control" id="surname" name="surname" placeholder="Фамилия" required>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Имя" required  minlength="3" maxlength="15">
+                <input type="text" class="form-control" id="surname" name="surname" placeholder="Фамилия" required minlength="2" maxlength="50">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required minlength="5" maxlength="64">
                 <!--для правильного формата номера телефона-->
                 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.6-beta.29/dist/inputmask.min.js"></script>
-                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Номер телефона" required>
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Номер телефона" required pattern="8\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}" title="Введите номер в формате: 8 (XXX) XXX-XX-XX">
                 <script>
                     $(document).ready(function(){
                         Inputmask({"mask": "8 (999) 999-99-99"}).mask("#phoneNumber");
                     });
                 </script>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Пароль" required>
-                <input type="password" class="form-control" id="password2" name="password2" placeholder="Повторите пароль" required>
+
+
+                <input type="password" class="form-control" id="password" name="password" placeholder="Пароль" required minlength="6" maxlength="20">
+                <input type="password" class="form-control" id="password2" name="password2" placeholder="Повторите пароль" required minlength="6" maxlength="20">
 
                 <button>Зарегистрироваться</button>
             </form>
+            <script>
+                document.querySelector('form[action="/registration"]').addEventListener('submit', function(event) {
+                    const password = document.getElementById('password');
+                    const password2 = document.getElementById('password2');
+
+                    if (password.value !== password2.value) {
+                        event.preventDefault(); // Отменяет отправку формы
+                        showError('Пароли не совпадают. Пожалуйста, проверьте и повторите попытку.');
+                    }
+                });
+
+                document.querySelector('form[action="/registration"]').addEventListener('submit', function(event) {
+                    const emailInput = document.getElementById('email');
+                    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+                    if (!emailPattern.test(emailInput.value)) {
+                        event.preventDefault(); // Останавливает отправку формы
+                        showError('Email должен содержать и доменную часть, например, .ru, .com и т.д.');
+                    }
+                });
+
+            </script>
+
         </div>
         <div class="form-container sign-in">
             <form action="/login" method="post">
                 <h4>Вход</h4>
-                <input type="email" class="form-control" id="email" name="username" placeholder="Email" <#if userEmail??>value=${userEmail}</#if>>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Пароль">
+                <input type="email" class="form-control" id="email" name="username" placeholder="Email" <#if userEmail??>value=${userEmail}</#if> required>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Пароль" required>
                 <button>Войти</button>
             </form>
         </div>

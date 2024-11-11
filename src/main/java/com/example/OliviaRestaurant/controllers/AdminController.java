@@ -56,7 +56,7 @@ public class AdminController {
 
     @GetMapping("/adminAllDishes")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String adminAllDish(Model model, @AuthenticationPrincipal User user,
+    public String adminAllDishes(Model model, @AuthenticationPrincipal User user,
                                    @RequestParam(name = "dishTypeId", required = false, defaultValue = "0") String dishTypeId,
                                @RequestParam(name = "cuisineId", required = false, defaultValue = "0") String cuisineId){
         StaticMethods.header(user, model);
@@ -78,6 +78,27 @@ public class AdminController {
             case "4":
                 allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 4).toList();
                 break;
+            case "5":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 5).toList();
+                break;
+            case "6":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 6).toList();
+                break;
+            case "7":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 7).toList();
+                break;
+            case "8":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 8).toList();
+                break;
+            case "9":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 9).toList();
+                break;
+            case "10":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 10).toList();
+                break;
+            case "11":
+                allDishes = allDishes.stream().filter(dish -> dish.getDishType().getId() == 11).toList();
+                break;
         }
 
         switch (cuisineId){
@@ -95,27 +116,7 @@ public class AdminController {
             case "4":
                 allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 4).toList();
                 break;
-            case "5":
-                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 5).toList();
-                break;
-            case "6":
-                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 6).toList();
-                break;
-            case "7":
-                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 7).toList();
-                break;
-            case "8":
-                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 8).toList();
-                break;
-            case "9":
-                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 9).toList();
-                break;
-            case "10":
-                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 10).toList();
-                break;
-            case "11":
-                allDishes = allDishes.stream().filter(dish -> dish.getCuisine().getId() == 11).toList();
-                break;
+
         }
 
 
@@ -190,7 +191,7 @@ public class AdminController {
                 }
                 else{
                     redirectAttributes.addFlashAttribute("error", "Блюдо используется в заказах. Подождите доставки этих заказов");
-                    return "redirect:/adminAllDish";
+                    return "redirect:/adminAllDishes";
                 }
             }
         }
@@ -231,7 +232,7 @@ public class AdminController {
         }
 
 
-        return "redirect:/adminAllDish";
+        return "redirect:/adminAllDishes";
     }
 
     @GetMapping("/adminEditDish/{id}")
@@ -266,7 +267,7 @@ public class AdminController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Ошибка при редактировании блюда");
         }
-        return "redirect:/adminAllDish";
+        return "redirect:/adminAllDishes";
     }
 
     @GetMapping("/adminChoiceDish")
@@ -307,6 +308,10 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String addDish(Model model, @AuthenticationPrincipal User user){
         StaticMethods.header(user, model);
+
+        if (dishService.listAllDishes().size() > 100){
+            model.addAttribute("banOfAdding", "Нельзя иметь более 100 блюд");
+        }
 
         return "adminAddDish";
     }
@@ -357,7 +362,8 @@ public class AdminController {
     public String adminAllEmployee(Model model, @AuthenticationPrincipal User user,
                                    @RequestParam(name = "role", required = false, defaultValue = "all") String role,
                                    @RequestParam(name = "searchField", required = false, defaultValue = "") String searchField,
-                                   @RequestParam(name = "searchQuery", required = false, defaultValue = "") String searchQuery){
+                                   @RequestParam(name = "searchQuery", required = false, defaultValue = "") String searchQuery,
+                                   RedirectAttributes redirectAttributes){
         StaticMethods.header(user, model);
 
         List<User> employees = new ArrayList<>();
@@ -375,35 +381,40 @@ public class AdminController {
 
         switch (searchField){
             case "id":
-                Long id = Long.parseLong(searchQuery);
-                employees = userRepository.findAllById(Collections.singleton(id));
+                try {
+                    Long id = Long.parseLong(searchQuery);
+                    employees = userRepository.findAllById(Collections.singleton(id));
+                }
+                catch (Exception e){
+                    model.addAttribute("error", "Некорректный запрос для id");
+                    searchQuery="Введите значение для поиска";
+                }
                 break;
             case "name":
-                employees = userRepository.findByName(searchQuery);
+                employees = userRepository.findByNameContainingIgnoreCase(searchQuery);
                 break;
             case "surname":
-                employees = userRepository.findBySurname(searchQuery);
+                employees = userRepository.findBySurnameContainingIgnoreCase(searchQuery);
                 break;
             case "nameAndSurname":
-                String name = searchQuery.split(" ")[0];
-                String surname = searchQuery.split(" ")[1];
+                String[] nameAndSurname = searchQuery.split(" ");
+                String name = nameAndSurname[0];
+                String surname = nameAndSurname.length > 1 ? nameAndSurname[1] : "";
 
-                // Получение списка пользователей с указанным именем
-                List<User> emp = userRepository.findByName(name);
-
-                // Фильтрация пользователей по имени и фамилии
-                employees = emp.stream()
+                employees = userRepository.findByNameContainingIgnoreCase(name).stream()
                         .filter(e -> e.getSurname().equalsIgnoreCase(surname))
                         .collect(Collectors.toList());
                 break;
             case "phoneNumber":
                 employees.clear();
-                employees.add(userRepository.findByPhoneNumber(searchQuery));
+                employees.add(userRepository.findByPhoneNumberContaining(searchQuery));
                 break;
             case "email":
                 employees.clear();
-                employees.add(userRepository.findByEmail(searchQuery));
+                employees.add(userRepository.findByEmailContaining(searchQuery));
                 break;
+            default:
+                searchQuery="Введите значение для поиска";
         }
 
         employees = employees.stream()
@@ -412,6 +423,12 @@ public class AdminController {
 
         model.addAttribute("allEmployee", employees);
         model.addAttribute("role", role);
+        model.addAttribute("searchQuery", searchQuery);
+
+        if (searchField == ""){
+            model.addAttribute("searchField", "id");
+        }
+        else model.addAttribute("searchField", searchField);
         return "adminAllEmployee";
     }
 
@@ -451,41 +468,52 @@ public class AdminController {
 
         switch (searchField){
             case "id":
-                Long id = Long.parseLong(searchQuery);
-                users = userRepository.findAllById(Collections.singleton(id));
+                try {
+                    Long id = Long.parseLong(searchQuery);
+                    users = userRepository.findAllById(Collections.singleton(id));
+                }
+                catch (Exception e){
+                    model.addAttribute("error", "Некорректный запрос для id");
+                    searchQuery="Введите значение для поиска";
+                }
                 break;
             case "name":
-                users = userRepository.findByName(searchQuery);
+                users = userRepository.findByNameContainingIgnoreCase(searchQuery);
                 break;
             case "surname":
-                users = userRepository.findBySurname(searchQuery);
+                users = userRepository.findBySurnameContainingIgnoreCase(searchQuery);
                 break;
             case "nameAndSurname":
-                String name = searchQuery.split(" ")[0];
-                String surname = searchQuery.split(" ")[1];
+                String[] nameAndSurname = searchQuery.split(" ");
+                String name = nameAndSurname[0];
+                String surname = nameAndSurname.length > 1 ? nameAndSurname[1] : "";
 
-                // Получение списка пользователей с указанным именем
-                List<User> emp = userRepository.findByName(name);
-
-                // Фильтрация пользователей по имени и фамилии
-                users = emp.stream()
+                users = userRepository.findByNameContainingIgnoreCase(name).stream()
                         .filter(e -> e.getSurname().equalsIgnoreCase(surname))
                         .collect(Collectors.toList());
                 break;
             case "phoneNumber":
                 users.clear();
-                users.add(userRepository.findByPhoneNumber(searchQuery));
+                users.add(userRepository.findByPhoneNumberContaining(searchQuery));
                 break;
             case "email":
                 users.clear();
-                users.add(userRepository.findByEmail(searchQuery));
+                users.add(userRepository.findByEmailContaining(searchQuery));
                 break;
+            default:
+                searchQuery="Введите значение для поиска";
         }
 
         users = users.stream()
                 .filter(e -> e.getRole() == Role.ROLE_USER)
                 .collect(Collectors.toList());
 
+        if (searchField == ""){
+            model.addAttribute("searchField", "id");
+        }
+        else model.addAttribute("searchField", searchField);
+
+        model.addAttribute("searchQuery", searchQuery);
 
         model.addAttribute("allUsers", users);
         return "adminAllUsers";

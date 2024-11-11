@@ -30,18 +30,20 @@ public class HomePageController {
             model.addAttribute("openHours", restaurant.getOpenHours());
             model.addAttribute("closeHours", restaurant.getCloseHours());
         } else {
-            model.addAttribute("error", "Restaurant not found.");
+            model.addAttribute("error", "Проблема с подключением к базе данных");
         }
         return "home";
     }
 
     @GetMapping("/aboutWebsite")
-    public String aboutWebsite(){
+    public String aboutWebsite(@AuthenticationPrincipal User user, Model model){
+        StaticMethods.header(user, model);
         return "aboutWebsite";
     }
 
     @GetMapping("/aboutDevelopers")
-    public String aboutDevelopers(){
+    public String aboutDevelopers(@AuthenticationPrincipal User user, Model model){
+        StaticMethods.header(user, model);
         return "aboutDevelopers";
     }
 

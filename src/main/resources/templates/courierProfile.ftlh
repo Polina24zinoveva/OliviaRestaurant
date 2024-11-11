@@ -130,6 +130,7 @@
                         <#if toDeliverOrders?size = 0>
                             <h5>Нет назначенных заказов</h5>
                         <#else>
+                            <div class="horizontal-line"></div> <!-- Горизонтальная линия -->
                             <h5>Назначенные заказы</h5>
                             <br>
                             <#assign x = 0>

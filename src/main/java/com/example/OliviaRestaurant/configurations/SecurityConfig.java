@@ -41,7 +41,8 @@ public class SecurityConfig{
                                 "/activate/*", "/rest.jpg", "/restaurant_photos/1.jpg", "/restaurant_photos/2.jpg",
                                 "/restaurant_photos/3.jpg", "/restaurant_photos/4.jpg", "/restaurant_photos/5.jpg",
                                 "/restaurant_photos/6.jpg", "/restaurant_photos/7.jpg", "/restaurant_photos/8.jpg",
-                                "/restaurant_photos/9.jpg", "/aboutDevelopers", "/aboutWebsite")
+                                "/restaurant_photos/9.jpg", "/aboutDevelopers", "/aboutWebsite",
+                                "catalog.png", "dish.png", "lk.png", "login.png", "order.png", "registration.png", "history.png")
                         .permitAll()
                         .anyRequest().authenticated()
                 )

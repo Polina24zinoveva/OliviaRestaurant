@@ -62,7 +62,10 @@
                 margin-top: auto;
                 margin-bottom: auto;
                 max-width: 100%;
+                height: auto; /* Сохраняем пропорции */
+                object-fit: contain; /* Запрещаем растягивание изображения */
             }
+
 
             .thumbnail {
                 cursor: pointer;
@@ -72,7 +75,7 @@
             }
 
             .thumbnail.active {
-                border-color: #554635;
+                border-color: #f0eade;
             }
 
             .thumbnails-wrapper {
@@ -96,14 +99,30 @@
                 flex-grow: 1;
                 padding-bottom: 3rem;
             }
+
+            .vertical-line {
+                position: relative;
+            }
+
+            .vertical-line::after {
+                margin-top: 2rem;
+                margin-bottom: 2rem;
+                content: "";
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 50%;
+                border-left: 2px solid #f0eade; /* Цвет и стиль линии */
+            }
         </style>
     </head>
     <body class="d-flex flex-column h-100">
         <div class="wrapper flex-grow-1">
             <#include "blocks/header.ftlh">
 
+
             <div class="row row-custom">
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="row" style="margin-top: 2rem; margin-bottom: 2rem;">
                         <div class="col-md-2">
                             <div class="thumbnails-wrapper">
@@ -138,6 +157,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="col-md-1 vertical-line">
                 </div>
 
                 <div class="col-md-4 d-flex flex-column">

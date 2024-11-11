@@ -33,17 +33,54 @@
             margin: auto;
             margin-bottom: 4rem;
         }
+
+        /* Обновим контейнер для выравнивания элементов по горизонтали */
+        .links-container {
+            padding: 1rem 0; /* Добавим отступы сверху и снизу */
+        }
+
+        .vertical-line {
+            position: relative;
+        }
+
+        .vertical-line::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            border-left: 2px solid #f0eade; /* Цвет и стиль линии */
+        }
+
+
   </style>
 </head>
 <body class="d-flex flex-column h-100">
     <#include "blocks/header.ftlh">
-    <div class="wrapper flex-grow-1">
+    <div class="wrapper flex-grow-1" style="margin-top:3rem;">
         <div class="d-flex">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
-                        <div style="padding-top: 0.5rem;">
-                            <p><a href="/aboutWebsite" class="custom-link category-link">О веб-приложении</a></p>
+                        <div class="links-container">
+                            <p><a href="/aboutWebsite" class="custom-link category-link" style="padding-top: 1rem;">О веб-приложении</a></p>
+                            <div style="padding-left: 1rem;">
+                                <p><a href="#introduction" class="custom-link">Введение</a></p>
+                                <ul>
+                                    <li><a href="/aboutWebsite#authorization" class="custom-link ">Авторизация</a></li>
+                                    <li><a href="/aboutWebsite#home" class="custom-link">Главная страница и навигация на страницах</a></li>
+                                    <li><a href="/aboutWebsite#registration" class="custom-link">Регистрация</a></li>
+                                </ul>
+                                <p><a class="custom-link">Пользователи</a></p>
+                                <ul>
+                                    <li><a href="/aboutWebsite#menu" class="custom-link">Просмотр меню</a></li>
+                                    <li><a href="/aboutWebsite#addDish" class="custom-link">Добавление блюда в корзину</a></li>
+                                    <li><a href="/aboutWebsite#order" class="custom-link">Оформление заказа</a></li>
+                                    <li><a href="/aboutWebsite#trackingOrder" class="custom-link">Отслеживание заказа</a></li>
+                                    <li><a href="/aboutWebsite#historyUser" class="custom-link">Просмотр истории заказов</a></li>
+                                    <li><a href="/aboutWebsite#exitUser" class="custom-link">Выход из аккаунта</a></li>
+                                </ul>
+                            </div>
                             <p><a href="/aboutDevelopers" class="custom-link category-link">О разработчиках</a></p>
                         </div>
                     </div>
