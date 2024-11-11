@@ -13,8 +13,11 @@
         }
 
         .product{
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1), 0px 4px 8px rgba(0, 0, 0, 0.1); /* Добавляем тень со всех сторон */
+            border-radius: 10px;
             margin-top: 20px;
             max-width: 18rem; /* Максимальная ширина карточки */
+            height: 23rem;
         }
 
         .image img{
@@ -23,6 +26,7 @@
             border-radius: 7px;
             object-fit: cover;
         }
+
 
         .image{
             margin-bottom: 10px;
@@ -45,9 +49,7 @@
             margin-bottom: 28px;
         }
 
-        .sideMarginRight{
-            padding-right: 3rem;
-        }
+
 
         .card-link-name {
             font-size: 18px; /* Размер шрифта */
@@ -125,6 +127,23 @@
             text-decoration: underline;
         }
 
+        /* Для названия блюда */
+        .card-link-name {
+            font-size: 18px; /* Размер шрифта */
+            color: #333;
+            text-decoration: none;
+            word-wrap: break-word; /* Перенос длинных слов на новую строку */
+            white-space: normal;  /* Позволяет обрабатывать переносы */
+        }
+
+        /* Для цены */
+        .price {
+            font-size: 18px;
+            color: #333;
+            white-space: nowrap; /* Цена не будет переноситься на следующую строку */
+        }
+
+
         #emptyCartMessage {
             display: flex;
             flex-direction: column;
@@ -132,6 +151,18 @@
             align-items: center;
             height: 100%;
             text-align: center;
+        }
+        .vertical-line {
+            position: relative;
+        }
+
+        .vertical-line::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            border-left: 2px solid #f0eade; /* Цвет и стиль линии */
         }
 
     </style>
@@ -144,7 +175,7 @@
 
         <div class="container mt-5">
             <div class="row">
-                <div class="col-md-3 sideMarginRight">
+                <div class="col-md-2 sideMarginRight">
                     <br>
                     <h6 class="form-label" style="margin-bottom: 1rem;">Сортировка:</h6>
                     <select name="sort" id="typeRecipient" class="form-control">
@@ -317,7 +348,8 @@
                     });
                 </script>
 
-
+                <div class="col-md-1 vertical-line">
+                </div>
 
                 <#if allDishes?size = 0>
                     <div class="col-md-9 justify-content-center align-items-center">
@@ -336,8 +368,9 @@
                                         </a>
                                         <div class="info">
                                             <a href="/dish/${dish.id}" class="card-link-name">${dish.name}</a>
-                                            <div style=" font-size: 18px;">${dish.price} ₽</div>
+                                            <div class="price">${dish.price} ₽</div>
                                         </div>
+
                                     </div>
                                 </div>
                             </#list>

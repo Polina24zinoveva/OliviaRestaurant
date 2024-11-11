@@ -54,7 +54,7 @@
                                 </select>
 
                                 <!-- Поле для ввода текста -->
-                                <input type="text" name="searchQuery" class="form-control" style="max-height:40px;" placeholder="Введите значение для поиска">
+                                <input type="text" name="searchQuery" class="form-control" style="max-height:40px;" placeholder="${searchQuery}">
 
                                 <!-- Кнопка для поиска -->
                                 <button type="submit" class="btn btn-custom" style="max-width: 150px; max-height:40px; margin-top: 0px;">Найти</button>

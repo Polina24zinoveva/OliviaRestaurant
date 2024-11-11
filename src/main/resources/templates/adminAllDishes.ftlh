@@ -116,8 +116,30 @@
                                                 <button type="submit" class="btn btn-custom">Редактировать</button>
                                             </form>
                                             <form action="/adminDeleteDish/${dish.id}" method="post">
-                                                <button type="submit" class="btn btn-custom">Удалить</button>
+                                                <button type="submit" class="btn btn-custom" onclick="confirmDelete('${dish.id}', this.closest('form'))">Удалить</button>
                                             </form>
+                                            <script>
+                                                function confirmDelete(dishId, formElement) {
+                                                    event.preventDefault(); // Предотвращаем стандартное действие (отправка формы)
+
+                                                    Swal.fire({
+                                                        title: 'Вы уверены?',
+                                                        text: 'Это блюдо будет удалено из заказа.',
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonText: 'Удалить',
+                                                        confirmButtonText: 'Удалить',
+                                                        confirmButtonColor: '#333',
+                                                        cancelButtonText: 'Отмена',
+                                                        cancelButtonColor: '#999',
+                                                        reverseButtons: true
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            formElement.submit();
+                                                        }
+                                                    });
+                                                }
+                                            </script>
                                         </td>
                                     </tr>
                                 </#list>

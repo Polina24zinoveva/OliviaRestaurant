@@ -45,16 +45,16 @@
                             <div class="input-group">
                                 <!-- Выпадающий список -->
                                 <select name="searchField" class="form-select search-select" style="max-width: 150px; max-height:40px;">
-                                    <option value="id">ID</option>
-                                    <option value="name">Имя</option>
-                                    <option value="surname">Фамилия</option>
-                                    <option value="nameAndSurname">Имя и фамилия</option>
-                                    <option value="phoneNumber">Номер телефона</option>
-                                    <option value="email">Эл. почта</option>
+                                    <option value="id" <#if searchField=="id">selected</#if> >ID</option>
+                                    <option value="name" <#if searchField=="name">selected</#if>>Имя</option>
+                                    <option value="surname" <#if searchField=="surname">selected</#if>>Фамилия</option>
+                                    <option value="nameAndSurname" <#if searchField=="nameAndSurname">selected</#if>>Имя и фамилия</option>
+                                    <option value="phoneNumber" <#if searchField=="phoneNumber">selected</#if>>Номер телефона</option>
+                                    <option value="email" <#if searchField=="email">selected</#if>>Эл. почта</option>
                                 </select>
 
                                 <!-- Поле для ввода текста -->
-                                <input type="text" name="searchQuery" class="form-control" style="max-height:40px;" placeholder="Введите значение для поиска">
+                                <input type="text" name="searchQuery" class="form-control" style="max-height:40px;" placeholder="${searchQuery}">
 
                                 <!-- Кнопка для поиска -->
                                 <button type="submit" class="btn btn-custom" style="max-width: 150px; max-height:40px; margin-top: 0px;">Найти</button>
