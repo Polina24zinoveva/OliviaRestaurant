@@ -257,10 +257,56 @@
                                                 </div>
                                             </form>
                                         </td>
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function () {
+                                                // Инициализация событий для всех кнопок при загрузке
+                                                const dishInputs = document.querySelectorAll('input[name="count"]');
+
+                                                dishInputs.forEach(input => {
+                                                    updateButtonState(input);
+
+                                                    // Добавление события при изменении значения
+                                                    input.addEventListener('input', function () {
+                                                        updateButtonState(input);
+                                                    });
+                                                });
+
+                                                function updateButtonState(input) {
+                                                    const decreaseButton = input.parentNode.querySelector('button:first-of-type');
+                                                    const increaseButton = input.parentNode.querySelector('button:last-of-type');
+
+                                                    if (parseInt(input.value) <= 1) {
+                                                        decreaseButton.disabled = true;
+                                                    } else {
+                                                        decreaseButton.disabled = false;
+                                                    }
+
+                                                    if (parseInt(input.value) >= 50) {
+                                                        increaseButton.disabled = true;
+                                                    } else {
+                                                        increaseButton.disabled = false;
+                                                    }
+                                                }
+
+                                                // Перехват события нажатия кнопок
+                                                document.querySelectorAll('.btn').forEach(button => {
+                                                    button.addEventListener('click', function (event) {
+                                                        // Найти input, связанный с кнопкой
+                                                        const input = button.parentNode.querySelector('input[type="number"]');
+                                                        setTimeout(() => {
+                                                            // Обновляем состояние кнопок после шага
+                                                            updateButtonState(input);
+                                                        }, 0);
+                                                    });
+                                                });
+                                            });
+                                        </script>
+
 
                                         <script>
                                             function validateDishCount() {
                                                 const dishInputs = document.querySelectorAll('input[name="count"]');
+
                                                 let totalDishes = 0;
 
                                                 dishInputs.forEach(input => {
