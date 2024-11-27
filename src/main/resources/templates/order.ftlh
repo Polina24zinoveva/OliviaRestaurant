@@ -247,60 +247,23 @@
 
                                         <td style="vertical-align: middle; text-align: center;">${dish.price}</td>
 
-
                                         <td style="vertical-align: middle; text-align: center;">
-                                            <form action="/changeDishCount/${dish.id}" method="post" >
-                                                <div class="input-group input-group-sm" style="max-width: 5rem;">
-                                                    <button class="btn btn-outline-secondary" type="submit" id="decreaseButton_${dish.id}" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">-</button>
-                                                    <input type="number" id="count" name="count" style="text-align: center;" readonly class="form-control form-control-sm" size="1" min="1" max="50" value="${amounts[x]}">
-                                                    <button class="btn btn-outline-secondary" type="submit" id="increaseButton_${dish.id}" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
-                                                </div>
-                                            </form>
+                                            <div class="input-group input-group-sm" style="max-width: 5rem;">
+                                                <!-- Кнопка уменьшения количества -->
+                                                <button class="btn btn-outline-secondary change-count-btn" data-action="decrease" data-dish-id="${dish.id}" onclick="changeCount(this)">
+                                                    -
+                                                </button>
+
+                                                <!-- Количество -->
+                                                <input type="number" id="dish-count-${dish.id}" name="count" style="text-align: center;" readonly class="form-control form-control-sm" size="1" min="1" max="50" value="${amounts[x]}">
+
+                                                <!-- Кнопка увеличения количества -->
+                                                <button class="btn btn-outline-secondary change-count-btn" data-action="increase" data-dish-id="${dish.id}" onclick="changeCount(this)">
+                                                    +
+                                                </button>
+
+                                            </div>
                                         </td>
-                                        <script>
-                                            document.addEventListener('DOMContentLoaded', function () {
-                                                // Инициализация событий для всех кнопок при загрузке
-                                                const dishInputs = document.querySelectorAll('input[name="count"]');
-
-                                                dishInputs.forEach(input => {
-                                                    updateButtonState(input);
-
-                                                    // Добавление события при изменении значения
-                                                    input.addEventListener('input', function () {
-                                                        updateButtonState(input);
-                                                    });
-                                                });
-
-                                                function updateButtonState(input) {
-                                                    const decreaseButton = input.parentNode.querySelector('button:first-of-type');
-                                                    const increaseButton = input.parentNode.querySelector('button:last-of-type');
-
-                                                    if (parseInt(input.value) <= 1) {
-                                                        decreaseButton.disabled = true;
-                                                    } else {
-                                                        decreaseButton.disabled = false;
-                                                    }
-
-                                                    if (parseInt(input.value) >= 50) {
-                                                        increaseButton.disabled = true;
-                                                    } else {
-                                                        increaseButton.disabled = false;
-                                                    }
-                                                }
-
-                                                // Перехват события нажатия кнопок
-                                                document.querySelectorAll('.btn').forEach(button => {
-                                                    button.addEventListener('click', function (event) {
-                                                        // Найти input, связанный с кнопкой
-                                                        const input = button.parentNode.querySelector('input[type="number"]');
-                                                        setTimeout(() => {
-                                                            // Обновляем состояние кнопок после шага
-                                                            updateButtonState(input);
-                                                        }, 0);
-                                                    });
-                                                });
-                                            });
-                                        </script>
 
 
                                         <script>
@@ -393,10 +356,13 @@
 
                             <div class="row">
                                 <div class="col-6">
-                                    <p>${countDishesInOrderString}</p>
+                                    <div class="col-6">
+                                        <p id="countDishesInOrderString">${countDishesInOrderString}</p>
+                                    </div>
+
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-end">${order.totalPrice} руб.</p>
+                                    <p id="totalPrice" class="text-end">${order.totalPrice} руб.</p>
                                 </div>
                             </div>
 
@@ -407,7 +373,7 @@
                                     <h5 class="text-start">Сумма заказа:</h5>
                                 </div>
                                 <div class="col-6">
-                                    <h5 class="text-end">${order.totalPrice} руб.</h5>
+                                    <h5 id="totalTotalPrice" class="text-end">${order.totalPrice} руб.</h5>
                                 </div>
                             </div>
 
@@ -502,5 +468,58 @@
     <footer class="footer mt-auto">
         <#include "blocks/footer.ftlh">
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function changeCount(buttonElement) {
+        var dishId = buttonElement.getAttribute('data-dish-id');
+        var action = buttonElement.getAttribute('data-action');
+
+            $.ajax({
+                url: "/increaseDishCount",
+                type: "POST",
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+                },
+                data: { dishId: dishId,
+                    action: action},
+                success: function(response) {
+                    if (response.success === "false") {
+                        // Если количество больше 50, блокируем кнопку
+                        if (response.disableIncreaseButton) {
+                            alert(response.message);  // Выводим сообщение об ошибке
+                        }
+                        return;  // Выход из функции, чтобы не обновлять UI
+                    }
+
+                    // Обновляем количество для каждого блюда
+                    let newAmount = response.newAmount;
+                    let totalPrice = response.totalPrice;
+                    let countDishesInOrderString = response.countDishesInOrderString;
+
+                    // Обновляем количество для блюда
+                    $("#dish-count-" + dishId).val(newAmount);
+
+                    // Обновляем строку с количеством блюд в заказе
+                    $("#countDishesInOrderString").text(countDishesInOrderString);
+
+                    // Обновляем строку с суммой заказа
+                    $("#totalPrice").text(totalPrice + " руб.");
+                    $("#totalTotalPrice").text(totalPrice + " руб.");
+                },
+                error: function(xhr, status, error) {
+                    if (xhr.status === 401) {
+                        window.location.href = "/login"; // Если статус 401 => вход
+                    } else {
+                        console.error("Ошибка:", error);
+                        alert("$(error)");
+                    }
+                }
+            });
+        }
+    </script>
+
 </body>
 </html>

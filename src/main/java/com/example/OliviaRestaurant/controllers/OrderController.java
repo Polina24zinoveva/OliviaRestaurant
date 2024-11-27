@@ -3,19 +3,16 @@ package com.example.OliviaRestaurant.controllers;
 import com.example.OliviaRestaurant.models.Dish;
 import com.example.OliviaRestaurant.models.Order;
 import com.example.OliviaRestaurant.models.User;
+import com.example.OliviaRestaurant.repositories.OrderHasDishRepository;
 import com.example.OliviaRestaurant.services.*;
 import com.example.OliviaRestaurant.statics.StaticMethods;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
@@ -24,7 +21,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @Controller
@@ -34,6 +33,7 @@ public class OrderController {
 
     @Autowired
     public final OrderHasDishService orderHasDishService;
+    private final OrderHasDishRepository orderHasDishRepository;
 
     @Autowired
     private final UserService userService;
@@ -122,17 +122,62 @@ public class OrderController {
         return "redirect:/order";
     }
 
-    @PostMapping("/changeDishCount/{id}")
-    public String changeDishCount(@PathVariable Long id, @RequestParam(name = "count") Integer count, Principal principal, RedirectAttributes redirectAttributes){
-        try{
-            Dish dish = dishService.getDishByID(id);
-            orderHasDishService.changeAmount(dish, principal, count);
-        }catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Ошибка при изменении стоимости");
+    @PostMapping("/increaseDishCount")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> increaseDishCount(
+            @RequestParam String dishId, @RequestParam String action,
+            Principal principal, @AuthenticationPrincipal User user) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            if (action.equals("increase")){
+                List<Integer> acAmounts = orderHasDishService.getAmountsByOrder(orderService.haveOrderInCardByUser(user));
+                Long countDishesInOrder = 0L;
+                for(int i = 0; i < acAmounts.size(); i++){
+                    countDishesInOrder += acAmounts.get(i);
+                }
+
+                if (countDishesInOrder >= 50) {
+                    response.put("success", "false");
+                    response.put("message", "Нельзя заказать более 50 блюд ");
+                    response.put("disableIncreaseButton", true); // Добавляем флаг для блокировки кнопки
+                    return ResponseEntity.ok(response);
+                }
+            }
+
+
+            Dish dish = dishService.getDishByID(Long.parseLong(dishId));
+            int amount = orderHasDishService.increaseAmount(dish, principal, action);
+
+            response.put("success", "true");
+            response.put("message", "Количество успешно обновлено");
+
+            response.put("newAmount", amount);
+
+            List<Integer> acAmounts = orderHasDishService.getAmountsByOrder(orderService.haveOrderInCardByUser(user));
+            Long countDishesInOrder = 0L;
+            for(int i = 0; i < acAmounts.size(); i++){
+                countDishesInOrder += acAmounts.get(i);
+            }
+            String countDishesInOrderString = "";
+            if (countDishesInOrder == 1){ countDishesInOrderString = "1 блюдо";}
+            else if (countDishesInOrder >= 2 && countDishesInOrder <= 4){countDishesInOrderString = countDishesInOrder + " блюда";}
+            else {countDishesInOrderString = countDishesInOrder + " блюд";}
+
+            response.put("totalPrice", orderService.haveOrderInCardByUser(user).getTotalPrice());
+
+            response.put("countDishesInOrderString", countDishesInOrderString);
+
+            //response.put("newCount", count); // Можно вернуть обновлённое количество, если нужно
+        } catch (Exception e) {
+            response.put("success", "false");
+            response.put("message", "Ошибка при изменении количества: " + e.getMessage());
         }
 
-        return "redirect:/order";
+        return ResponseEntity.ok(response);
     }
+
 
 
     @PostMapping("/orderCheckout")

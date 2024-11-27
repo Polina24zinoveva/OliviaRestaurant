@@ -164,6 +164,29 @@ public class OrderHasDishService {
         }
     }
 
+    public int increaseAmount(Dish dish, Principal principal, String action){
+        try{
+            Order order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART).getFirst();
+            Integer oldAmount = orderHasDishRepository.findByDishAndOrder(dish, order).getCount();
+            Integer amount = 0;
+            if (action.equals("decrease")) amount = oldAmount - 1;
+            else if (action.equals("increase")) amount = oldAmount + 1;
+
+            Double deltaSum = amount*dish.getPrice() - oldAmount*dish.getPrice();
+            OrderHasDish orderHasDish = orderHasDishRepository.findByDishAndOrder(dish, order);
+            orderHasDish.setCount(amount);
+
+            order.setTotalPrice(order.getTotalPrice() + deltaSum);
+            orderHasDishRepository.save(orderHasDish);
+            orderRepository.save(order);
+            return amount;
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
     public void changeAmount(Dish dish, Principal principal, Integer amount){
         try{
             Order order = orderRepository.findByUserAndStatus(getUserByPrincipal(principal), OrderStatus.STATUS_IN_CART).getFirst();
