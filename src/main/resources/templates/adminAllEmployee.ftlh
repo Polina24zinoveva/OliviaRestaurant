@@ -38,7 +38,10 @@
 
                     <div class="col-md-9">
 
-                        <h5 style="margin-top: 10px; margin-bottom: 2rem;">Сотрудники</h5>
+                        <h5 style="margin-top: 10px; margin-bottom: 2rem;">
+                            <a href="/adminAllEmployee" style="text-decoration: none; color: inherit;">Сотрудники</a>
+                        </h5>
+
 
                         <h6 style="margin-top: 1rem; margin-bottom: 1rem;">Поиск</h6>
                         <form class="d-flex mb-3" method="GET" action="/adminAllEmployee">

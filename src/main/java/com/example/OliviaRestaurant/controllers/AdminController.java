@@ -386,8 +386,7 @@ public class AdminController {
                     employees = userRepository.findAllById(Collections.singleton(id));
                 }
                 catch (Exception e){
-                    model.addAttribute("error", "Некорректный запрос для id");
-                    searchQuery="Введите значение для поиска";
+                    employees.clear();
                 }
                 break;
             case "name":
@@ -407,19 +406,20 @@ public class AdminController {
                 break;
             case "phoneNumber":
                 employees.clear();
-                employees.add(userRepository.findByPhoneNumberContaining(searchQuery));
+                if (userRepository.findByPhoneNumberContaining(searchQuery) != null) employees.addAll(userRepository.findByPhoneNumberContaining(searchQuery));
                 break;
             case "email":
                 employees.clear();
-                employees.add(userRepository.findByEmailContaining(searchQuery));
+                if (userRepository.findByEmailContaining(searchQuery) != null) employees.addAll(userRepository.findByEmailContaining(searchQuery));
                 break;
             default:
                 searchQuery="Введите значение для поиска";
         }
 
         employees = employees.stream()
-                .filter(e -> e.getRole() != Role.ROLE_ADMIN && e.getRole() != Role.ROLE_USER)
-                .collect(Collectors.toList());
+            .filter(e -> e.getRole() != Role.ROLE_ADMIN && e.getRole() != Role.ROLE_USER)
+            .collect(Collectors.toList());
+
 
         model.addAttribute("allEmployee", employees);
         model.addAttribute("role", role);
@@ -473,8 +473,7 @@ public class AdminController {
                     users = userRepository.findAllById(Collections.singleton(id));
                 }
                 catch (Exception e){
-                    model.addAttribute("error", "Некорректный запрос для id");
-                    searchQuery="Введите значение для поиска";
+                    users.clear();
                 }
                 break;
             case "name":
@@ -494,11 +493,11 @@ public class AdminController {
                 break;
             case "phoneNumber":
                 users.clear();
-                users.add(userRepository.findByPhoneNumberContaining(searchQuery));
+                if (userRepository.findByPhoneNumberContaining(searchQuery) != null) users.addAll(userRepository.findByPhoneNumberContaining(searchQuery));
                 break;
             case "email":
                 users.clear();
-                users.add(userRepository.findByEmailContaining(searchQuery));
+                if (userRepository.findByEmailContaining(searchQuery) != null) users.addAll(userRepository.findByEmailContaining(searchQuery));
                 break;
             default:
                 searchQuery="Введите значение для поиска";

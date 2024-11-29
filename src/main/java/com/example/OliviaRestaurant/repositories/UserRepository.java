@@ -18,8 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByNameContainingIgnoreCase(String name);
     List<User> findBySurnameContainingIgnoreCase(String surname);
-    User findByPhoneNumberContaining(String phoneNumber);
-    User findByEmailContaining(String email);
+    List<User> findByPhoneNumberContaining(String phoneNumber);
+    List<User> findByEmailContaining(String email);
 
     // Или можно использовать аннотацию @Query для более сложных запросов
     @Query("SELECT u FROM User u WHERE u.name LIKE %:searchQuery%")
